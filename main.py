@@ -49,6 +49,9 @@ COMMAND_WHITELIST = {
     'whoami': 'Current user',
     'systeminfo': 'System information',
     'taskkill': 'Kill process',
+    'shutdown': '⚠️ Shutdown PC (30 detik)',
+    'restart': '🔄 Restart PC (30 detik)',
+    'cancel_shutdown': '❌ Cancel scheduled shutdown/restart',
 }
 
 # Commands that require additional parameters

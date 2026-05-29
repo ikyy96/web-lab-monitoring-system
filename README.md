@@ -404,6 +404,9 @@ Fitur untuk menjalankan command di remote PC melalui MQTT.
 | `whoami` | Current user info | Cross-platform |
 | `systeminfo` | System information | Windows: `systeminfo`, Linux: `uname -a` |
 | `taskkill` | Kill process | Windows: `taskkill /IM {name} /F`, Linux: `killall {name}` |
+| `shutdown` | ⛔ **Matikan PC** (delay 30 detik) | Windows: `shutdown /s /t 30`, Linux: `shutdown -h +1` |
+| `restart` | 🔄 **Restart PC** (delay 30 detik) | Windows: `shutdown /r /t 30`, Linux: `shutdown -r +1` |
+| `cancel_shutdown` | ✅ **Batalkan shutdown/restart** | Windows: `shutdown /a`, Linux: `shutdown -c` |
 
 ### Alur Kerja (MQTT Flow)
 
@@ -894,6 +897,13 @@ Fitur tambahan yang bisa dikembangkan:
 ---
 
 ## 📝 Changelog
+
+### v2.2.0 (2026-05-29)
+- ✅ **Remote Shutdown/Restart PC** - Matikan atau restart PC dari dashboard
+- ✅ **Cancel Shutdown** - Batalkan shutdown/restart yang sudah dijadwalkan
+- ✅ **Delay 30 detik** - User punya waktu untuk menyimpan pekerjaan
+- ✅ **Firewall fix scripts** - Script otomatis buka port firewall
+- ✅ **Panduan setup lengkap** - File SETUP_GUIDE.md
 
 ### v2.1.0 (2026-05-27)
 - ✅ Added robust error handling

@@ -9037,3 +9037,169 @@ SUCCESS: The process "Spotify...
 2026-05-28 06:41:42,896 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
 2026-05-28 06:41:42,896 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
 2026-05-28 06:41:49,584 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 09:51:02,505 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 09:51:02,506 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 09:51:02,516 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 09:51:02,516 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 09:51:02,527 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 09:51:33,477 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 09:52:01,557 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 09:52:02,003 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 09:52:02,538 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.158198, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 09:52:37,392 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 09:52:37,496 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 09:52:38,297 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 09:52:38,297 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 09:54:30,761 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 09:54:30,761 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 09:54:30,777 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 09:54:30,777 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 09:54:30,793 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 09:54:40,241 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 09:55:30,806 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.076336, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 09:55:36,379 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 09:55:36,816 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 09:55:53,768 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
+2026-05-29 09:55:53,768 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 09:55:56,123 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 09:55:56,234 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 09:55:56,830 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 09:55:56,830 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:00:58,199 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:00:58,199 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:00:58,231 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:00:58,231 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:00:58,231 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:01:48,711 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:01:58,251 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.084364, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:02:58,265 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.098145, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:03:58,269 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.102127, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:04:58,276 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.109417, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:05:21,969 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
+2026-05-29 10:05:21,971 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:05:24,822 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:05:24,933 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:05:25,013 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:05:25,013 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:07:57,689 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:07:57,689 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:07:57,715 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:07:57,715 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:07:57,715 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:08:11,209 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:08:52,299 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
+2026-05-29 10:08:52,299 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:08:55,182 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:08:55,294 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:08:55,367 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:08:55,368 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:09:04,448 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:09:04,448 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:09:04,459 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:09:04,459 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:09:04,475 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:09:07,919 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:09:13,068 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:09:13,452 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:09:41,738 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:09:42,110 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:10:04,493 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.083721, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:11:04,495 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.086520, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:12:01,329 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:12:01,440 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:12:01,711 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:12:01,713 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:12:24,519 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:12:24,519 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:12:26,590 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:12:26,590 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:12:26,612 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:12:26,739 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:13:24,222 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:13:24,600 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:13:26,629 - __main__ - INFO - 📊 Stats - Uptime: 0:01:02.140387, Messages: 1, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:13:28,763 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:13:28,867 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:13:29,097 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:13:29,098 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:13:43,254 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:13:43,255 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:13:43,259 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:13:43,259 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:13:43,276 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:13:44,245 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:14:43,274 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.055173, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:15:43,279 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.060681, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:16:43,286 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.067242, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:17:43,307 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.088631, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:18:43,311 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.092489, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:19:38,184 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:19:38,614 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:19:42,055 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:19:42,169 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:19:42,830 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:19:42,830 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:19:54,337 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:19:54,338 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:19:54,346 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:19:54,347 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:19:54,358 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:19:54,895 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:20:12,029 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:20:12,406 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:20:54,358 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.060244, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:21:54,362 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.063752, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:22:54,383 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.084757, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:23:54,383 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.084764, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:23:58,014 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
+2026-05-29 10:23:58,017 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:24:01,070 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:24:01,070 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:24:02,269 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:24:02,380 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:24:03,078 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:24:03,078 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:28:05,620 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:28:05,620 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:28:07,692 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:28:07,692 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:28:07,704 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:28:12,533 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:29:07,707 - __main__ - INFO - 📊 Stats - Uptime: 0:01:02.119206, Messages: 115, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:29:16,711 - __main__ - INFO - Command published: tasklist to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780025356711_7755, params: {})
+2026-05-29 10:29:17,822 - commands - INFO - Command: tasklist | Host: DESKTOP-RDHIAJV | Status: success | Output: 
+Image Name                     PID Session Name        Session#    Mem Usage
+======================...
+2026-05-29 10:29:17,832 - __main__ - INFO - [✓] Command result diterima: tasklist dari DESKTOP-RDHIAJV
+2026-05-29 10:29:28,912 - __main__ - INFO - Command published: tasklist to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780025368912_9203, params: {})
+2026-05-29 10:29:30,004 - commands - INFO - Command: tasklist | Host: DESKTOP-RDHIAJV | Status: success | Output: 
+Image Name                     PID Session Name        Session#    Mem Usage
+======================...
+2026-05-29 10:29:30,005 - __main__ - INFO - [✓] Command result diterima: tasklist dari DESKTOP-RDHIAJV
+2026-05-29 10:29:51,745 - __main__ - INFO - Command published: taskkill to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780025391745_4808, params: {'process_name': 'WINWORD.EXE'})
+2026-05-29 10:29:52,367 - commands - INFO - Command: taskkill | Host: DESKTOP-RDHIAJV | Status: success | Output: SUCCESS: The process "WINWORD.EXE" with PID 7472 has been terminated.
+...
+2026-05-29 10:29:52,368 - __main__ - INFO - [✓] Command result diterima: taskkill dari DESKTOP-RDHIAJV
+2026-05-29 10:30:07,718 - __main__ - INFO - 📊 Stats - Uptime: 0:02:02.130121, Messages: 302, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:31:07,727 - __main__ - INFO - 📊 Stats - Uptime: 0:03:02.139311, Messages: 523, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:31:45,613 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:31:46,065 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:32:07,727 - __main__ - INFO - 📊 Stats - Uptime: 0:04:02.139843, Messages: 795, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:33:07,728 - __main__ - INFO - 📊 Stats - Uptime: 0:05:02.140662, Messages: 1087, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:34:07,724 - __main__ - INFO - 📊 Stats - Uptime: 0:06:02.136258, Messages: 1363, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:35:07,720 - __main__ - INFO - 📊 Stats - Uptime: 0:07:02.133053, Messages: 1614, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:36:07,719 - __main__ - INFO - 📊 Stats - Uptime: 0:08:02.131900, Messages: 1850, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:36:13,849 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-29 10:36:13,858 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-29 10:36:15,956 - __main__ - INFO - 🚀 MQTT client started
+2026-05-29 10:36:15,956 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-29 10:36:16,029 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-29 10:36:16,041 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-29 10:36:17,049 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-29 10:36:17,051 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-29 10:37:07,735 - __main__ - INFO - 📊 Stats - Uptime: 0:09:02.147557, Messages: 1850, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:38:01,147 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-29 10:38:01,595 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-29 10:38:07,752 - __main__ - INFO - 📊 Stats - Uptime: 0:10:02.164721, Messages: 1850, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:39:07,780 - __main__ - INFO - 📊 Stats - Uptime: 0:11:02.192159, Messages: 1850, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-29 10:40:07,793 - __main__ - INFO - 📊 Stats - Uptime: 0:12:02.205214, Messages: 1850, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0

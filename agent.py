@@ -298,6 +298,9 @@ ALLOWED_COMMANDS = {
     'whoami': 'whoami',
     'systeminfo': 'systeminfo' if platform.system() == 'Windows' else 'uname -a',
     'taskkill': 'taskkill /IM {process_name} /F' if platform.system() == 'Windows' else 'killall {process_name}',
+    'shutdown': 'shutdown /s /t 30 /c "PC akan dimatikan oleh admin lab" /f' if platform.system() == 'Windows' else 'shutdown -h +1 "PC akan dimatikan oleh admin lab"',
+    'restart': 'shutdown /r /t 30 /c "PC akan direstart oleh admin lab" /f' if platform.system() == 'Windows' else 'shutdown -r +1 "PC akan direstart oleh admin lab"',
+    'cancel_shutdown': 'shutdown /a' if platform.system() == 'Windows' else 'shutdown -c',
 }
 
 command_lock = Lock()
