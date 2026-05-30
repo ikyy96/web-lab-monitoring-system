@@ -458,7 +458,7 @@
                     </div>
 
                     <!-- CPU Details -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4">
+                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4" id="modal-cpu-section">
                         <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
@@ -705,6 +705,7 @@
                         <div class="w-full bg-cyber-dark rounded-full h-2">
                             <div class="h-2 rounded-full progress-gradient transition-all duration-500" style="width: ${client.cpu_percent}%"></div>
                         </div>
+                        ${client.cpu_name ? `<div class="text-[10px] text-cyber-blue mt-1 truncate" title="${client.cpu_name}">${client.cpu_name}</div>` : ''}
                         <div class="mt-1 h-8">
                             <canvas id="sparkline-cpu-${client.id}" class="w-full h-full"></canvas>
                         </div>
@@ -1494,29 +1495,93 @@
         }
         
         function formatIpconfig(output) {
-            const lines = output.split('\n');
-            let html = '<div style="font-size:11px;">';
+            // Normalize line endings (handle Windows \r\n)
+            const lines = output.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
+            let html = '';
+            let dataFound = false;
             let inAdapter = false;
+            let hasData = false;
             
             for (const line of lines) {
-                if (!line.trim()) { inAdapter = false; continue; }
+                const trimmed = line.trim();
                 
-                if (line.match(/^[A-Za-z]/) && line.includes(':')) {
-                    html += `<div style="color:#00f0ff;font-weight:bold;margin-top:10px;margin-bottom:4px;">🔌 ${escapeHtml(line.trim())}</div>`;
+                // Detect adapter name: e.g. "Ethernet adapter Ethernet:" or "Wireless LAN adapter Wi-Fi:"
+                // Windows ipconfig - adapter lines always have "adapter" and end with ":"
+                if (trimmed.toLowerCase().includes('adapter') && trimmed.match(/^(.+adapter\s+.+):\s*$/i)) {
+                    html += `<div style="color:#00f0ff;font-weight:bold;margin-top:10px;margin-bottom:4px;">🔌 ${escapeHtml(trimmed)}</div>`;
                     inAdapter = true;
-                } else if (line.includes(':') && inAdapter) {
-                    const [key, ...valParts] = line.split(':');
-                    const val = valParts.join(':').trim();
-                    if (!val) continue;
+                    hasData = false;
+                    continue;
+                }
+                
+                if (!inAdapter) {
+                    // Skip any header lines (like "Windows IP Configuration")
+                    continue;
+                }
+                
+                if (!trimmed) continue;  // Skip blank lines inside adapter
+                
+                // Data line - contains ":"
+                if (trimmed.includes(':')) {
+                    // Split on FIRST colon: "IPv4 Address. . . . . . . . . . . : 192.168.1.1"
+                    const colonIdx = trimmed.indexOf(':');
+                    
+                    let key = trimmed.substring(0, colonIdx).trim();
+                    let val = trimmed.substring(colonIdx + 1).trim();
+                    
+                    // Clean up dots in key: "IPv4 Address. . . . . . . . . . ." → "IPv4 Address"
+                    key = key.replace(/\.\s*/g, '').replace(/\s+/g, ' ').trim();
+                    if (!key) continue;
+                    
+                    // Clean up value spacing
+                    val = val.replace(/\s+/g, ' ').trim();
+                    
+                    if (!val) {
+                        // Show disconnected status even without val
+                        if (trimmed.toLowerCase().includes('disconnected') || key.toLowerCase().includes('connection')) {
+                            html += `<div style="display:flex;gap:8px;padding:2px 12px;">
+                                <span style="color:#0066ff;min-width:180px;flex-shrink:0;">${escapeHtml(key)}</span>
+                                <span style="color:#ff0044;">Disconnected</span>
+                            </div>`;
+                        }
+                        continue;
+                    }
+                    
+                    hasData = true;
+                    dataFound = true;
+                    
                     const isIp = val.match(/^\d+\.\d+\.\d+\.\d+/);
+                    const isMac = val.match(/^[0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}/);
+                    
                     html += `<div style="display:flex;gap:8px;padding:2px 12px;">
-                        <span style="color:#0066ff;min-width:180px;">${escapeHtml(key.trim())}</span>
-                        <span style="color:${isIp ? '#00ff88' : '#aaa'};">${escapeHtml(val)}</span>
+                        <span style="color:#0066ff;min-width:180px;flex-shrink:0;">${escapeHtml(key)}</span>
+                        <span style="color:${isIp ? '#00ff88' : isMac ? '#ff8800' : '#ccc'};">${escapeHtml(val)}</span>
+                    </div>`;
+                } 
+                // Media disconnected line
+                else if (trimmed.match(/^(Media|Connection|No|Disconnected)/i)) {
+                    html += `<div style="display:flex;gap:8px;padding:2px 12px;">
+                        <span style="color:#ff8800;">${escapeHtml(trimmed)}</span>
+                    </div>`;
+                    hasData = true;
+                }
+                // Blank line or other non-data - end of this adapter section
+                else if (trimmed.endsWith(':') && trimmed.match(/^[A-Za-z]/)) {
+                    // Could be a status line like "IPv4 Address: 192.168.1.1"
+                    const key = trimmed.replace(/:$/, '').trim();
+                    html += `<div style="display:flex;gap:8px;padding:2px 12px;">
+                        <span style="color:#0066ff;min-width:180px;flex-shrink:0;">${escapeHtml(key)}</span>
+                        <span style="color:#ccc;">(empty)</span>
                     </div>`;
                 }
             }
-            html += '</div>';
-            return html;
+            
+            // If no data was found using parser, fall back to raw output
+            if (!dataFound) {
+                return `<pre style="white-space:pre-wrap;color:#00ff88;font-size:11px;">${escapeHtml(output)}</pre>`;
+            }
+            
+            return '<div style="font-size:11px;">' + html + '</div>';
         }
         
         function formatSysteminfo(output) {

@@ -8,8 +8,6 @@ import subprocess
 import os
 import paho.mqtt.client as mqtt
 from datetime import datetime
-from threading import Lock
-import shlex
 
 # GPU Monitoring imports
 try:
@@ -34,18 +32,112 @@ PING_TARGET = "8.8.8.8"
 # Ambil Spek CPU Sekali Saja (Statik)
 CPU_THREADS = psutil.cpu_count(logical=True)
 CPU_CORES = psutil.cpu_count(logical=False)
-CPU_NAME = platform.processor() if platform.processor() else "Unknown CPU"
+CPU_NAME = "Unknown CPU"
 
-# Try to get more detailed CPU name on Windows
-if platform.system() == "Windows":
-    try:
-        result = subprocess.run(['wmic', 'cpu', 'get', 'name'], capture_output=True, text=True)
-        if result.returncode == 0:
-            lines = result.stdout.strip().split('\n')
-            if len(lines) > 1:
-                CPU_NAME = lines[1].strip()
-    except:
-        pass
+def get_cpu_name():
+    """Get detailed CPU name with multiple fallback methods"""
+    import platform as pf
+    
+    if pf.system() == "Windows":
+        # Method 1: Try wmic (legacy, works on older Windows)
+        try:
+            result = subprocess.run(['wmic', 'cpu', 'get', 'name', '/format:csv'], 
+                                  capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                # Parse CSV format: "Node,CpuName"
+                for line in result.stdout.strip().split('\n'):
+                    if ',' in line and not line.strip().startswith('Node'):
+                        parts = line.strip().split(',', 1)
+                        if len(parts) > 1 and parts[1].strip():
+                            name = parts[1].strip()
+                            if name and not name.startswith('Node'):
+                                return name
+        except:
+            pass
+        
+        # Method 2: wmic simple format (fallback)
+        try:
+            result = subprocess.run(['wmic', 'cpu', 'get', 'name'], 
+                                  capture_output=True, text=True, timeout=5)
+            if result.returncode == 0:
+                lines = [l.strip() for l in result.stdout.strip().split('\n') if l.strip()]
+                # lines[0] is header "Name", lines[1] is the actual CPU name
+                for line in lines:
+                    if line.lower() != 'name' and line:
+                        return line
+        except:
+            pass
+        
+        # Method 3: Use PowerShell (most reliable on Windows 10/11)
+        try:
+            result = subprocess.run([
+                'powershell', '-Command',
+                '(Get-CimInstance Win32_Processor).Name'
+            ], capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
+        except:
+            pass
+        
+        # Method 4: Fallback - try to get from registry
+        try:
+            import winreg
+            key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, 
+                               r"HARDWARE\DESCRIPTION\System\CentralProcessor\0")
+            name, _ = winreg.QueryValueEx(key, "ProcessorNameString")
+            winreg.CloseKey(key)
+            if name:
+                return name.strip()
+        except:
+            pass
+        
+        # Method 5: platform.processor() as last resort (returns generic identifier)
+        proc = pf.processor()
+        if proc and proc != "Unknown CPU":
+            return proc
+        return "Unknown CPU"
+    
+    elif pf.system() == "Linux":
+        # Try /proc/cpuinfo for detailed name
+        try:
+            with open('/proc/cpuinfo', 'r') as f:
+                for line in f:
+                    if line.startswith('model name'):
+                        name = line.split(':')[1].strip()
+                        if name:
+                            return name
+        except:
+            pass
+        
+        # Try lscpu
+        try:
+            result = subprocess.run(['lscpu'], capture_output=True, text=True, timeout=5)
+            for line in result.stdout.split('\n'):
+                if 'Model name' in line:
+                    name = line.split(':')[1].strip()
+                    if name:
+                        return name
+        except:
+            pass
+        
+        proc = pf.processor()
+        return proc if proc else "Unknown CPU"
+    
+    else:
+        # macOS or other
+        try:
+            result = subprocess.run(['sysctl', '-n', 'machdep.cpu.brand_string'],
+                                  capture_output=True, text=True, timeout=5)
+            if result.returncode == 0 and result.stdout.strip():
+                return result.stdout.strip()
+        except:
+            pass
+        
+        proc = pf.processor()
+        return proc if proc else "Unknown CPU"
+
+CPU_NAME = get_cpu_name()
+print(f"[✓] CPU Terdeteksi: {CPU_NAME}")
 
 # Initialize GPU monitoring
 def init_gpu_monitoring():
@@ -290,137 +382,155 @@ def get_net_usage(interface):
     except: pass
     return 0, 0
 
-# ==================== COMMAND EXECUTION HANDLER ====================
-# Whitelist command - hanya command ini yang diizinkan
+# ==================== REMOTE COMMAND EXECUTION ====================
+COMMAND_TIMEOUT = 15  # Max execution time per command (detik)
 ALLOWED_COMMANDS = {
     'tasklist': 'tasklist' if platform.system() == 'Windows' else 'ps aux',
     'ipconfig': 'ipconfig' if platform.system() == 'Windows' else 'ifconfig',
     'whoami': 'whoami',
     'systeminfo': 'systeminfo' if platform.system() == 'Windows' else 'uname -a',
-    'taskkill': 'taskkill /IM {process_name} /F' if platform.system() == 'Windows' else 'killall {process_name}',
-    'shutdown': 'shutdown /s /t 30 /c "PC akan dimatikan oleh admin lab" /f' if platform.system() == 'Windows' else 'shutdown -h +1 "PC akan dimatikan oleh admin lab"',
-    'restart': 'shutdown /r /t 30 /c "PC akan direstart oleh admin lab" /f' if platform.system() == 'Windows' else 'shutdown -r +1 "PC akan direstart oleh admin lab"',
-    'cancel_shutdown': 'shutdown /a' if platform.system() == 'Windows' else 'shutdown -c',
+    'taskkill': None,  # Special handling with params
+    'shutdown': None,  # Special handling
+    'restart': None,   # Special handling
+    'cancel_shutdown': None,  # Special handling
 }
 
-command_lock = Lock()
-
-def execute_command(command_name, timeout=10, params=None):
+def execute_command(command_name, params=None):
     """
-    Execute whitelisted command dengan timeout
-    
-    Args:
-        command_name: nama command dari whitelist
-        timeout: timeout dalam detik (default 10)
-        params: dict parameter tambahan untuk command (misal process_name untuk taskkill)
-    
-    Returns:
-        dict dengan status dan output/error
+    Execute a command with timeout.
+    Returns dict dengan status, output, error.
     """
+    start_time = time.time()
+    
     if command_name not in ALLOWED_COMMANDS:
-        return {
-            "status": "error",
-            "error": f"Command '{command_name}' tidak ada di whitelist",
-            "output": ""
-        }
+        return {"status": "error", "output": "", "error": f"Command '{command_name}' tidak diizinkan"}
     
     try:
-        with command_lock:  # Prevent concurrent execution
-            cmd_template = ALLOWED_COMMANDS[command_name]
-            params = params or {}
+        # Special commands with custom handling
+        if command_name == 'taskkill':
+            process_name = (params or {}).get('process_name', '')
+            if not process_name:
+                return {"status": "error", "output": "", "error": "Nama proses tidak diberikan"}
+            cmd = f"taskkill /IM {process_name} /F" if platform.system() == "Windows" else f"killall {process_name}"
             
-            # Validate: jika template mengandung {process_name}, parameter wajib ada
-            if '{process_name}' in cmd_template and 'process_name' not in params:
-                return {
-                    "status": "error",
-                    "error": "Parameter 'process_name' diperlukan untuk command taskkill",
-                    "output": ""
-                }
+        elif command_name == 'shutdown':
+            if platform.system() == "Windows":
+                cmd = "shutdown /s /t 30"
+            else:
+                cmd = "shutdown -h +1"
+            print(f"[!] Perintah SHUTDOWN diterima! PC akan mati dalam 30 detik...")
             
-            # Substitute parameters into command template
-            cmd = cmd_template
-            for key, value in params.items():
-                placeholder = '{' + key + '}'
-                if placeholder in cmd:
-                    cmd = cmd.replace(placeholder, str(value))
+        elif command_name == 'restart':
+            if platform.system() == "Windows":
+                cmd = "shutdown /r /t 30"
+            else:
+                cmd = "shutdown -r +1"
+            print(f"[!] Perintah RESTART diterima! PC akan restart dalam 30 detik...")
             
-            is_windows = platform.system() == 'Windows'
+        elif command_name == 'cancel_shutdown':
+            if platform.system() == "Windows":
+                cmd = "shutdown /a"
+            else:
+                cmd = "shutdown -c"
+            print(f"[!] Perintah CANCEL SHUTDOWN diterima!")
             
-            result = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=timeout,
-                shell=is_windows
-            )
-            
-            output = result.stdout if result.stdout else result.stderr
-            
-            return {
-                "status": "success",
-                "output": output,
-                "error": result.stderr if result.returncode != 0 else ""
-            }
+        else:
+            cmd = ALLOWED_COMMANDS[command_name]
+        
+        # Execute with timeout
+        startupinfo = None
+        if platform.system() == "Windows":
+            startupinfo = subprocess.STARTUPINFO()
+            startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        
+        # Use binary mode first, then decode with system encoding to avoid Unicode errors
+        proc_result = subprocess.run(
+            cmd if isinstance(cmd, str) else cmd,
+            capture_output=True,
+            timeout=COMMAND_TIMEOUT,
+            startupinfo=startupinfo,
+            shell=True
+        )
+        
+        # Decode with proper encoding (handle Windows locale encoding)
+        try:
+            stdout = proc_result.stdout.decode('utf-8', errors='replace')
+        except:
+            try:
+                stdout = proc_result.stdout.decode('cp1252', errors='replace')
+            except:
+                stdout = proc_result.stdout.decode('latin-1', errors='replace')
+        
+        try:
+            stderr = proc_result.stderr.decode('utf-8', errors='replace')
+        except:
+            try:
+                stderr = proc_result.stderr.decode('cp1252', errors='replace')
+            except:
+                stderr = proc_result.stderr.decode('latin-1', errors='replace')
+        
+        elapsed = time.time() - start_time
+        output = (stdout or "") + (stderr or "")
+        output = output.strip()
+        
+        if proc_result.returncode == 0 and output:
+            return {"status": "success", "output": output, "error": "", "execution_time": round(elapsed, 2)}
+        elif proc_result.returncode == 0 and not output:
+            return {"status": "success", "output": "Command executed successfully (no output)", "error": "", "execution_time": round(elapsed, 2)}
+        else:
+            return {"status": "error", "output": output, "error": f"Return code: {proc_result.returncode}", "execution_time": round(elapsed, 2)}
     
     except subprocess.TimeoutExpired:
-        return {
-            "status": "error",
-            "error": f"Command timeout setelah {timeout} detik",
-            "output": ""
-        }
+        return {"status": "error", "output": "", "error": f"Command timeout ({COMMAND_TIMEOUT}s)", "execution_time": COMMAND_TIMEOUT}
     except Exception as e:
-        return {
-            "status": "error",
-            "error": str(e),
-            "output": ""
-        }
+        return {"status": "error", "output": "", "error": str(e), "execution_time": round(time.time() - start_time, 2)}
 
-def on_command_message(client, userdata, msg):
-    """
-    Handler untuk command dari backend via MQTT
-    Topic: lab/command/{HOSTNAME}
-    """
+def on_message(client, userdata, msg):
+    """Handle incoming MQTT messages (for remote commands)"""
     try:
-        payload = json.loads(msg.payload.decode('utf-8'))
-        command_name = payload.get('command')
-        request_id = payload.get('request_id', 'unknown')
+        payload_str = msg.payload.decode('utf-8')
+        payload = json.loads(payload_str)
         
-        print(f"[*] Command diterima: {command_name} (ID: {request_id})")
-        
-        # Extract additional parameters (e.g. process_name for taskkill)
+        command = payload.get('command', '')
+        request_id = payload.get('request_id', '')
         params = payload.get('params', {})
+        timestamp = payload.get('timestamp', '')
         
-        # Execute command dengan timeout 10 detik
-        result = execute_command(command_name, timeout=10, params=params)
+        print(f"\n[📨] Command diterima: {command} (ID: {request_id})")
+        if params:
+            print(f"     Params: {params}")
         
-        # Siapkan response
-        response = {
-            "hostname": HOSTNAME,
+        # Execute command
+        result = execute_command(command, params)
+        
+        # Send result back
+        result_topic = f"lab/command/result/{HOSTNAME}"
+        result_payload = {
             "request_id": request_id,
-            "command": command_name,
-            "timestamp": datetime.now().isoformat(),
+            "hostname": HOSTNAME,
+            "command": command,
             "result": result
         }
         
-        # Publish hasil ke topic response
-        response_topic = f"lab/command/result/{HOSTNAME}"
-        client.publish(response_topic, json.dumps(response))
-        print(f"[✓] Hasil command dipublikasi ke {response_topic}")
+        client.publish(result_topic, json.dumps(result_payload))
+        
+        status_icon = "✓" if result["status"] == "success" else "✗"
+        print(f"[{status_icon}] Hasil command '{command}' dikirim ke {result_topic}")
+        if result.get("execution_time"):
+            print(f"     Waktu eksekusi: {result['execution_time']}s")
         
     except json.JSONDecodeError as e:
-        print(f"[!] Error parsing command payload: {e}")
+        print(f"[✗] Gagal parse JSON: {e}")
     except Exception as e:
-        print(f"[!] Error handling command: {e}")
+        print(f"[✗] Error processing command: {e}")
 
-# --- SETUP MQTT ---
-# Support paho-mqtt v1.x dan v2.x
 def on_connect(client, userdata, connect_flags, rc, properties=None):
     if rc == 0:
         print(f"[✓] MQTT Terhubung ke {BROKER_URL}:{PORT}")
-        # Subscribe ke command topic
+        # Subscribe ke topic command khusus hostname ini
         command_topic = f"lab/command/{HOSTNAME}"
         client.subscribe(command_topic)
-        print(f"[✓] Subscribe ke {command_topic}")
+        print(f"[📡] Subscribed ke: {command_topic}")
     else:
         print(f"[✗] MQTT Gagal dengan kode {rc}")
 
@@ -440,22 +550,8 @@ except (ImportError, AttributeError):
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_publish = on_publish
-# Setup message callback untuk command topic
-client.message_callback_add(f"lab/command/{HOSTNAME}", on_command_message)
+client.on_message = on_message
 client.will_set(TOPIC, json.dumps({"id": HOSTNAME, "status": "offline"}), retain=True)
-
-# ==================== GRACEFUL SHUTDOWN ====================
-import signal, sys
-
-running = True  # Flag untuk stop while loop
-
-def shutdown(signum=None, frame=None):
-    global running
-    print(f"\n[!] Shutting down agent '{HOSTNAME}'...")
-    running = False  # Stop while loop, cleanup dilakukan setelah loop
-
-signal.signal(signal.SIGINT, shutdown)
-signal.signal(signal.SIGTERM, shutdown)
 
 mqtt_connected = False
 try:
@@ -478,123 +574,39 @@ last_time = time.time()
 # Pre-calc ip/mac once (could also refresh each loop if network changes)
 IP_ADDRESS, MAC_ADDRESS = get_interface_ip_mac(INTERFACE_NAME)
 
-# Caching timers & values for high-frequency millisecond updates (0.1s / 100ms)
-# Separates fast-changing metrics (CPU, RAM, network speed) from slow-changing ones
-last_latency_time = 0
-last_storage_time = 0
-last_processes_time = 0
-last_files_time = 0
-last_gpu_time = 0
-last_freq_time = 0
-
-cached_latency = 0
-cached_storage_total = 0
-cached_storage_used = 0
-cached_storage_free = 0
-cached_storage_percent = 0
-cached_processes = []
-cached_files = []
-cached_gpu_info = []
-cached_current_ghz = 0
-cached_max_ghz = 0
-
-# Set target refresh interval (e.g. 0.1s for millisecond real-time responsiveness)
-REFRESH_INTERVAL = 0.1
-
-while running:
+while True:
     try:
         current_time = time.time()
         elapsed = current_time - last_time
         last_time = current_time
 
-        # Fast metric: Network RX/TX usage
         current_rx_bytes, current_tx_bytes = get_net_usage(INTERFACE_NAME)
         down_mbps = ((current_rx_bytes - old_rx) * 8 / (1024 * 1024)) / elapsed if elapsed > 0 else 0
         old_rx, old_tx = current_rx_bytes, current_tx_bytes
 
-        # Fast metric: RAM Virtual Memory
         mem = psutil.virtual_memory()
+        disk_path = 'C:\\' if platform.system() == "Windows" else '/'
+        disk = psutil.disk_usage(disk_path)
+        
+        freq = psutil.cpu_freq()
+        current_ghz = round(freq.current / 1000, 2) if freq else 0
+        max_ghz = round(freq.max / 1000, 2) if freq else 0
 
-        # Slow metric: Latency (Ping) - Refresh every 5 seconds to avoid overhead
-        if current_time - last_latency_time >= 5.0:
-            cached_latency = get_latency(PING_TARGET)
-            last_latency_time = current_time
-
-        # Slow metric: Storage - Refresh every 10 seconds to avoid disk wear
-        if current_time - last_storage_time >= 10.0:
-            storage_total = 0
-            storage_used = 0
-            storage_free = 0
-
-            if platform.system() == "Windows":
-                for part in psutil.disk_partitions(all=False):
-                    fstype = (part.fstype or "").lower()
-                    if fstype in {"tmpfs", "devtmpfs"}:
-                        continue
-                    if not part.mountpoint:
-                        continue
-                    try:
-                        usage = psutil.disk_usage(part.mountpoint)
-                        storage_total += usage.total
-                        storage_used += usage.used
-                        storage_free += usage.free
-                    except Exception:
-                        continue
-            else:
-                for part in psutil.disk_partitions(all=False):
-                    fstype = (part.fstype or "").lower()
-                    if fstype in {"tmpfs", "devtmpfs", "proc", "sysfs", "cgroup", "cgroup2", "overlay"}:
-                        continue
-                    if not part.mountpoint:
-                        continue
-                    try:
-                        usage = psutil.disk_usage(part.mountpoint)
-                        storage_total += usage.total
-                        storage_used += usage.used
-                        storage_free += usage.free
-                    except Exception:
-                        continue
-
-            cached_storage_percent = (storage_used / storage_total * 100.0) if storage_total > 0 else 0
-            cached_storage_total = storage_total
-            cached_storage_used = storage_used
-            cached_storage_free = storage_free
-            last_storage_time = current_time
-
-        # Medium metric: CPU Frequency - Refresh every 1.0 second
-        if current_time - last_freq_time >= 1.0:
-            freq = psutil.cpu_freq()
-            cached_current_ghz = round(freq.current / 1000, 2) if freq else 0
-            cached_max_ghz = round(freq.max / 1000, 2) if freq else 0
-            last_freq_time = current_time
-
-        # Medium metric: GPU Info - Refresh every 1.0 second
-        if current_time - last_gpu_time >= 1.0:
-            cached_gpu_info = get_gpu_info()
-            last_gpu_time = current_time
-
-        # Medium metric: Top Processes - Refresh every 2.0 seconds
-        if current_time - last_processes_time >= 2.0:
-            cached_processes = get_top_processes(5)
-            last_processes_time = current_time
-
-        # Ultra-slow metric: Top Largest Files - Refresh every 30.0 seconds to prevent 100% Disk Usage
-        if current_time - last_files_time >= 30.0:
-            cached_files = get_largest_files(5)
-            last_files_time = current_time
-
+        # Get GPU info
+        gpu_info = get_gpu_info()
+        
         payload = {
             "id": HOSTNAME, "status": "online", "user": getpass.getuser(),
             "time": datetime.now().strftime("%H:%M:%S"),
             "info": {
-                "uptime": get_uptime(),
+                "uptime": get_uptime(), 
                 "os": f"{platform.system()} {platform.release()}",
                 "cpu_name": CPU_NAME
             },
             "network": {
                 "down_mbps": round(max(0, down_mbps), 2),
                 "traffic_in_gb": round(current_rx_bytes / (1024**3), 2),
-                "latency_ms": cached_latency,
+                "latency_ms": get_latency(PING_TARGET),
                 "iface": INTERFACE_NAME,
                 "ip": IP_ADDRESS,
                 "mac": MAC_ADDRESS
@@ -604,8 +616,8 @@ while running:
                     "percent": int(psutil.cpu_percent()),
                     "threads": CPU_THREADS,
                     "cores": CPU_CORES,
-                    "ghz": cached_current_ghz,
-                    "max_ghz": cached_max_ghz
+                    "ghz": current_ghz,
+                    "max_ghz": max_ghz
                 },
                 "ram_percent": int(mem.percent),
                 "ram": {
@@ -613,41 +625,20 @@ while running:
                     "total_gb": round(mem.total / (1024**3), 1)
                 },
                 "storage": {
-                    "total_gb": round(cached_storage_total / (1024**3), 1),
-                    "used_gb": round(cached_storage_used / (1024**3), 1),
-                    "free_gb": round(cached_storage_free / (1024**3), 1),
-                    "percent": round(cached_storage_percent, 1)
+                    "total_gb": round(disk.total / (1024**3), 1),
+                    "used_gb": round(disk.used / (1024**3), 1),
+                    "free_gb": round(disk.free / (1024**3), 1),
+                    "percent": round(disk.percent, 1)
                 },
-                "gpu": cached_gpu_info,
-                "top_processes": cached_processes,
-                "top_files": cached_files
+                "gpu": gpu_info,
+                "top_processes": get_top_processes(5),
+                "top_files": get_largest_files(5)
             }
         }
-
-        if not running:
-            break  # Keluar sebelum sempat publish online lagi
         if mqtt_connected or client.is_connected():
             client.publish(TOPIC, json.dumps(payload), retain=True)
         else:
             print(f"[!] MQTT tidak terhubung, skip publish")
-        print(f"[{payload['time']}] CPU: {payload['metrics']['cpu']['percent']}% | RAM: {payload['metrics']['ram_percent']}% | Net: {payload['network']['down_mbps']} Mbps")
+        print(f"[{payload['time']}] CPU: {payload['metrics']['cpu']['percent']}% ({CPU_THREADS} Thread)")
     except Exception as e: print(f"Err: {e}")
-    time.sleep(REFRESH_INTERVAL)
-
-# ==================== CLEANUP SETELAH LOOP BERHENTI ====================
-print("[*] Loop berhenti, mengirim status offline...")
-try:
-    offline_payload = json.dumps({"id": HOSTNAME, "status": "offline"})
-    if client.is_connected():
-        info = client.publish(TOPIC, offline_payload, retain=True)
-        info.wait_for_publish(timeout=3)
-        print("[✓] Status offline berhasil dikirim")
-    else:
-        print("[!] MQTT sudah disconnect, skip publish offline")
-except Exception as e:
-    print(f"[!] Gagal kirim offline: {e}")
-finally:
-    client.loop_stop()
-    client.disconnect()
-    print("[✓] Agent berhenti.")
-    sys.exit(0)
+    time.sleep(2)
