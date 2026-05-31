@@ -9843,3 +9843,178 @@ Wireless LAN adapter Wi-Fi:
 2026-05-30 22:52:16,175 - __main__ - INFO - 📊 Stats - Uptime: 0:38:00.432801, Messages: 567, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
 2026-05-30 22:52:44,329 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
 2026-05-30 22:52:44,436 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 14:03:04,248 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0
+2026-05-31 14:03:04,250 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 14:03:04,289 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 14:03:04,290 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 14:03:04,290 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 14:03:14,972 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 14:04:04,290 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.282813, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:05:04,313 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.305182, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:06:04,323 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.316029, Messages: 0, Failed: 0, Clients: 0, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:06:56,443 - __main__ - INFO - Command published: restart to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211216442_2957, params: {})
+2026-05-31 14:07:04,342 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.334442, Messages: 10, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:07:05,414 - commands - INFO - Command: restart | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:07:05,429 - __main__ - INFO - [✓] Command result diterima: restart dari DESKTOP-RDHIAJV
+2026-05-31 14:07:08,659 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211228658_1279, params: {})
+2026-05-31 14:07:09,058 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:07:09,059 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:08:04,357 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.349523, Messages: 29, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:08:19,941 - __main__ - INFO - Command published: shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211299941_6325, params: {})
+2026-05-31 14:08:27,987 - commands - INFO - Command: shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:08:27,992 - __main__ - INFO - [✓] Command result diterima: shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:09:04,353 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.345673, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:10:04,367 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.359655, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:10:32,098 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 14:10:32,568 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 14:11:04,386 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.378580, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:12:04,388 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.380727, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:13:04,402 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.394311, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:14:04,402 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.394697, Messages: 46, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:14:44,301 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 14:14:44,673 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 14:14:49,928 - __main__ - INFO - Command published: restart to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211689927_6584, params: {})
+2026-05-31 14:14:58,573 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211698572_1229, params: {})
+2026-05-31 14:15:04,053 - commands - INFO - Command: restart | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:15:04,055 - __main__ - INFO - [✓] Command result diterima: restart dari DESKTOP-RDHIAJV
+2026-05-31 14:15:04,059 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:15:04,061 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:15:04,423 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.415763, Messages: 54, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:15:18,511 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211718511_2093, params: {})
+2026-05-31 14:15:18,631 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: error | Output: Unable to abort the system shutdown because no shutdown was in progress.(1116)...
+2026-05-31 14:15:18,637 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:15:43,308 - __main__ - INFO - Command published: tasklist to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211743308_3351, params: {})
+2026-05-31 14:15:43,828 - commands - INFO - Command: tasklist | Host: DESKTOP-RDHIAJV | Status: success | Output: Image Name                     PID Session Name        Session#    Mem Usage
+======================...
+2026-05-31 14:15:43,831 - __main__ - INFO - [✓] Command result diterima: tasklist dari DESKTOP-RDHIAJV
+2026-05-31 14:15:54,342 - __main__ - INFO - Command published: ipconfig to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211754339_4376, params: {})
+2026-05-31 14:15:54,418 - commands - INFO - Command: ipconfig | Host: DESKTOP-RDHIAJV | Status: success | Output: Windows IP Configuration
+
+
+Ethernet adapter Ethernet:
+
+   Media State . . . . . . . . . . . : M...
+2026-05-31 14:15:54,422 - __main__ - INFO - [✓] Command result diterima: ipconfig dari DESKTOP-RDHIAJV
+2026-05-31 14:16:04,435 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.427505, Messages: 74, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:16:07,836 - __main__ - INFO - Command published: taskkill to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211767836_8429, params: {'process_name': 'chrome.exe'})
+2026-05-31 14:16:08,037 - commands - INFO - Command: taskkill | Host: DESKTOP-RDHIAJV | Status: success | Output: SUCCESS: The process "chrome.exe" with PID 9752 has been terminated.
+SUCCESS: The process "chrome.e...
+2026-05-31 14:16:08,039 - __main__ - INFO - [✓] Command result diterima: taskkill dari DESKTOP-RDHIAJV
+2026-05-31 14:16:21,235 - __main__ - INFO - Command published: systeminfo to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780211781234_3075, params: {})
+2026-05-31 14:16:25,021 - commands - INFO - Command: systeminfo | Host: DESKTOP-RDHIAJV | Status: success | Output: Host Name:                 DESKTOP-RDHIAJV
+OS Name:                   Microsoft Windows 10 Pro
+OS ...
+2026-05-31 14:16:25,023 - __main__ - INFO - [✓] Command result diterima: systeminfo dari DESKTOP-RDHIAJV
+2026-05-31 14:17:04,445 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.435922, Messages: 96, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:18:04,452 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.444461, Messages: 114, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:18:32,889 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 14:18:33,269 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 14:19:04,473 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.465436, Messages: 127, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:20:04,479 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.471654, Messages: 148, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:21:04,507 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.499180, Messages: 169, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:22:04,524 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.516356, Messages: 190, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:23:04,539 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.531513, Messages: 212, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:24:04,557 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.549487, Messages: 234, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:25:04,578 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.570008, Messages: 257, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:26:04,590 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.583018, Messages: 279, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:27:04,598 - __main__ - INFO - 📊 Stats - Uptime: 0:24:00.590514, Messages: 302, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:28:04,601 - __main__ - INFO - 📊 Stats - Uptime: 0:25:00.593314, Messages: 324, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:29:04,624 - __main__ - INFO - 📊 Stats - Uptime: 0:26:00.616120, Messages: 344, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:30:04,636 - __main__ - INFO - 📊 Stats - Uptime: 0:27:00.629012, Messages: 365, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:31:04,655 - __main__ - INFO - 📊 Stats - Uptime: 0:28:00.647436, Messages: 386, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:32:04,655 - __main__ - INFO - 📊 Stats - Uptime: 0:29:00.647201, Messages: 408, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:33:04,667 - __main__ - INFO - 📊 Stats - Uptime: 0:30:00.659936, Messages: 430, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:34:04,679 - __main__ - INFO - 📊 Stats - Uptime: 0:31:00.671876, Messages: 453, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:35:04,699 - __main__ - INFO - 📊 Stats - Uptime: 0:32:00.691993, Messages: 476, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:36:04,707 - __main__ - INFO - 📊 Stats - Uptime: 0:33:00.699596, Messages: 499, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:37:04,708 - __main__ - INFO - 📊 Stats - Uptime: 0:34:00.700371, Messages: 523, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:38:04,713 - __main__ - INFO - 📊 Stats - Uptime: 0:35:00.705175, Messages: 546, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:39:04,712 - __main__ - INFO - 📊 Stats - Uptime: 0:36:00.704431, Messages: 570, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:40:04,727 - __main__ - INFO - 📊 Stats - Uptime: 0:37:00.719349, Messages: 593, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:41:04,741 - __main__ - INFO - 📊 Stats - Uptime: 0:38:00.733296, Messages: 616, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:42:04,734 - __main__ - INFO - 📊 Stats - Uptime: 0:39:00.726468, Messages: 639, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:43:04,746 - __main__ - INFO - 📊 Stats - Uptime: 0:40:00.738899, Messages: 662, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:44:04,752 - __main__ - INFO - 📊 Stats - Uptime: 0:41:00.744399, Messages: 685, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:45:04,745 - __main__ - INFO - 📊 Stats - Uptime: 0:42:00.737673, Messages: 708, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:46:04,739 - __main__ - INFO - 📊 Stats - Uptime: 0:43:00.731146, Messages: 730, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:47:04,749 - __main__ - INFO - 📊 Stats - Uptime: 0:44:00.741640, Messages: 753, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:48:04,742 - __main__ - INFO - 📊 Stats - Uptime: 0:45:00.734192, Messages: 775, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:49:04,763 - __main__ - INFO - 📊 Stats - Uptime: 0:46:00.755486, Messages: 798, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:50:04,774 - __main__ - INFO - 📊 Stats - Uptime: 0:47:00.766713, Messages: 822, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:51:04,790 - __main__ - INFO - 📊 Stats - Uptime: 0:48:00.782682, Messages: 846, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:51:51,824 - __main__ - INFO - Command published: shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780213911824_6973, params: {})
+2026-05-31 14:51:58,421 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780213918420_8158, params: {})
+2026-05-31 14:52:04,777 - __main__ - INFO - 📊 Stats - Uptime: 0:49:00.769774, Messages: 865, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:52:05,556 - commands - INFO - Command: shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:52:05,559 - __main__ - INFO - [✓] Command result diterima: shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:52:05,560 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 14:52:05,561 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 14:53:04,785 - __main__ - INFO - 📊 Stats - Uptime: 0:50:00.777138, Messages: 894, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:54:04,796 - __main__ - INFO - 📊 Stats - Uptime: 0:51:00.788155, Messages: 918, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:55:04,807 - __main__ - INFO - 📊 Stats - Uptime: 0:52:00.799985, Messages: 941, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:56:04,827 - __main__ - INFO - 📊 Stats - Uptime: 0:53:00.819504, Messages: 964, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:57:04,834 - __main__ - INFO - 📊 Stats - Uptime: 0:54:00.826524, Messages: 988, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:58:04,820 - __main__ - INFO - 📊 Stats - Uptime: 0:55:00.812465, Messages: 1011, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 14:59:04,833 - __main__ - INFO - 📊 Stats - Uptime: 0:56:00.826074, Messages: 1035, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:00:04,845 - __main__ - INFO - 📊 Stats - Uptime: 0:57:00.838074, Messages: 1058, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:01:04,845 - __main__ - INFO - 📊 Stats - Uptime: 0:58:00.837315, Messages: 1081, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:02:04,853 - __main__ - INFO - 📊 Stats - Uptime: 0:59:00.845861, Messages: 1105, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:03:04,870 - __main__ - INFO - 📊 Stats - Uptime: 1:00:00.862814, Messages: 1128, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:04:04,863 - __main__ - INFO - 📊 Stats - Uptime: 1:01:00.855186, Messages: 1150, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:04:22,972 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:04:23,563 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:04:34,339 - __main__ - INFO - Command published: restart to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780214674339_3053, params: {})
+2026-05-31 15:04:44,152 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780214684151_2366, params: {})
+2026-05-31 15:04:49,662 - __main__ - WARNING - [TIMEOUT] DESKTOP-RDHIAJV marked offline (no data for 16s)
+2026-05-31 15:04:52,204 - commands - INFO - Command: restart | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:04:52,205 - __main__ - INFO - [✓] Command result diterima: restart dari DESKTOP-RDHIAJV
+2026-05-31 15:04:52,207 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:04:52,209 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 15:05:04,855 - __main__ - INFO - 📊 Stats - Uptime: 1:02:00.847101, Messages: 1171, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:05:42,147 - __main__ - INFO - Command published: restart to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780214742146_9973, params: {})
+2026-05-31 15:05:54,083 - __main__ - INFO - Command published: cancel_shutdown to DESKTOP-RDHIAJV (ID: DESKTOP-RDHIAJV_1780214754082_9701, params: {})
+2026-05-31 15:05:59,663 - commands - INFO - Command: restart | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:05:59,666 - __main__ - INFO - [✓] Command result diterima: restart dari DESKTOP-RDHIAJV
+2026-05-31 15:05:59,667 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:05:59,671 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 15:06:04,867 - __main__ - INFO - 📊 Stats - Uptime: 1:03:00.859802, Messages: 1195, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:07:04,892 - __main__ - INFO - 📊 Stats - Uptime: 1:04:00.884720, Messages: 1218, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:08:04,885 - __main__ - INFO - 📊 Stats - Uptime: 1:05:00.877930, Messages: 1241, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:09:04,896 - __main__ - INFO - 📊 Stats - Uptime: 1:06:00.887822, Messages: 1264, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:10:04,890 - __main__ - INFO - 📊 Stats - Uptime: 1:07:00.882227, Messages: 1288, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:11:04,890 - __main__ - INFO - 📊 Stats - Uptime: 1:08:00.882389, Messages: 1310, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:12:04,895 - __main__ - INFO - 📊 Stats - Uptime: 1:09:00.887218, Messages: 1333, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:13:04,903 - __main__ - INFO - 📊 Stats - Uptime: 1:10:00.895290, Messages: 1356, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:14:04,909 - __main__ - INFO - 📊 Stats - Uptime: 1:11:00.901604, Messages: 1379, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:15:04,916 - __main__ - INFO - 📊 Stats - Uptime: 1:12:00.908270, Messages: 1403, Failed: 0, Clients: 1, WS Connections: 1, Broadcast Failures: 0
+2026-05-31 15:15:34,810 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:15:34,914 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 15:15:35,601 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-31 15:15:35,604 - __main__ - INFO - Will attempt to reconnect in 5 seconds...
+2026-05-31 15:17:30,959 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-05-31 15:17:30,959 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 15:17:30,959 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-05-31 15:17:30,971 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 15:17:30,978 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 15:17:30,988 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 15:17:54,244 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-05-31 15:17:54,246 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-05-31 15:17:54,568 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:18:14,207 - __main__ - INFO - [AUDIT] Command: shutdown ke DESKTOP-RDHIAJV dari 127.0.0.1
+2026-05-31 15:18:14,209 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: DESKTOP-RDHIAJV | Command: shutdown | ID: DESKTOP-RDHIAJV_1780215494206_6907
+2026-05-31 15:18:19,911 - __main__ - INFO - [AUDIT] Command: cancel_shutdown ke DESKTOP-RDHIAJV dari 127.0.0.1
+2026-05-31 15:18:19,914 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: DESKTOP-RDHIAJV | Command: cancel_shutdown | ID: DESKTOP-RDHIAJV_1780215499911_9460
+2026-05-31 15:18:30,989 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.094972, Messages: 12, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-05-31 15:18:31,065 - __main__ - WARNING - [TIMEOUT] DESKTOP-RDHIAJV marked offline
+2026-05-31 15:18:31,719 - commands - INFO - Command: shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:18:31,724 - __main__ - INFO - [✓] Command result diterima: shutdown dari DESKTOP-RDHIAJV
+2026-05-31 15:18:31,726 - commands - INFO - Command: cancel_shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:18:31,735 - __main__ - INFO - [✓] Command result diterima: cancel_shutdown dari DESKTOP-RDHIAJV
+2026-05-31 15:18:55,186 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-05-31 15:18:55,187 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-05-31 15:18:55,196 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:18:56,811 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:19:05,715 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-05-31 15:19:05,717 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-05-31 15:19:06,035 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-05-31 15:19:31,015 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.121230, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
