@@ -1,7 +1,7 @@
 """
 Lab Monitoring System - Complete Solution with Robust Error Handling
 FastAPI + MQTT Subscriber + WebSocket + Demo Mode
-Version: 2.1.0 - Secure Edition
+Version: 2.2.0 - Google OAuth Edition
 """
 
 import json
@@ -15,7 +15,7 @@ import secrets
 import hashlib
 import os
 from datetime import datetime, timedelta
-from typing import Dict, Set, Optional, Any
+from typing import Dict, Set, Optional, Any, List
 from dataclasses import dataclass, field
 from functools import wraps
 
@@ -26,6 +26,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 import paho.mqtt.client as mqtt
 import uvicorn
+
+# ==================== GOOGLE OAUTH (Opsional) ====================
+GOOGLE_AUTH_AVAILABLE = False
+try:
+    from google.oauth2 import id_token
+    from google.auth.transport import requests as google_requests
+    GOOGLE_AUTH_AVAILABLE = True
+except ImportError:
+    pass
 
 # ==================== KEAMANAN ====================
 # Ubah password ini! Gunakan password yang kuat dan unik.
@@ -49,8 +58,18 @@ COMMAND_RATE_LIMIT_MAX = 5  # Max command per window
 FAILED_LOGIN_LIMIT = 5  # Max gagal login sebelum diblokir
 FAILED_LOGIN_BLOCK = 300  # Blokir 5 menit
 
+# ==================== GOOGLE OAUTH CONFIG ====================
+# Client ID dari Google Cloud Console!
+GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "1024514167323-0pc62a62d85jrjor7tqaeme12lt7pk2n.apps.googleusercontent.com")
+
+# Daftar email yang diizinkan login (pisahkan dengan koma)
+# Hanya email dalam daftar ini yang bisa masuk dashboard!
+ALLOWED_EMAILS = os.environ.get("ALLOWED_EMAILS", "rizkyharun122@gmail.com")
+ALLOWED_EMAILS_LIST = [e.strip().lower() for e in ALLOWED_EMAILS.split(",") if e.strip()]
+
+
 # ==================== KONFIGURASI ====================
-MQTT_BROKER = "localhost"
+MQTT_BROKER = "10.190.143.166"
 MQTT_PORT = 1883
 MQTT_TOPIC = "lab/monitoring/+"
 MQTT_COMMAND_RESULT_TOPIC = "lab/command/result/+"
@@ -438,6 +457,75 @@ async def check_auth_status(request: Request):
             "session_remaining": max(0, remaining)
         })
     return JSONResponse({"authenticated": False})
+
+
+# ==================== GOOGLE OAUTH ENDPOINT ====================
+@app.post("/api/auth/google")
+async def google_auth(request: Request):
+    """Login dengan Google"""
+    client_ip = request.client.host if request.client else "unknown"
+    
+    # Cek apakah Google OAuth sudah dikonfigurasi
+    if not GOOGLE_CLIENT_ID:
+        return JSONResponse(status_code=400, content={
+            "detail": "Google OAuth belum dikonfigurasi. Set GOOGLE_CLIENT_ID dan ALLOWED_EMAILS."
+        })
+    
+    try:
+        data = await request.json()
+        id_token_str = data.get("id_token", "")
+        
+        if not id_token_str:
+            return JSONResponse(status_code=400, content={"detail": "Token tidak ditemukan"})
+        
+        # Verifikasi token dengan Google
+        try:
+            token_info = id_token.verify_oauth2_token(
+                id_token_str, 
+                google_requests.Request(), 
+                GOOGLE_CLIENT_ID
+            )
+        except ValueError as e:
+            logger.warning(f"[SECURITY] Token Google tidak valid dari {client_ip}: {e}")
+            return JSONResponse(status_code=401, content={"detail": "Token Google tidak valid"})
+        
+        # Ambil email dari token
+        user_email = token_info.get("email", "").lower()
+        user_name = token_info.get("name", user_email)
+        
+        # Cek apakah email diizinkan
+        if ALLOWED_EMAILS_LIST and user_email not in ALLOWED_EMAILS_LIST:
+            logger.warning(f"[SECURITY] Email tidak terdaftar: {user_email} dari {client_ip}")
+            audit_logger.info(f"GOOGLE_LOGIN_DENIED | Email: {user_email} | IP: {client_ip}")
+            return JSONResponse(status_code=403, content={
+                "detail": f"Akses ditolak. Email {user_email} tidak terdaftar. Hubungi admin."
+            })
+        
+        # Buat session
+        session_token = create_session()
+        session = sessions[session_token]
+        session["ip"] = client_ip
+        session["user_agent"] = request.headers.get("User-Agent", "")
+        session["email"] = user_email
+        session["login_type"] = "google"
+        
+        # Simpan di cookie
+        request.session["session"] = session_token
+        
+        logger.info(f"[AUDIT] Google Login berhasil: {user_email} dari {client_ip}")
+        audit_logger.info(f"GOOGLE_LOGIN_SUCCESS | Email: {user_email} | IP: {client_ip}")
+        
+        return JSONResponse({
+            "status": "success",
+            "session": session_token,
+            "email": user_email,
+            "name": user_name,
+            "message": f"Selamat datang, {user_name}!"
+        })
+        
+    except Exception as e:
+        logger.error(f"Google Auth error: {e}")
+        return JSONResponse(status_code=400, content={"detail": "Gagal autentikasi dengan Google"})
 
 
 # ==================== CLIENT STATE ====================

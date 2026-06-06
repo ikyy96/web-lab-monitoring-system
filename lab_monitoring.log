@@ -10018,3 +10018,479 @@ OS ...
 2026-05-31 15:19:05,717 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
 2026-05-31 15:19:06,035 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
 2026-05-31 15:19:31,015 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.121230, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:20:31,016 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.121933, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:21:31,026 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.132290, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:22:31,028 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.134387, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:23:31,030 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.136118, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:24:31,038 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.144209, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:25:31,059 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.165138, Messages: 39, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-05-31 15:25:54,178 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-05-31 15:25:54,179 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:25:54,644 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:26:20,729 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:26:21,132 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:26:25,481 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:26:25,596 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 15:26:25,814 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-31 15:26:28,673 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-05-31 15:26:28,674 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 15:26:28,674 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-05-31 15:26:28,681 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 15:26:28,682 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 15:26:28,694 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 15:26:29,020 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:26:33,496 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:26:47,266 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-05-31 15:26:47,267 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-05-31 15:26:47,595 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:27:17,596 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:27:17,992 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:27:28,708 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.079385, Messages: 1, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-05-31 15:28:28,741 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.112334, Messages: 18, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-05-31 15:28:46,659 - __main__ - INFO - [AUDIT] Command: shutdown ke DESKTOP-RDHIAJV dari 127.0.0.1
+2026-05-31 15:28:46,661 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: DESKTOP-RDHIAJV | Command: shutdown | ID: DESKTOP-RDHIAJV_1780216126659_5536
+2026-05-31 15:29:04,000 - __main__ - WARNING - [TIMEOUT] DESKTOP-RDHIAJV marked offline
+2026-05-31 15:29:04,038 - commands - INFO - Command: shutdown | Host: DESKTOP-RDHIAJV | Status: success | Output: Command executed successfully (no output)...
+2026-05-31 15:29:04,042 - __main__ - INFO - [✓] Command result diterima: shutdown dari DESKTOP-RDHIAJV
+2026-05-31 15:29:28,763 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.134489, Messages: 40, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-05-31 15:29:49,561 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:29:49,954 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 15:30:27,038 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-05-31 15:30:27,146 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 15:30:27,756 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-31 23:54:31,894 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-05-31 23:54:31,894 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 23:54:31,894 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-05-31 23:54:31,917 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 23:54:31,917 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 23:54:31,917 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 23:55:31,920 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.216217, Messages: 0, Failed: 0, Clients: 0, WS: 0, Sessions: 0
+2026-05-31 23:55:43,559 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 23:55:44,482 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-31 23:55:47,725 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-05-31 23:55:47,725 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 23:55:47,725 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-05-31 23:55:47,745 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 23:55:47,745 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 23:55:47,745 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 23:55:56,333 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-05-31 23:55:56,828 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-05-31 23:56:16,857 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-05-31 23:56:16,857 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-05-31 23:56:16,857 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-05-31 23:56:16,880 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-05-31 23:56:16,880 - __main__ - INFO - 🚀 MQTT client started
+2026-05-31 23:56:16,880 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-05-31 23:56:49,188 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-05-31 23:56:49,188 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-05-31 23:56:49,535 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-05-31 23:57:16,882 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.083513, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-05-31 23:58:16,852 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.053131, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-05-31 23:59:16,870 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.071339, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-01 00:00:16,876 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.078250, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-01 00:01:16,871 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.072821, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-01 00:02:16,881 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.083005, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-01 00:02:54,657 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=7)
+2026-06-01 00:03:09,409 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-01 00:03:09,511 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-01 21:35:44,567 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-01 21:35:44,568 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-01 21:35:44,568 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-01 21:35:44,580 - __main__ - INFO - 🚀 MQTT client started
+2026-06-01 21:35:44,580 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-06-01 21:35:44,590 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-01 21:36:21,481 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-01 21:36:21,482 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-01 21:36:21,828 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-01 21:36:44,572 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.126597, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-01 21:37:44,586 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.140686, Messages: 14, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:38:44,610 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.165017, Messages: 28, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:39:44,616 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.171203, Messages: 34, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:40:44,634 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.189035, Messages: 36, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:40:55,662 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-01 21:40:56,162 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-01 21:41:44,650 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.204604, Messages: 50, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:42:44,679 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.234087, Messages: 64, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:43:44,697 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.251560, Messages: 78, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:44:44,705 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.260326, Messages: 92, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:45:44,681 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.235656, Messages: 106, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:46:44,704 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.259319, Messages: 120, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:47:44,703 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.257969, Messages: 134, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:48:44,680 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.235518, Messages: 148, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:49:44,703 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.257787, Messages: 161, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:50:44,715 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.269986, Messages: 175, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:51:44,731 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.285622, Messages: 188, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:52:44,727 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.281532, Messages: 201, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:53:44,748 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.303131, Messages: 213, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:54:44,751 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.306194, Messages: 226, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:55:44,765 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.320090, Messages: 240, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:56:44,787 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.342042, Messages: 253, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:57:44,795 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.349821, Messages: 267, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:58:44,811 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.365564, Messages: 282, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-01 21:59:40,499 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-01 21:59:40,607 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-01 21:59:40,962 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-02 08:53:35,644 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-02 08:53:35,646 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-02 08:53:35,646 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-02 08:53:35,672 - __main__ - INFO - 🚀 MQTT client started
+2026-06-02 08:53:35,672 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-06-02 08:53:35,694 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-02 08:54:24,693 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-02 08:54:24,699 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-02 08:54:25,123 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-02 08:54:35,673 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.468555, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 08:55:35,692 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.487170, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 08:56:35,712 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.506291, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 08:57:35,718 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.513832, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 08:58:35,723 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.518029, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 08:59:35,718 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.513646, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 09:00:35,718 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.513581, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-02 09:01:34,213 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-02 09:01:34,817 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-02 09:01:35,716 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.511132, Messages: 9, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-02 09:01:39,240 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-02 09:01:39,244 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-02 09:01:39,276 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-02 09:01:40,944 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-02 09:01:52,110 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-02 09:01:52,114 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-02 09:01:52,438 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-02 09:01:55,791 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-02 09:01:55,799 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-02 09:01:55,814 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-02 09:01:57,298 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-02 09:02:35,730 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.525501, Messages: 20, Failed: 0, Clients: 1, WS: 2, Sessions: 0
+2026-06-02 09:02:37,171 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-02 09:02:37,171 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-02 09:02:37,491 - __main__ - INFO - 🔌 WebSocket connected. Total: 3
+2026-06-02 09:03:35,128 - __main__ - INFO - [AUDIT] Command: tasklist ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:03:35,130 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: tasklist | ID: LOQ-15IAX9_1780365815121_3051
+2026-06-02 09:03:35,733 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.528457, Messages: 30, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:03:36,751 - commands - INFO - Command: tasklist | Host: LOQ-15IAX9 | Status: success | Output: Image Name                     PID Session Name        Session#    Mem Usage
+======================...
+2026-06-02 09:03:36,778 - __main__ - INFO - [✓] Command result diterima: tasklist dari LOQ-15IAX9
+2026-06-02 09:03:52,115 - __main__ - INFO - [AUDIT] Command: ipconfig ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:03:52,122 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: ipconfig | ID: LOQ-15IAX9_1780365832115_1218
+2026-06-02 09:03:52,462 - commands - INFO - Command: ipconfig | Host: LOQ-15IAX9 | Status: success | Output: Windows IP Configuration
+
+
+Ethernet adapter Ethernet:
+
+   Media State . . . . . . . . . . . : M...
+2026-06-02 09:03:52,468 - __main__ - INFO - [✓] Command result diterima: ipconfig dari LOQ-15IAX9
+2026-06-02 09:04:00,523 - __main__ - INFO - [AUDIT] Command: whoami ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:04:00,529 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: whoami | ID: LOQ-15IAX9_1780365840523_7726
+2026-06-02 09:04:01,476 - commands - INFO - Command: whoami | Host: LOQ-15IAX9 | Status: success | Output: LENOVO...
+2026-06-02 09:04:01,476 - __main__ - INFO - [✓] Command result diterima: whoami dari LOQ-15IAX9
+2026-06-02 09:04:07,190 - __main__ - INFO - [AUDIT] Command: systeminfo ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:04:07,195 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: systeminfo | ID: LOQ-15IAX9_1780365847190_3761
+2026-06-02 09:04:14,707 - commands - INFO - Command: systeminfo | Host: LOQ-15IAX9 | Status: success | Output: Host Name:                     LOQ-15IAX9
+OS Name:                       Microsoft Windows 11 Home ...
+2026-06-02 09:04:14,707 - __main__ - INFO - [✓] Command result diterima: systeminfo dari LOQ-15IAX9
+2026-06-02 09:04:35,741 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.536384, Messages: 41, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:04:45,644 - __main__ - INFO - [AUDIT] Command: tasklist ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:04:45,648 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: tasklist | ID: LOQ-15IAX9_1780365885643_8879
+2026-06-02 09:04:47,310 - commands - INFO - Command: tasklist | Host: LOQ-15IAX9 | Status: success | Output: Image Name                     PID Session Name        Session#    Mem Usage
+======================...
+2026-06-02 09:04:47,314 - __main__ - INFO - [✓] Command result diterima: tasklist dari LOQ-15IAX9
+2026-06-02 09:05:08,795 - __main__ - WARNING - [SECURITY] Dangerous command without password: taskkill from 127.0.0.1
+2026-06-02 09:05:08,802 - audit - INFO - DANGEROUS_CMD_NO_PASS | IP: 127.0.0.1 | Command: taskkill
+2026-06-02 09:05:16,599 - __main__ - INFO - [AUDIT] Command: taskkill ke LOQ-15IAX9 dari 127.0.0.1
+2026-06-02 09:05:16,603 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: LOQ-15IAX9 | Command: taskkill | ID: LOQ-15IAX9_1780365916599_8592
+2026-06-02 09:05:17,284 - commands - INFO - Command: taskkill | Host: LOQ-15IAX9 | Status: success | Output: SUCCESS: The process "WINWORD.EXE" with PID 3844 has been terminated....
+2026-06-02 09:05:17,287 - __main__ - INFO - [✓] Command result diterima: taskkill dari LOQ-15IAX9
+2026-06-02 09:05:35,760 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.555651, Messages: 51, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:06:35,766 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.560918, Messages: 62, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:07:35,761 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.556363, Messages: 73, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:08:35,780 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.575410, Messages: 85, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:09:35,796 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.591528, Messages: 96, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:10:35,791 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.586582, Messages: 107, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:11:35,791 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.586045, Messages: 118, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:12:35,780 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.575909, Messages: 129, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:13:35,789 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.584631, Messages: 140, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:14:35,807 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.602463, Messages: 151, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:15:35,827 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.622852, Messages: 161, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-02 09:16:27,752 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 2
+2026-06-02 09:16:27,759 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-02 09:16:27,761 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-02 09:16:28,465 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-02 09:16:35,862 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.657452, Messages: 173, Failed: 0, Clients: 2, WS: 1, Sessions: 1
+2026-06-02 09:17:19,411 - __main__ - INFO - [AUDIT] Command: shutdown ke A15 dari 127.0.0.1
+2026-06-02 09:17:19,419 - audit - INFO - COMMAND | IP: 127.0.0.1 | Target: A15 | Command: shutdown | ID: A15_1780366639411_2102
+2026-06-02 09:17:35,868 - __main__ - INFO - 📊 Stats - Uptime: 0:24:00.662991, Messages: 194, Failed: 0, Clients: 2, WS: 1, Sessions: 1
+2026-06-02 09:17:37,096 - __main__ - WARNING - [TIMEOUT] A15 marked offline
+2026-06-02 09:17:38,472 - commands - INFO - Command: shutdown | Host: A15 | Status: success | Output: Command executed successfully (no output)...
+2026-06-02 09:17:38,480 - __main__ - INFO - [✓] Command result diterima: shutdown dari A15
+2026-06-02 09:18:35,869 - __main__ - INFO - 📊 Stats - Uptime: 0:25:00.664688, Messages: 217, Failed: 0, Clients: 2, WS: 1, Sessions: 1
+2026-06-02 09:19:06,374 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-02 09:19:06,484 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-02 09:19:07,082 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-05 13:45:57,774 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-05 13:45:57,774 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-05 13:45:57,774 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-05 13:45:57,795 - __main__ - INFO - 🚀 MQTT client started
+2026-06-05 13:45:57,795 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-06-05 13:45:57,811 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-05 13:46:57,803 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.195593, Messages: 0, Failed: 0, Clients: 0, WS: 0, Sessions: 0
+2026-06-05 13:47:18,012 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 13:47:18,012 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 13:47:18,370 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 13:47:57,807 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.198771, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-05 13:48:57,816 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.208361, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-05 13:49:57,812 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.204198, Messages: 11, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 13:50:30,960 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 13:50:57,808 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.200070, Messages: 26, Failed: 0, Clients: 1, WS: 0, Sessions: 1
+2026-06-05 13:51:57,826 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.217926, Messages: 40, Failed: 0, Clients: 1, WS: 0, Sessions: 1
+2026-06-05 13:52:31,186 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 13:52:39,702 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 13:52:40,172 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 13:52:57,838 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.230230, Messages: 54, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 13:53:06,396 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-05 13:53:06,396 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-05 13:53:06,402 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 13:53:07,899 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 13:53:15,209 - __main__ - ERROR - Google Auth error: name 'id_token' is not defined
+2026-06-05 13:53:23,490 - __main__ - ERROR - Google Auth error: name 'id_token' is not defined
+2026-06-05 13:53:29,508 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 13:53:29,508 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 13:53:29,824 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 13:53:57,855 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.247044, Messages: 68, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:54:57,857 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.249095, Messages: 83, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:55:57,862 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.254407, Messages: 98, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:56:57,855 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.246815, Messages: 112, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:57:57,862 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.254261, Messages: 126, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:58:57,874 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.266681, Messages: 141, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 13:59:57,871 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.263425, Messages: 156, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:00:57,884 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.276725, Messages: 172, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:01:57,886 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.278554, Messages: 187, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:02:57,891 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.283148, Messages: 201, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:03:57,914 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.306429, Messages: 216, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:04:57,932 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.323830, Messages: 231, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:05:57,947 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.339418, Messages: 244, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:06:57,949 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.341408, Messages: 258, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:07:57,952 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.344217, Messages: 272, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:08:57,948 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.339911, Messages: 288, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:09:57,959 - __main__ - INFO - 📊 Stats - Uptime: 0:24:00.351093, Messages: 302, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:10:57,950 - __main__ - INFO - 📊 Stats - Uptime: 0:25:00.341841, Messages: 316, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:11:57,960 - __main__ - INFO - 📊 Stats - Uptime: 0:26:00.352518, Messages: 330, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:12:57,970 - __main__ - INFO - 📊 Stats - Uptime: 0:27:00.362195, Messages: 344, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:13:57,972 - __main__ - INFO - 📊 Stats - Uptime: 0:28:00.364254, Messages: 358, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:14:57,982 - __main__ - INFO - 📊 Stats - Uptime: 0:29:00.374305, Messages: 371, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:15:58,002 - __main__ - INFO - 📊 Stats - Uptime: 0:30:00.393908, Messages: 385, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:16:58,008 - __main__ - INFO - 📊 Stats - Uptime: 0:31:00.400734, Messages: 398, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:17:58,031 - __main__ - INFO - 📊 Stats - Uptime: 0:32:00.423462, Messages: 411, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:18:58,034 - __main__ - INFO - 📊 Stats - Uptime: 0:33:00.426586, Messages: 424, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:19:58,041 - __main__ - INFO - 📊 Stats - Uptime: 0:34:00.433393, Messages: 438, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:20:58,040 - __main__ - INFO - 📊 Stats - Uptime: 0:35:00.432619, Messages: 452, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:21:58,053 - __main__ - INFO - 📊 Stats - Uptime: 0:36:00.444882, Messages: 465, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:22:58,046 - __main__ - INFO - 📊 Stats - Uptime: 0:37:00.437914, Messages: 478, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:23:58,040 - __main__ - INFO - 📊 Stats - Uptime: 0:38:00.431989, Messages: 492, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:24:58,053 - __main__ - INFO - 📊 Stats - Uptime: 0:39:00.444877, Messages: 506, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:25:58,078 - __main__ - INFO - 📊 Stats - Uptime: 0:40:00.470347, Messages: 518, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:26:58,089 - __main__ - INFO - 📊 Stats - Uptime: 0:41:00.480876, Messages: 531, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:27:58,100 - __main__ - INFO - 📊 Stats - Uptime: 0:42:00.491961, Messages: 543, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:28:58,109 - __main__ - INFO - 📊 Stats - Uptime: 0:43:00.500866, Messages: 556, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 14:29:42,109 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 14:29:42,109 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 14:29:42,217 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-05 14:29:42,304 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-05 14:29:47,079 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-05 14:29:47,089 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-05 14:29:47,090 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-05 14:29:47,105 - __main__ - INFO - 🚀 MQTT client started
+2026-06-05 14:29:47,105 - __main__ - INFO - ✅ Connected to MQTT Broker at localhost:1883
+2026-06-05 14:29:47,106 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-05 14:29:47,122 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 14:29:51,572 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 14:29:59,520 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 14:29:59,522 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 14:30:28,951 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 14:30:28,952 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 14:30:29,286 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 14:30:47,122 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.090213, Messages: 15, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:31:47,123 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.091315, Messages: 29, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:32:01,340 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 14:32:01,871 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 14:32:47,103 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.070986, Messages: 42, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:33:47,109 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.077344, Messages: 56, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:34:47,107 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.075268, Messages: 70, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:35:47,127 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.094862, Messages: 84, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:36:47,125 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.092467, Messages: 98, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:37:47,132 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.099543, Messages: 112, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:38:47,145 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.113164, Messages: 126, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:39:47,156 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.123632, Messages: 140, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:40:47,176 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.143743, Messages: 155, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:41:47,156 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.124130, Messages: 168, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:42:47,178 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.146199, Messages: 183, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:43:47,182 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.149591, Messages: 197, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:44:47,196 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.163969, Messages: 211, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:45:47,215 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.183269, Messages: 224, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:46:47,221 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.188993, Messages: 238, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:47:47,217 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.184421, Messages: 252, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:48:47,221 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.188004, Messages: 265, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:49:47,221 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.189061, Messages: 279, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:50:47,215 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.183057, Messages: 292, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:51:47,226 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.194092, Messages: 306, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:52:47,224 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.191863, Messages: 320, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:53:47,234 - __main__ - INFO - 📊 Stats - Uptime: 0:24:00.201571, Messages: 334, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:54:47,240 - __main__ - INFO - 📊 Stats - Uptime: 0:25:00.208218, Messages: 348, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:55:47,227 - __main__ - INFO - 📊 Stats - Uptime: 0:26:00.195143, Messages: 362, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:56:47,234 - __main__ - INFO - 📊 Stats - Uptime: 0:27:00.201780, Messages: 375, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:57:47,233 - __main__ - INFO - 📊 Stats - Uptime: 0:28:00.200725, Messages: 389, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:58:47,241 - __main__ - INFO - 📊 Stats - Uptime: 0:29:00.208554, Messages: 402, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 14:59:47,231 - __main__ - INFO - 📊 Stats - Uptime: 0:30:00.198649, Messages: 416, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:00:47,246 - __main__ - INFO - 📊 Stats - Uptime: 0:31:00.213936, Messages: 430, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:01:47,234 - __main__ - INFO - 📊 Stats - Uptime: 0:32:00.202392, Messages: 444, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:02:47,241 - __main__ - INFO - 📊 Stats - Uptime: 0:33:00.208609, Messages: 458, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:03:47,250 - __main__ - INFO - 📊 Stats - Uptime: 0:34:00.217856, Messages: 472, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:04:47,236 - __main__ - INFO - 📊 Stats - Uptime: 0:35:00.204088, Messages: 486, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:05:47,233 - __main__ - INFO - 📊 Stats - Uptime: 0:36:00.201207, Messages: 500, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:06:47,238 - __main__ - INFO - 📊 Stats - Uptime: 0:37:00.205897, Messages: 514, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:07:47,247 - __main__ - INFO - 📊 Stats - Uptime: 0:38:00.214977, Messages: 528, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:08:47,255 - __main__ - INFO - 📊 Stats - Uptime: 0:39:00.222609, Messages: 542, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:09:47,232 - __main__ - INFO - 📊 Stats - Uptime: 0:40:00.200052, Messages: 557, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:10:47,257 - __main__ - INFO - 📊 Stats - Uptime: 0:41:00.225341, Messages: 571, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:11:47,258 - __main__ - INFO - 📊 Stats - Uptime: 0:42:00.225679, Messages: 585, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:12:47,269 - __main__ - INFO - 📊 Stats - Uptime: 0:43:00.237184, Messages: 599, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:13:47,269 - __main__ - INFO - 📊 Stats - Uptime: 0:44:00.236503, Messages: 613, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:14:47,271 - __main__ - INFO - 📊 Stats - Uptime: 0:45:00.239382, Messages: 628, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:15:47,263 - __main__ - INFO - 📊 Stats - Uptime: 0:46:00.230505, Messages: 642, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:16:47,294 - __main__ - INFO - 📊 Stats - Uptime: 0:47:00.262196, Messages: 656, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:17:47,298 - __main__ - INFO - 📊 Stats - Uptime: 0:48:00.266095, Messages: 670, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:18:47,318 - __main__ - INFO - 📊 Stats - Uptime: 0:49:00.285925, Messages: 684, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:19:47,322 - __main__ - INFO - 📊 Stats - Uptime: 0:50:00.290372, Messages: 698, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:20:47,328 - __main__ - INFO - 📊 Stats - Uptime: 0:51:00.295765, Messages: 711, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:21:47,333 - __main__ - INFO - 📊 Stats - Uptime: 0:52:00.301085, Messages: 725, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:22:47,330 - __main__ - INFO - 📊 Stats - Uptime: 0:53:00.298340, Messages: 739, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:23:47,313 - __main__ - INFO - 📊 Stats - Uptime: 0:54:00.281392, Messages: 753, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:24:47,319 - __main__ - INFO - 📊 Stats - Uptime: 0:55:00.286840, Messages: 767, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:25:47,320 - __main__ - INFO - 📊 Stats - Uptime: 0:56:00.288103, Messages: 781, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:26:47,327 - __main__ - INFO - 📊 Stats - Uptime: 0:57:00.295143, Messages: 795, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:27:22,859 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:27:23,358 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:27:25,753 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-05 15:27:25,753 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-05 15:27:25,760 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:27:27,277 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:27:34,652 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 15:27:34,652 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 15:27:34,961 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 15:27:47,323 - __main__ - INFO - 📊 Stats - Uptime: 0:58:00.291175, Messages: 808, Failed: 0, Clients: 1, WS: 2, Sessions: 1
+2026-06-05 15:28:27,137 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 15:28:27,143 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:28:27,593 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:28:47,328 - __main__ - INFO - 📊 Stats - Uptime: 0:59:00.295525, Messages: 822, Failed: 0, Clients: 1, WS: 1, Sessions: 1
+2026-06-05 15:28:56,842 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:28:57,303 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:29:02,613 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-05 15:29:02,614 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-05 15:29:02,619 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:29:04,161 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:29:17,989 - __main__ - WARNING - [SECURITY] Login gagal dari IP 127.0.0.1
+2026-06-05 15:29:26,767 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 15:29:26,767 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 15:29:27,084 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 15:29:28,751 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-05 15:29:28,752 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-05 15:29:28,766 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 15:29:30,210 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 15:29:36,592 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 15:29:36,598 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 15:29:36,918 - __main__ - INFO - 🔌 WebSocket connected. Total: 3
+2026-06-05 15:29:47,332 - __main__ - INFO - 📊 Stats - Uptime: 1:00:00.299787, Messages: 836, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:30:47,326 - __main__ - INFO - 📊 Stats - Uptime: 1:01:00.293791, Messages: 849, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:31:47,330 - __main__ - INFO - 📊 Stats - Uptime: 1:02:00.298356, Messages: 863, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:32:47,336 - __main__ - INFO - 📊 Stats - Uptime: 1:03:00.303716, Messages: 877, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:33:47,355 - __main__ - INFO - 📊 Stats - Uptime: 1:04:00.323172, Messages: 890, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:34:47,382 - __main__ - INFO - 📊 Stats - Uptime: 1:05:00.350167, Messages: 904, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:35:47,400 - __main__ - INFO - 📊 Stats - Uptime: 1:06:00.368059, Messages: 918, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:36:47,421 - __main__ - INFO - 📊 Stats - Uptime: 1:07:00.388963, Messages: 931, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:37:47,421 - __main__ - INFO - 📊 Stats - Uptime: 1:08:00.388640, Messages: 945, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:38:47,419 - __main__ - INFO - 📊 Stats - Uptime: 1:09:00.387097, Messages: 960, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:39:47,438 - __main__ - INFO - 📊 Stats - Uptime: 1:10:00.406032, Messages: 974, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:40:47,441 - __main__ - INFO - 📊 Stats - Uptime: 1:11:00.408722, Messages: 988, Failed: 0, Clients: 1, WS: 3, Sessions: 1
+2026-06-05 15:41:08,843 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 2
+2026-06-05 15:41:08,847 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 15:41:08,847 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 15:41:08,954 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-05 15:41:09,631 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-05 15:41:24,341 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-05 15:41:24,341 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-05 15:41:24,341 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-05 15:41:24,347 - __main__ - INFO - 🚀 MQTT client started
+2026-06-05 15:41:24,347 - __main__ - INFO - ✅ Connected to MQTT Broker at 10.190.143.166:1883
+2026-06-05 15:41:24,351 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-05 15:41:31,562 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-05 15:41:47,576 - __main__ - INFO - 🔌 WebSocket connected. Total: 2
+2026-06-05 15:41:54,568 - __main__ - INFO - 🔌 WebSocket connected. Total: 3
+2026-06-05 15:42:24,342 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.051221, Messages: 1, Failed: 0, Clients: 1, WS: 3, Sessions: 0
+2026-06-05 15:43:24,350 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.059487, Messages: 1, Failed: 0, Clients: 1, WS: 3, Sessions: 0
+2026-06-05 15:44:12,017 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-05 15:44:12,019 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-05 15:44:12,358 - __main__ - INFO - 🔌 WebSocket connected. Total: 4
+2026-06-05 15:44:24,351 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.060932, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:45:24,346 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.055919, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:46:24,352 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.061629, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:47:24,370 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.079333, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:48:24,362 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.071464, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:49:24,369 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.078674, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:50:24,378 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.087650, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:51:24,353 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.062618, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:52:24,359 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.068363, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:53:24,363 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.072486, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:54:24,364 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.073908, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:55:24,367 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.076896, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:56:24,363 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.072286, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:57:24,372 - __main__ - INFO - 📊 Stats - Uptime: 0:16:00.081888, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:58:24,378 - __main__ - INFO - 📊 Stats - Uptime: 0:17:00.087382, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 15:59:24,374 - __main__ - INFO - 📊 Stats - Uptime: 0:18:00.083994, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:00:24,376 - __main__ - INFO - 📊 Stats - Uptime: 0:19:00.085189, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:01:24,360 - __main__ - INFO - 📊 Stats - Uptime: 0:20:00.069406, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:02:24,369 - __main__ - INFO - 📊 Stats - Uptime: 0:21:00.078423, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:03:24,372 - __main__ - INFO - 📊 Stats - Uptime: 0:22:00.081984, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:04:24,385 - __main__ - INFO - 📊 Stats - Uptime: 0:23:00.094567, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:05:24,390 - __main__ - INFO - 📊 Stats - Uptime: 0:24:00.099793, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:06:24,397 - __main__ - INFO - 📊 Stats - Uptime: 0:25:00.106888, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:07:24,398 - __main__ - INFO - 📊 Stats - Uptime: 0:26:00.107613, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:08:24,406 - __main__ - INFO - 📊 Stats - Uptime: 0:27:00.115199, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:09:24,412 - __main__ - INFO - 📊 Stats - Uptime: 0:28:00.121778, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:10:24,411 - __main__ - INFO - 📊 Stats - Uptime: 0:29:00.121080, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:11:24,407 - __main__ - INFO - 📊 Stats - Uptime: 0:30:00.116473, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:12:24,418 - __main__ - INFO - 📊 Stats - Uptime: 0:31:00.127387, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:13:24,430 - __main__ - INFO - 📊 Stats - Uptime: 0:32:00.139637, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:14:24,447 - __main__ - INFO - 📊 Stats - Uptime: 0:33:00.156487, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:15:24,439 - __main__ - INFO - 📊 Stats - Uptime: 0:34:00.148709, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:16:24,441 - __main__ - INFO - 📊 Stats - Uptime: 0:35:00.151122, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:17:24,451 - __main__ - INFO - 📊 Stats - Uptime: 0:36:00.160719, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:18:24,458 - __main__ - INFO - 📊 Stats - Uptime: 0:37:00.167331, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:19:24,450 - __main__ - INFO - 📊 Stats - Uptime: 0:38:00.159495, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:20:24,454 - __main__ - INFO - 📊 Stats - Uptime: 0:39:00.164032, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:21:24,437 - __main__ - INFO - 📊 Stats - Uptime: 0:40:00.146141, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:22:24,441 - __main__ - INFO - 📊 Stats - Uptime: 0:41:00.150541, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:23:24,454 - __main__ - INFO - 📊 Stats - Uptime: 0:42:00.163532, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:24:24,447 - __main__ - INFO - 📊 Stats - Uptime: 0:43:00.156307, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:25:24,459 - __main__ - INFO - 📊 Stats - Uptime: 0:44:00.169079, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:26:24,446 - __main__ - INFO - 📊 Stats - Uptime: 0:45:00.155787, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:27:24,451 - __main__ - INFO - 📊 Stats - Uptime: 0:46:00.160637, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:28:24,458 - __main__ - INFO - 📊 Stats - Uptime: 0:47:00.167325, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:29:24,436 - __main__ - INFO - 📊 Stats - Uptime: 0:48:00.145576, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:30:24,449 - __main__ - INFO - 📊 Stats - Uptime: 0:49:00.158965, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:31:24,449 - __main__ - INFO - 📊 Stats - Uptime: 0:50:00.158127, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:32:24,464 - __main__ - INFO - 📊 Stats - Uptime: 0:51:00.173725, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:33:24,470 - __main__ - INFO - 📊 Stats - Uptime: 0:52:00.179974, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:34:24,474 - __main__ - INFO - 📊 Stats - Uptime: 0:53:00.183308, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:35:24,480 - __main__ - INFO - 📊 Stats - Uptime: 0:54:00.189539, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:36:24,496 - __main__ - INFO - 📊 Stats - Uptime: 0:55:00.205693, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:37:24,499 - __main__ - INFO - 📊 Stats - Uptime: 0:56:00.209061, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:38:24,499 - __main__ - INFO - 📊 Stats - Uptime: 0:57:00.208547, Messages: 1, Failed: 0, Clients: 1, WS: 4, Sessions: 1
+2026-06-05 16:38:43,429 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-05 16:38:43,429 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-05 16:38:43,445 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 3
+2026-06-05 16:38:44,890 - __main__ - INFO - 🔌 WebSocket connected. Total: 4
+2026-06-05 16:38:49,744 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 3
+2026-06-05 16:38:49,755 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 2
+2026-06-05 16:38:49,757 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 1
+2026-06-05 16:38:49,758 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-05 16:38:59,796 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-05 16:38:59,811 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)

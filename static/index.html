@@ -76,6 +76,53 @@
         .login-btn:hover { box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); transform: translateY(-2px); }
         .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .login-error { color: #ff0044; font-size: 12px; font-family: 'Share Tech Mono', monospace; min-height: 20px; }
+
+        /* ============ LIGHT MODE CYBERPUNK ============ */
+        body.light-mode { background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 50%, #d0d8ff 100%) !important; transition: background 0.5s ease; }
+        body.light-mode .grid-bg { background-image: linear-gradient(rgba(0, 102, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.08) 1px, transparent 1px) !important; }
+        body.light-mode .scanlines { background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px) !important; opacity: 0.15; }
+        body.light-mode #login-screen { background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 50%, #d0d8ff 100%) !important; }
+        body.light-mode .login-box { background: #ffffff !important; border: 1px solid #0066ff !important; box-shadow: 0 0 30px rgba(0, 102, 255, 0.15), inset 0 0 30px rgba(0, 102, 255, 0.05) !important; }
+        body.light-mode .login-box input { background: #f5f7ff !important; border: 1px solid #c0c8e0 !important; color: #0066ff !important; }
+        body.light-mode .login-box input::placeholder { color: #8090a0 !important; }
+        body.light-mode .login-btn { background: #0066ff !important; color: #ffffff !important; }
+        body.light-mode #main-header { background: rgba(255, 255, 255, 0.9) !important; border-bottom: 1px solid #c0c8e0 !important; }
+        body.light-mode .text-cyber-cyan { color: #0066ff !important; }
+        body.light-mode .text-cyber-blue { color: #00aa66 !important; }
+        body.light-mode .text-cyber-border { color: #7080a0 !important; }
+        body.light-mode .bg-cyber-panel { background-color: #ffffff !important; }
+        body.light-mode .bg-cyber-dark { background-color: #ffffff !important; }
+        body.light-mode .bg-cyber-black { background-color: #f0f4ff !important; }
+        body.light-mode .bg-cyber-panel\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
+        body.light-mode .bg-cyber-panel\/50 { background-color: rgba(240, 244, 255, 0.7) !important; }
+        body.light-mode .border-cyber-border { border-color: #c0c8e0 !important; }
+        body.light-mode .neon-text { text-shadow: 0 0 5px rgba(0, 102, 255, 0.4), 0 0 10px rgba(0, 102, 255, 0.3) !important; }
+        body.light-mode .corner-decor { border-color: rgba(0, 102, 255, 0.5) !important; }
+        body.light-mode .hacker-terminal { background: #1a1a2e !important; }
+        body.light-mode ::-webkit-scrollbar-track { background: #f0f4ff !important; }
+        body.light-mode ::-webkit-scrollbar-thumb { background: #c0c8e0 !important; }
+        body.light-mode ::-webkit-scrollbar-thumb:hover { background: #0066ff !important; }
+        body.light-mode .bg-cyber-green\/20 { background-color: rgba(0, 200, 100, 0.15) !important; }
+        body.light-mode .bg-cyber-red\/20 { background-color: rgba(255, 0, 68, 0.12) !important; }
+        body.light-mode #detail-modal .bg-cyber-dark\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
+        body.light-mode #modal-processes td, body.light-mode #modal-files td { border-color: #e0e8f0 !important; }
+        body.light-mode #modal-processes th, body.light-mode #modal-files th { border-color: #e0e8f0 !important; }
+        body.light-mode .command-dropdown { background: #ffffff !important; color: #0066ff !important; border-color: #0066ff !important; }
+        body.light-mode #modal-process-name-input, body.light-mode #modal-admin-password { background: #f5f7ff !important; color: #0066ff !important; }
+        body.light-mode .pc-card { background: #ffffff !important; border: 1px solid #c0c8e0 !important; box-shadow: 0 2px 8px rgba(0, 102, 255, 0.08) !important; }
+        body.light-mode .pc-card:hover { box-shadow: 0 8px 32px rgba(0, 102, 255, 0.2) !important; }
+        body.light-mode .shadow-neon-cyan { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4), 0 0 20px rgba(0, 102, 255, 0.2) !important; }
+        body.light-mode .shadow-neon-green { box-shadow: 0 0 10px rgba(0, 200, 100, 0.4), 0 0 20px rgba(0, 200, 100, 0.2) !important; }
+        body.light-mode .shadow-neon-red { box-shadow: 0 0 10px rgba(255, 0, 68, 0.4), 0 0 20px rgba(255, 0, 68, 0.2) !important; }
+        body.light-mode #main-content .text-cyber-cyan { color: #0066ff !important; }
+        body.light-mode #main-content .text-cyber-border { color: #7080a0 !important; }
+        /* Theme toggle button styles */
+        .theme-toggle-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
+        .theme-toggle-btn .toggle-icon { font-size: 14px; line-height: 1; }
+        body:not(.light-mode) .theme-toggle-btn { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border-color: rgba(0, 240, 255, 0.5); }
+        body:not(.light-mode) .theme-toggle-btn:hover { background: rgba(0, 240, 255, 0.2); box-shadow: 0 0 12px rgba(0, 240, 255, 0.4); transform: translateY(-1px); }
+        body.light-mode .theme-toggle-btn { background: rgba(0, 102, 255, 0.1); color: #0066ff; border-color: rgba(0, 102, 255, 0.5); }
+        body.light-mode .theme-toggle-btn:hover { background: rgba(0, 102, 255, 0.2); box-shadow: 0 0 12px rgba(0, 102, 255, 0.4); transform: translateY(-1px); }
     </style>
 </head>
 <body class="font-mono text-cyber-cyan">
@@ -116,10 +163,10 @@
                     <div class="flex items-center space-x-3">
                         <div class="w-3 h-3 bg-cyber-green rounded-full status-dot animate-glow"></div>
                         <h1 class="text-xl font-orbitron font-bold text-cyber-cyan neon-text">
-                            === LAB MONITORING ===
+                            LAB MONITORING
                         </h1>
                     </div>
-                    <span class="text-xs text-cyber-border px-3 py-1 border border-cyber-border rounded">v2.1</span>
+                    <span class="text-xs text-cyber-border px-3 py-1 border border-cyber-border rounded">v2.0</span>
                 </div>
                 <div class="flex items-center space-x-6">
                     <div class="flex items-center space-x-2">
@@ -139,6 +186,10 @@
                         <span class="text-xs text-cyber-blue">Online</span>
                     </div>
                     <div id="session-timer" class="text-xs text-cyber-yellow"></div>
+                    <button id="theme-toggle-btn" onclick="toggleTheme()" class="theme-toggle-btn" title="Switch to Light Cyberpunk">
+                        <span class="toggle-icon">🌙</span>
+                        <span class="toggle-text">LIGHT</span>
+                    </button>
                     <button onclick="logout()" class="text-xs text-cyber-red hover:text-cyber-orange border border-cyber-red/30 px-2 py-1 rounded hover:bg-cyber-red/10 transition-all">LOGOUT</button>
                 </div>
             </div>
@@ -314,6 +365,27 @@
     
     <!-- JavaScript -->
     <script>
+
+        // ==================== THEME MANAGER ====================
+        const THEME_KEY = 'cyberpunk_theme';
+        function getCurrentTheme() { try { return localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) { return 'dark'; } }
+        function applyTheme(theme) {
+            if (theme === 'light') { document.body.classList.add('light-mode'); }
+            else { document.body.classList.remove('light-mode'); }
+            try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
+            const btn = document.getElementById('theme-toggle-btn');
+            if (btn) {
+                const iconEl = btn.querySelector('.toggle-icon');
+                const textEl = btn.querySelector('.toggle-text');
+                if (iconEl) iconEl.textContent = theme === 'dark' ? '☀️' : '🌙';
+                if (textEl) textEl.textContent = theme === 'dark' ? 'LIGHT' : 'DARK';
+                btn.title = theme === 'dark' ? 'Switch to Light Cyberpunk' : 'Switch to Dark Cyberpunk';
+            }
+        }
+        function toggleTheme() { applyTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark'); }
+        // Apply theme on initial load (before login)
+        (function() { applyTheme(getCurrentTheme()); })();
+
         // ==================== AUTH STATE ====================
         let sessionToken = localStorage.getItem('session_token') || '';
         let sessionTimer = null;

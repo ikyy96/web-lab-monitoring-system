@@ -25,7 +25,7 @@ except:
 # --- KONFIGURASI ---
 HOSTNAME = socket.gethostname()
 TOPIC = f"lab/monitoring/{HOSTNAME}"
-BROKER_URL = "192.168.2.2"
+BROKER_URL = "10.190.143.166"
 PORT = 1883
 PING_TARGET = "8.8.8.8"
 
@@ -702,8 +702,36 @@ while True:
         old_rx, old_tx = current_rx_bytes, current_tx_bytes
 
         mem = psutil.virtual_memory()
-        disk_path = 'C:\\' if platform.system() == "Windows" else '/'
-        disk = psutil.disk_usage(disk_path)
+        
+        # Dapatkan semua partisi/drive dan akumulasi total storage
+        disk_partitions = psutil.disk_partitions()
+        total_disk_space = 0
+        total_disk_used = 0
+        total_disk_free = 0
+        disk_details = []
+        
+        for partition in disk_partitions:
+            # Skip drive CD-ROM, RAM disk, dll
+            if 'cdrom' in partition.opts or partition.fstype == '':
+                continue
+            try:
+                usage = psutil.disk_usage(partition.mountpoint)
+                total_disk_space += usage.total
+                total_disk_used += usage.used
+                total_disk_free += usage.free
+                disk_details.append({
+                    "mount": partition.mountpoint,
+                    "device": partition.device,
+                    "fstype": partition.fstype,
+                    "total_gb": round(usage.total / (1024**3), 1),
+                    "used_gb": round(usage.used / (1024**3), 1),
+                    "free_gb": round(usage.free / (1024**3), 1),
+                    "percent": round(usage.percent, 1)
+                })
+            except (PermissionError, OSError):
+                continue
+        
+        disk_percent = round((total_disk_used / total_disk_space) * 100, 1) if total_disk_space > 0 else 0
 
         freq = psutil.cpu_freq()
         current_ghz = round(freq.current / 1000, 2) if freq else 0
@@ -741,10 +769,11 @@ while True:
                     "total_gb": round(mem.total / (1024**3), 1)
                 },
                 "storage": {
-                    "total_gb": round(disk.total / (1024**3), 1),
-                    "used_gb": round(disk.used / (1024**3), 1),
-                    "free_gb": round(disk.free / (1024**3), 1),
-                    "percent": round(disk.percent, 1)
+                    "total_gb": round(total_disk_space / (1024**3), 1),
+                    "used_gb": round(total_disk_used / (1024**3), 1),
+                    "free_gb": round(total_disk_free / (1024**3), 1),
+                    "percent": disk_percent,
+                    "drives": disk_details
                 },
                 "gpu": gpu_info,
                 "top_processes": get_top_processes(5),
