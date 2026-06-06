@@ -78,27 +78,66 @@
         .login-btn:active { transform: scale(0.98); }
         .login-error { color: #ff0044; font-size: 12px; font-family: 'Share Tech Mono', monospace; min-height: 20px; word-wrap: break-word; }
 
+        /* ============ HAMBURGER MENU ============ */
+        .hamburger-btn { display: none; background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; padding: 6px 8px; cursor: pointer; color: #00f0ff; min-width: 38px; min-height: 38px; align-items: center; justify-content: center; }
+        .hamburger-btn:hover { background: rgba(0, 240, 255, 0.1); border-color: rgba(0, 240, 255, 0.5); }
+        .hamburger-btn:active { transform: scale(0.95); }
+        .hamburger-icon { display: inline-block; width: 22px; height: 16px; position: relative; }
+        .hamburger-icon span { display: block; position: absolute; height: 2px; width: 100%; background: currentColor; border-radius: 2px; transition: all 0.3s ease; }
+        .hamburger-icon span:nth-child(1) { top: 0; }
+        .hamburger-icon span:nth-child(2) { top: 7px; }
+        .hamburger-icon span:nth-child(3) { top: 14px; }
+        .hamburger-btn.active .hamburger-icon span:nth-child(1) { top: 7px; transform: rotate(45deg); }
+        .hamburger-btn.active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.active .hamburger-icon span:nth-child(3) { top: 7px; transform: rotate(-45deg); }
+
+        .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
+
+        .mobile-menu { position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw; height: 100%; background: linear-gradient(135deg, #0d0d1a 0%, #12121f 100%); border-left: 1px solid #1e1e3a; box-shadow: -4px 0 20px rgba(0, 240, 255, 0.15); z-index: 9999; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; padding: 16px; }
+        .mobile-menu.open { transform: translateX(0); }
+        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid #1e1e3a; }
+        .mobile-menu-close { background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; cursor: pointer; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+        .mobile-menu-close:hover { background: rgba(255, 0, 68, 0.1); border-color: #ff0044; color: #ff0044; }
+        .mobile-menu-close:active { transform: scale(0.95); }
+        .mobile-menu-section { margin-bottom: 16px; }
+        .mobile-menu-section-title { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #0066ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; padding-left: 4px; }
+        .mobile-menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; margin-bottom: 6px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; font-size: 13px; color: #00f0ff; min-height: 44px; }
+        .mobile-menu-item .item-label { color: #0066ff; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mobile-menu-item .item-value { color: #00f0ff; font-weight: bold; font-size: 12px; }
+        .mobile-menu-item .item-value.green { color: #00ff88; }
+        .mobile-menu-item .item-value.red { color: #ff0044; }
+        .mobile-menu-item .item-value.yellow { color: #ffee00; }
+        .mobile-menu-divider { height: 1px; background: #1e1e3a; margin: 12px 0; }
+        .mobile-menu-actions { display: flex; flex-direction: column; gap: 8px; }
+        .mobile-menu-action-btn { display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 12px 14px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; min-height: 48px; transition: all 0.3s ease; }
+        .mobile-menu-action-btn:active { transform: scale(0.98); }
+        .mobile-menu-action-btn.logout { color: #ff0044; border-color: rgba(255, 0, 68, 0.3); }
+        .mobile-menu-action-btn.logout:active { background: rgba(255, 0, 68, 0.15); }
+        .mobile-menu-action-btn .action-icon { font-size: 16px; }
+
+        body.light-mode .mobile-menu { background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%); border-left-color: #c0c8e0; }
+        body.light-mode .mobile-menu-section-title { color: #0066ff; }
+        body.light-mode .mobile-menu-item { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
+        body.light-mode .mobile-menu-item .item-label { color: #0066ff; }
+        body.light-mode .mobile-menu-item .item-value { color: #0066ff; }
+        body.light-mode .mobile-menu-divider { background: #c0c8e0; }
+        body.light-mode .mobile-menu-action-btn { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
+        body.light-mode .mobile-menu-action-btn.logout { color: #ff0044; }
+
         /* ============ MOBILE RESPONSIVE ============ */
         * { -webkit-tap-highlight-color: transparent; }
         html, body { overflow-x: hidden; max-width: 100vw; }
         .pc-card:active { transform: scale(0.98); }
 
         @media (max-width: 768px) {
-            /* Header compact */
+            /* Header compact - mobile only shows logo + hamburger */
             #main-header .container, #main-content { padding-left: 12px !important; padding-right: 12px !important; }
             #main-header { font-size: 11px; }
             .header-title-text { font-size: 13px !important; }
             .header-version { display: none !important; }
-            .header-status-item { font-size: 10px !important; }
-            .header-status-label { display: none !important; }
-            .header-time { display: none !important; }
-            .header-pcs-info { font-size: 10px !important; }
-            .header-pcs-info .pcs-label { display: none !important; }
-            .header-btn-text { display: none !important; }
-            .header-btn { padding: 6px 8px !important; min-width: 32px; justify-content: center; }
-            .header-session-timer { font-size: 9px !important; }
-            .header-logout-text { display: none !important; }
-            .header-logout-btn { padding: 6px 10px !important; }
+            .header-desktop-actions { display: none !important; }
+            .hamburger-btn { display: inline-flex !important; }
 
             /* Login */
             .login-box { padding: 24px 20px !important; }
@@ -243,7 +282,8 @@
     <header id="main-header" class="relative z-10 border-b border-cyber-border bg-cyber-dark/80 backdrop-blur-sm" style="display:none;">
         <div class="container mx-auto px-3 sm:px-4 md:px-6 py-2 md:py-4">
             <div class="flex items-center justify-between flex-wrap gap-2">
-                <div class="flex items-center space-x-2 md:space-x-4 min-w-0">
+                <!-- Brand: Always visible (left) -->
+                <div class="flex items-center space-x-2 md:space-x-4 min-w-0 flex-1">
                     <div class="flex items-center space-x-2 md:space-x-3 min-w-0">
                         <div class="w-2.5 h-2.5 md:w-3 md:h-3 bg-cyber-green rounded-full status-dot animate-glow flex-shrink-0"></div>
                         <h1 class="text-sm md:text-xl font-orbitron font-bold text-cyber-cyan neon-text header-title-text truncate">
@@ -252,7 +292,12 @@
                     </div>
                     <span class="header-version text-xs text-cyber-border px-2 md:px-3 py-1 border border-cyber-border rounded">v2.0</span>
                 </div>
-                <div class="flex items-center gap-1.5 md:gap-3 flex-wrap">
+                <!-- Hamburger button (mobile only) -->
+                <button id="hamburger-btn" class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
+                    <span class="hamburger-icon"><span></span><span></span><span></span></span>
+                </button>
+                <!-- Desktop status bar -->
+                <div class="header-desktop-actions hidden md:flex items-center gap-3">
                     <div class="header-status-item flex items-center space-x-1">
                         <span class="header-status-label text-xs text-cyber-blue">MQTT:</span>
                         <span id="mqtt-status" class="text-xs px-2 py-1 rounded bg-cyber-panel border border-cyber-border">Connecting...</span>
@@ -272,13 +317,73 @@
                     <div id="session-timer" class="header-session-timer text-xs text-cyber-yellow"></div>
                     <button id="theme-toggle-btn" onclick="toggleTheme()" class="header-btn theme-toggle-btn" title="Switch to Light Cyberpunk">
                         <span class="toggle-icon">🌙</span>
-                        <span class="toggle-text header-btn-text">LIGHT</span>
+                        <span class="toggle-text">LIGHT</span>
                     </button>
-                    <button onclick="logout()" class="header-btn header-logout-btn text-xs text-cyber-red hover:text-cyber-orange border border-cyber-red/30 px-2 py-1 rounded hover:bg-cyber-red/10 transition-all"><span class="header-logout-text">LOGOUT</span><span class="md:hidden">⏻</span></button>
+                    <button onclick="logout()" class="header-btn text-xs text-cyber-red hover:text-cyber-orange border border-cyber-red/30 px-3 py-1 rounded hover:bg-cyber-red/10 transition-all">LOGOUT</button>
                 </div>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div id="mobile-menu" class="mobile-menu">
+        <div class="mobile-menu-header">
+            <div>
+                <div class="font-orbitron text-cyber-cyan text-sm font-bold">SYSTEM MENU</div>
+                <div class="text-[10px] text-cyber-blue mt-1">Lab Monitoring v2.0</div>
+            </div>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close menu">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-section-title">Connection Status</div>
+            <div class="mobile-menu-item">
+                <span class="item-label">MQTT</span>
+                <span id="mobile-mqtt-status" class="item-value">Connecting...</span>
+            </div>
+            <div class="mobile-menu-item">
+                <span class="item-label">WebSocket</span>
+                <span id="mobile-ws-status" class="item-value">Disconnected</span>
+            </div>
+        </div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-section-title">System Info</div>
+            <div class="mobile-menu-item">
+                <span class="item-label">Time</span>
+                <span id="mobile-current-time" class="item-value">--:--:--</span>
+            </div>
+            <div class="mobile-menu-item">
+                <span class="item-label">PCs Online</span>
+                <span class="item-value"><span id="mobile-pc-count">0</span> / <span id="mobile-online-count">0</span></span>
+            </div>
+            <div class="mobile-menu-item">
+                <span class="item-label">Session</span>
+                <span id="mobile-session-timer" class="item-value">--:--</span>
+            </div>
+        </div>
+
+        <div class="mobile-menu-divider"></div>
+
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-section-title">Actions</div>
+            <div class="mobile-menu-actions">
+                <button id="mobile-theme-toggle-btn" onclick="toggleTheme()" class="mobile-menu-action-btn">
+                    <span class="action-icon">🌙</span>
+                    <span class="mobile-theme-text">Switch to Light</span>
+                </button>
+                <button onclick="closeMobileMenu(); logout();" class="mobile-menu-action-btn logout">
+                    <span class="action-icon">⏻</span>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </div>
+    </div>
     
     <!-- Main Content -->
     <main id="main-content" class="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 py-3 md:py-6" style="display:none;">
@@ -465,10 +570,75 @@
                 if (textEl) textEl.textContent = theme === 'dark' ? 'LIGHT' : 'DARK';
                 btn.title = theme === 'dark' ? 'Switch to Light Cyberpunk' : 'Switch to Dark Cyberpunk';
             }
+            // Update mobile menu theme button
+            const mobileThemeBtn = document.querySelector('.mobile-theme-text');
+            const mobileThemeIcon = document.querySelector('#mobile-theme-toggle-btn .action-icon');
+            if (mobileThemeBtn) mobileThemeBtn.textContent = theme === 'dark' ? 'Switch to Light' : 'Switch to Dark';
+            if (mobileThemeIcon) mobileThemeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
         }
         function toggleTheme() { applyTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark'); }
         // Apply theme on initial load (before login)
         (function() { applyTheme(getCurrentTheme()); })();
+
+        // ==================== HAMBURGER MENU ====================
+        function toggleMobileMenu() {
+            const btn = document.getElementById('hamburger-btn');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const isOpen = menu.classList.contains('open');
+            if (isOpen) closeMobileMenu();
+            else {
+                btn.classList.add('active');
+                menu.classList.add('open');
+                overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                syncMobileMenuValues();
+            }
+        }
+        function closeMobileMenu() {
+            const btn = document.getElementById('hamburger-btn');
+            const menu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            btn.classList.remove('active');
+            menu.classList.remove('open');
+            overlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function syncMobileMenuValues() {
+            // Sync MQTT status
+            const mqttEl = document.getElementById('mqtt-status');
+            const mobileMqtt = document.getElementById('mobile-mqtt-status');
+            if (mqttEl && mobileMqtt) {
+                mobileMqtt.textContent = mqttEl.textContent;
+                mobileMqtt.className = mqttEl.className.includes('green') ? 'item-value green' : mqttEl.className.includes('red') ? 'item-value red' : mqttEl.className.includes('yellow') ? 'item-value yellow' : 'item-value';
+            }
+            // Sync WS status
+            const wsEl = document.getElementById('ws-status');
+            const mobileWs = document.getElementById('mobile-ws-status');
+            if (wsEl && mobileWs) {
+                mobileWs.textContent = wsEl.textContent;
+                mobileWs.className = wsEl.className.includes('green') ? 'item-value green' : wsEl.className.includes('red') ? 'item-value red' : 'item-value';
+            }
+            // Sync Time
+            const timeEl = document.getElementById('current-time');
+            const mobileTime = document.getElementById('mobile-current-time');
+            if (timeEl && mobileTime) mobileTime.textContent = timeEl.textContent;
+            // Sync PC counts
+            const pcEl = document.getElementById('pc-count');
+            const onlineEl = document.getElementById('online-count');
+            const mobilePc = document.getElementById('mobile-pc-count');
+            const mobileOnline = document.getElementById('mobile-online-count');
+            if (pcEl && mobilePc) mobilePc.textContent = pcEl.textContent;
+            if (onlineEl && mobileOnline) mobileOnline.textContent = onlineEl.textContent;
+            // Sync Session timer
+            const sessionEl = document.getElementById('session-timer');
+            const mobileSession = document.getElementById('mobile-session-timer');
+            if (sessionEl && mobileSession) {
+                mobileSession.textContent = sessionEl.textContent || '--:--';
+            }
+        }
+        // Update mobile menu values periodically
+        setInterval(syncMobileMenuValues, 1000);
 
         // ==================== AUTH STATE ====================
         let sessionToken = localStorage.getItem('session_token') || '';
@@ -1129,7 +1299,13 @@
         });
         
         // Handle escape key
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeModal(); });
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('mobile-menu');
+                if (menu && menu.classList.contains('open')) closeMobileMenu();
+                else closeModal();
+            }
+        });
     </script>
 </body>
 </html>
