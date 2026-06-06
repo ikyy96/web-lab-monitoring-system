@@ -13,6 +13,13 @@
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <!-- Font Awesome for Google icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- favicon -->
+    <link rel="icon" type="image/png" href="/static/favicon.png">
     
     <!-- Tailwind Config -->
     <script>
@@ -77,6 +84,53 @@
         .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .login-btn:active { transform: scale(0.98); }
         .login-error { color: #ff0044; font-size: 12px; font-family: 'Share Tech Mono', monospace; min-height: 20px; word-wrap: break-word; }
+
+        /* ============ GOOGLE LOGIN BUTTON ============ */
+        .google-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 16px; background: #ffffff; color: #3c4043; border: 1px solid #dadce0; border-radius: 6px; font-family: 'Roboto', 'Segoe UI', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; min-height: 48px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); -webkit-tap-highlight-color: transparent; }
+        .google-btn:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); transform: translateY(-1px); }
+        .google-btn:active { transform: scale(0.98); }
+        .google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        body.light-mode .google-btn { background: #ffffff; color: #3c4043; border-color: #0066ff; }
+        body.light-mode .google-btn:hover { background: #f5f7ff; }
+
+        .login-divider { display: flex; align-items: center; margin: 16px 0 12px 0; color: #0066ff; font-size: 10px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
+        .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: #1e1e3a; }
+        .login-divider span { padding: 0 12px; }
+        body.light-mode .login-divider { color: #0066ff; }
+        body.light-mode .login-divider::before, body.light-mode .login-divider::after { background: #c0c8e0; }
+
+        /* ============ ADMIN MODAL ============ */
+        .admin-modal-backdrop { position: fixed; inset: 0; z-index: 99990; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
+        .admin-modal-backdrop.open { display: flex; }
+        .admin-modal { background: #0d0d1a; border: 1px solid #00f0ff; border-radius: 12px; padding: 24px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 240, 255, 0.3); }
+        body.light-mode .admin-modal { background: #ffffff; border-color: #0066ff; }
+        .admin-modal-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid #1e1e3a; }
+        body.light-mode .admin-modal-header { border-color: #c0c8e0; }
+        .admin-modal-close { background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; cursor: pointer; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+        .admin-modal-close:hover { background: rgba(255, 0, 68, 0.1); border-color: #ff0044; color: #ff0044; }
+        body.light-mode .admin-modal-close { border-color: #c0c8e0; color: #0066ff; }
+        .email-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
+        .email-input-row input { flex: 1; background: #0a0a0f; border: 1px solid #1e1e3a; color: #00f0ff; font-family: 'Share Tech Mono', monospace; padding: 10px 12px; border-radius: 6px; outline: none; font-size: 14px; min-height: 44px; }
+        .email-input-row input:focus { border-color: #00f0ff; }
+        body.light-mode .email-input-row input { background: #f5f7ff; border-color: #c0c8e0; color: #0066ff; }
+        .email-add-btn { background: #00ff88; color: #0a0a0f; border: none; padding: 10px 16px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-weight: bold; font-size: 12px; cursor: pointer; min-height: 44px; min-width: 80px; }
+        .email-add-btn:hover { background: #00cc6e; }
+        .email-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        body.light-mode .email-add-btn { background: #0066ff; color: #ffffff; }
+        body.light-mode .email-add-btn:hover { background: #0052cc; }
+        .email-list { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; padding: 4px; }
+        .email-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; font-family: 'Share Tech Mono', monospace; font-size: 13px; color: #00f0ff; min-height: 44px; gap: 8px; }
+        .email-item .email-text { word-break: break-all; flex: 1; }
+        .email-item .email-remove-btn { background: transparent; border: 1px solid rgba(255, 0, 68, 0.5); color: #ff0044; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; min-width: 32px; min-height: 32px; }
+        .email-item .email-remove-btn:hover { background: rgba(255, 0, 68, 0.15); }
+        body.light-mode .email-item { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
+        .empty-email-state { text-align: center; padding: 24px; color: #0066ff; font-size: 12px; }
+        .admin-info-box { padding: 10px 12px; background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 6px; font-size: 11px; color: #0066ff; margin-bottom: 12px; line-height: 1.5; }
+        body.light-mode .admin-info-box { background: rgba(0, 102, 255, 0.05); border-color: rgba(0, 102, 255, 0.3); color: #0066ff; }
+        .admin-menu-btn { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid #00f0ff; padding: 6px 10px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold; cursor: pointer; min-height: 32px; }
+        .admin-menu-btn:hover { background: rgba(0, 240, 255, 0.2); }
+        body.light-mode .admin-menu-btn { background: rgba(0, 102, 255, 0.1); color: #0066ff; border-color: #0066ff; }
+        body.light-mode .admin-menu-btn:hover { background: rgba(0, 102, 255, 0.2); }
 
         /* ============ HAMBURGER MENU ============ */
         .hamburger-btn { display: none; background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; padding: 6px 8px; cursor: pointer; color: #00f0ff; min-width: 38px; min-height: 38px; align-items: center; justify-content: center; }
@@ -256,15 +310,33 @@
     <!-- Login Screen -->
     <div id="login-screen">
         <div class="login-box animate-slide-in">
-            <div class="text-center mb-8">
+            <div class="text-center mb-6">
                 <div class="w-4 h-4 bg-cyber-green rounded-full mx-auto mb-4 animate-glow"></div>
                 <h1 class="text-2xl font-orbitron font-bold text-cyber-cyan neon-text mb-2">SECURE ACCESS</h1>
                 <p class="text-xs text-cyber-border">Lab Monitoring System v2.1</p>
             </div>
+
+            <!-- Google Sign-In Button (rendered by GIS library) -->
+            <div id="google-signin-container" class="mb-4" style="min-height: 50px;">
+                <!-- GSI will render the button here -->
+            </div>
+
+            <!-- Custom Google Login Fallback Button (always visible) -->
+            <button id="google-login-btn" class="google-btn" onclick="loginWithGoogle()">
+                <i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i>
+                <span>Sign in with Google</span>
+            </button>
+            <p class="text-center text-cyber-border text-[10px] mb-4">Login cepat & aman via akun Google</p>
+
+            <!-- Divider -->
+            <div class="login-divider">
+                <span>ATAU LOGIN DENGAN PASSWORD</span>
+            </div>
+
             <div class="space-y-4">
                 <div>
                     <label class="text-xs text-cyber-blue block mb-2">ADMIN PASSWORD</label>
-                    <input id="login-password" type="password" placeholder="Masukkan password admin..." 
+                    <input id="login-password" type="password" placeholder="Masukkan password admin..."
                            onkeydown="if(event.key==='Enter') login()">
                 </div>
                 <div id="login-error" class="login-error"></div>
@@ -324,6 +396,36 @@
             </div>
         </div>
     </header>
+
+    <!-- ============ ADMIN EMAIL MANAGER MODAL ============ -->
+    <div id="admin-modal-backdrop" class="admin-modal-backdrop" onclick="closeAdminModal(event)">
+        <div class="admin-modal animate-slide-in" onclick="event.stopPropagation()">
+            <div class="admin-modal-header">
+                <div>
+                    <div class="font-orbitron text-cyber-cyan text-lg font-bold">📧 EMAIL WHITELIST</div>
+                    <div class="text-[10px] text-cyber-blue mt-1" id="admin-modal-subtitle">Kelola email yang boleh login via Google</div>
+                </div>
+                <button class="admin-modal-close" onclick="closeAdminModal()" aria-label="Close">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="admin-info-box">
+                ℹ️ Hanya email dalam daftar di bawah yang bisa login via <b>Sign in with Google</b>. Email lain akan ditolak dengan pesan "Akses ditolak".
+            </div>
+
+            <!-- Add Email Form -->
+            <div class="email-input-row">
+                <input type="email" id="new-email-input" placeholder="email@contoh.com" autocomplete="off">
+                <button class="email-add-btn" id="add-email-btn" onclick="addEmail()">+ ADD</button>
+            </div>
+
+            <!-- Email List -->
+            <div class="email-list" id="email-list">
+                <div class="empty-email-state">Loading emails...</div>
+            </div>
+        </div>
+    </div>
 
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
@@ -665,11 +767,125 @@
             }
         }
         
+        // ==================== GOOGLE OAUTH ====================
+        const GOOGLE_CLIENT_ID = '1024514167323-0pc62a62d85jrjor7tqaeme12lt7pk2n.apps.googleusercontent.com';
+
+        // Initialize Google Sign-In (GIS library)
+        function initGoogleSignIn() {
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                try {
+                    google.accounts.id.initialize({
+                        client_id: GOOGLE_CLIENT_ID,
+                        callback: handleGoogleCredential,
+                        auto_select: false,
+                        cancel_on_tap_outside: true
+                    });
+                    // Try to render official GSI button
+                    const gsiContainer = document.getElementById('google-signin-container');
+                    if (gsiContainer) {
+                        google.accounts.id.renderButton(gsiContainer, {
+                            type: 'standard',
+                            theme: 'outline',
+                            size: 'large',
+                            text: 'signin_with',
+                            shape: 'rectangular',
+                            logo_alignment: 'left',
+                            width: 320
+                        });
+                    }
+                } catch (e) {
+                    console.warn('GIS init failed, using custom button:', e);
+                }
+            }
+        }
+
+        // Handle Google credential response
+        async function handleGoogleCredential(response) {
+            const btn = document.getElementById('google-login-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span>⏳ Authenticating...</span>';
+            }
+            try {
+                const res = await fetch('/api/auth/google', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id_token: response.credential }),
+                    credentials: 'same-origin'
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    sessionToken = data.session;
+                    localStorage.setItem('session_token', sessionToken);
+                    showNotification('success', `✅ Selamat datang, ${data.name || data.email}!`);
+                    showDashboard();
+                    startSessionTimer();
+                } else {
+                    showNotification('error', '❌ ' + (data.detail || 'Gagal login dengan Google'));
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Sign in with Google</span>';
+                    }
+                }
+            } catch (e) {
+                showNotification('error', '❌ Gagal terhubung ke server');
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Sign in with Google</span>';
+                }
+            }
+        }
+
+        // Custom Google login (fallback if GIS not available, or use One Tap)
+        async function loginWithGoogle() {
+            // Trigger Google One Tap / popup
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                try {
+                    google.accounts.id.prompt();
+                } catch (e) {
+                    // If GIS not initialized or no CLIENT_ID, use direct OAuth
+                    showNotification('info', '🔄 Membuka Google login...');
+                    const width = 500, height = 600;
+                    const left = (screen.width - width) / 2;
+                    const top = (screen.height - height) / 2;
+                    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(window.location.origin + '/api/auth/google/callback')}&scope=openid%20email%20profile`;
+                    const popup = window.open(authUrl, 'Google Login', `width=${width},height=${height},left=${left},top=${top}`);
+                    if (!popup) showNotification('error', '❌ Pop-up diblokir! Izinkan pop-up di browser.');
+                }
+            } else {
+                showNotification('error', '❌ Google Sign-In tidak tersedia. Cek koneksi internet.');
+            }
+        }
+
+        // Simple notification system
+        function showNotification(type, message) {
+            // Remove old notifications
+            document.querySelectorAll('.custom-notification').forEach(n => n.remove());
+            const n = document.createElement('div');
+            n.className = 'custom-notification';
+            const bgColor = type === 'success' ? 'bg-cyber-green' : type === 'error' ? 'bg-cyber-red' : 'bg-cyber-blue';
+            n.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 14px 20px; border-radius: 8px; color: #0a0a0f; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 99999; transform: translateX(400px); transition: transform 0.3s ease; max-width: 350px;`;
+            n.textContent = message;
+            document.body.appendChild(n);
+            // Animate in
+            setTimeout(() => { n.style.transform = 'translateX(0)'; }, 10);
+            // Auto-remove after 4s
+            setTimeout(() => {
+                n.style.transform = 'translateX(400px)';
+                setTimeout(() => n.remove(), 300);
+            }, 4000);
+        }
+
+        // Init Google when GIS library loads
+        window.addEventListener('load', initGoogleSignIn);
+        // Also try after short delay (in case load already fired)
+        setTimeout(initGoogleSignIn, 1000);
+
         async function login() {
             const password = document.getElementById('login-password').value;
             const btn = document.getElementById('login-btn');
             const error = document.getElementById('login-error');
-            
+
             if (!password) {
                 error.textContent = '⚠️ Masukkan password!';
                 return;

@@ -25,7 +25,7 @@ except:
 # --- KONFIGURASI ---
 HOSTNAME = socket.gethostname()
 TOPIC = f"lab/monitoring/{HOSTNAME}"
-BROKER_URL = "10.190.143.166"
+BROKER_URL = "10.190.143.33"
 PORT = 1883
 PING_TARGET = "8.8.8.8"
 

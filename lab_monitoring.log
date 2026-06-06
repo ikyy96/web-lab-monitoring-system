@@ -10494,3 +10494,23 @@ OS Name:                       Microsoft Windows 11 Home ...
 2026-06-05 16:38:49,758 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
 2026-06-05 16:38:59,796 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
 2026-06-05 16:38:59,811 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-06 12:10:01,063 - __main__ - INFO - 📧 Using default allowed emails
+2026-06-06 12:10:39,278 - __main__ - INFO - 📧 Using default allowed emails
+2026-06-06 12:11:47,833 - __main__ - INFO - 📧 Using default allowed emails
+2026-06-06 12:11:47,974 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-06 12:11:47,974 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-06 12:11:47,974 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-06 12:11:47,990 - __main__ - INFO - 🚀 MQTT client started
+2026-06-06 12:11:47,990 - __main__ - INFO - ✅ Connected to MQTT Broker at 10.190.143.166:1883
+2026-06-06 12:11:47,990 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-06 12:12:20,396 - __main__ - INFO - [AUDIT] Google Login berhasil: rizkyharun122@gmail.com dari 127.0.0.1
+2026-06-06 12:12:20,396 - audit - INFO - GOOGLE_LOGIN_SUCCESS | Email: rizkyharun122@gmail.com | IP: 127.0.0.1
+2026-06-06 12:12:20,722 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-06 12:12:28,646 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-06 12:12:28,646 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-06 12:12:28,658 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-06 12:12:29,974 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-06 12:12:42,343 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-06 12:12:47,777 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-06 12:12:48,291 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-06 12:12:48,292 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.459536, Messages: 0, Failed: 0, Clients: 0, WS: 0, Sessions: 0

@@ -62,10 +62,55 @@ FAILED_LOGIN_BLOCK = 300  # Blokir 5 menit
 # Client ID dari Google Cloud Console!
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID", "1024514167323-0pc62a62d85jrjor7tqaeme12lt7pk2n.apps.googleusercontent.com")
 
-# Daftar email yang diizinkan login (pisahkan dengan koma)
-# Hanya email dalam daftar ini yang bisa masuk dashboard!
-ALLOWED_EMAILS = os.environ.get("ALLOWED_EMAILS", "rizkyharun122@gmail.com")
-ALLOWED_EMAILS_LIST = [e.strip().lower() for e in ALLOWED_EMAILS.split(",") if e.strip()]
+# ============ EMAIL WHITELIST MANAGEMENT ============
+# File untuk persistensi daftar email yang diizinkan
+ALLOWED_EMAILS_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "allowed_emails.json")
+
+def load_allowed_emails():
+    """Load daftar email yang diizinkan dari file JSON atau env var.
+    Prioritas: file JSON > environment variable > default
+    """
+    # 1. Coba load dari file JSON
+    if os.path.exists(ALLOWED_EMAILS_FILE):
+        try:
+            with open(ALLOWED_EMAILS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                emails = data.get("emails", [])
+                if emails:
+                    logger.info(f"📧 Loaded {len(emails)} allowed emails from {ALLOWED_EMAILS_FILE}")
+                    return [e.strip().lower() for e in emails if e.strip()]
+        except Exception as e:
+            logger.warning(f"⚠️ Failed to load allowed_emails.json: {e}")
+    
+    # 2. Fallback ke environment variable
+    env_emails = os.environ.get("ALLOWED_EMAILS", "")
+    if env_emails:
+        logger.info(f"📧 Loaded allowed emails from environment variable")
+        return [e.strip().lower() for e in env_emails.split(",") if e.strip()]
+    
+    # 3. Default fallback
+    logger.info(f"📧 Using default allowed emails")
+    return ["rizkyharun122@gmail.com"]
+
+def save_allowed_emails(emails_list):
+    """Simpan daftar email ke file JSON."""
+    try:
+        # Normalize: lowercase, strip, unique
+        normalized = sorted(set(e.strip().lower() for e in emails_list if e.strip()))
+        data = {
+            "emails": normalized,
+            "last_updated": datetime.now().isoformat(),
+            "total": len(normalized)
+        }
+        with open(ALLOWED_EMAILS_FILE, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        logger.info(f"💾 Saved {len(normalized)} emails to {ALLOWED_EMAILS_FILE}")
+        return True
+    except Exception as e:
+        logger.error(f"❌ Failed to save allowed_emails.json: {e}")
+        return False
+
+# Daftar email yang diizinkan login - load setelah logger siap (lihat bawah)
 
 
 # ==================== KONFIGURASI ====================
@@ -146,6 +191,10 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+
+# Daftar email yang diizinkan login - load dari file/env/default
+ALLOWED_EMAILS_LIST = load_allowed_emails()
+print(f"[OK] [EMAIL WHITELIST] {len(ALLOWED_EMAILS_LIST)} email(s) terdaftar: {', '.join(ALLOWED_EMAILS_LIST)}")
 
 # ==================== SECURITY UTILITIES ====================
 class RateLimiter:
@@ -514,7 +563,7 @@ async def google_auth(request: Request):
         
         logger.info(f"[AUDIT] Google Login berhasil: {user_email} dari {client_ip}")
         audit_logger.info(f"GOOGLE_LOGIN_SUCCESS | Email: {user_email} | IP: {client_ip}")
-        
+
         return JSONResponse({
             "status": "success",
             "session": session_token,
@@ -522,10 +571,167 @@ async def google_auth(request: Request):
             "name": user_name,
             "message": f"Selamat datang, {user_name}!"
         })
-        
+
     except Exception as e:
         logger.error(f"Google Auth error: {e}")
         return JSONResponse(status_code=400, content={"detail": "Gagal autentikasi dengan Google"})
+
+
+# ==================== EMAIL WHITELIST MANAGEMENT (ADMIN) ====================
+def is_valid_email(email: str) -> bool:
+    """Validasi format email sederhana."""
+    import re
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email.strip()) is not None
+
+
+@app.get("/api/admin/emails")
+async def get_allowed_emails(request: Request, session=Depends(check_auth)):
+    """
+    List semua email yang diizinkan untuk Google login.
+    Auth: hanya user yang sudah login yang bisa akses.
+    """
+    client_ip = request.client.host if request.client else "unknown"
+    try:
+        last_updated = None
+        if os.path.exists(ALLOWED_EMAILS_FILE):
+            with open(ALLOWED_EMAILS_FILE, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                last_updated = data.get("last_updated")
+
+        return JSONResponse({
+            "status": "success",
+            "emails": ALLOWED_EMAILS_LIST,
+            "total": len(ALLOWED_EMAILS_LIST),
+            "last_updated": last_updated,
+            "source": "file" if os.path.exists(ALLOWED_EMAILS_FILE) else "env_or_default",
+            "file_path": ALLOWED_EMAILS_FILE
+        })
+    except Exception as e:
+        logger.error(f"Error getting allowed emails from {client_ip}: {e}")
+        return JSONResponse(status_code=500, content={"detail": f"Error: {str(e)}"})
+
+
+@app.post("/api/admin/emails")
+async def add_allowed_email(request: Request, session=Depends(check_auth)):
+    """
+    Tambahkan email baru ke whitelist.
+    Body: {"email": "user@gmail.com"} atau {"emails": ["a@x.com", "b@y.com"]}
+    """
+    global ALLOWED_EMAILS_LIST
+    client_ip = request.client.host if request.client else "unknown"
+    try:
+        data = await request.json()
+        # Support single email atau multiple
+        new_emails = []
+        if 'email' in data:
+            new_emails.append(data['email'])
+        elif 'emails' in data:
+            new_emails = data['emails']
+        else:
+            return JSONResponse(status_code=400, content={"detail": "Body harus berisi 'email' atau 'emails'"})
+
+        # Validasi format
+        valid_emails = []
+        invalid_emails = []
+        for email in new_emails:
+            email = email.strip().lower()
+            if is_valid_email(email):
+                if email not in ALLOWED_EMAILS_LIST:
+                    valid_emails.append(email)
+                else:
+                    invalid_emails.append(f"{email} (sudah ada)")
+            else:
+                invalid_emails.append(f"{email} (format invalid)")
+
+        if not valid_emails:
+            return JSONResponse(status_code=400, content={
+                "detail": "Tidak ada email valid untuk ditambahkan",
+                "invalid": invalid_emails
+            })
+
+        # Tambahkan ke list
+        ALLOWED_EMAILS_LIST.extend(valid_emails)
+        # Save ke file
+        if save_allowed_emails(ALLOWED_EMAILS_LIST):
+            logger.info(f"[AUDIT] {len(valid_emails)} email(s) ditambahkan oleh {client_ip}: {valid_emails}")
+            audit_logger.info(f"EMAILS_ADDED | IP: {client_ip} | Emails: {', '.join(valid_emails)}")
+            return JSONResponse({
+                "status": "success",
+                "message": f"{len(valid_emails)} email berhasil ditambahkan",
+                "added": valid_emails,
+                "invalid": invalid_emails if invalid_emails else None,
+                "total": len(ALLOWED_EMAILS_LIST)
+            })
+        else:
+            return JSONResponse(status_code=500, content={"detail": "Gagal menyimpan ke file"})
+
+    except Exception as e:
+        logger.error(f"Error adding allowed email from {client_ip}: {e}")
+        return JSONResponse(status_code=500, content={"detail": f"Error: {str(e)}"})
+
+
+@app.delete("/api/admin/emails/{email}")
+async def remove_allowed_email(email: str, request: Request, session=Depends(check_auth)):
+    """
+    Hapus email dari whitelist.
+    URL: /api/admin/emails/{email}
+    """
+    global ALLOWED_EMAILS_LIST
+    client_ip = request.client.host if request.client else "unknown"
+    try:
+        email_lower = email.strip().lower()
+
+        if email_lower not in ALLOWED_EMAILS_LIST:
+            return JSONResponse(status_code=404, content={
+                "detail": f"Email '{email_lower}' tidak ditemukan di whitelist"
+            })
+
+        # Jangan izinkan hapus semua email (minimal 1)
+        if len(ALLOWED_EMAILS_LIST) <= 1:
+            return JSONResponse(status_code=400, content={
+                "detail": "Tidak bisa hapus email terakhir! Minimal harus ada 1 email terdaftar."
+            })
+
+        # Hapus dari list
+        ALLOWED_EMAILS_LIST.remove(email_lower)
+
+        # Save ke file
+        if save_allowed_emails(ALLOWED_EMAILS_LIST):
+            logger.info(f"[AUDIT] Email {email_lower} dihapus oleh {client_ip}")
+            audit_logger.info(f"EMAIL_REMOVED | IP: {client_ip} | Email: {email_lower}")
+            return JSONResponse({
+                "status": "success",
+                "message": f"Email '{email_lower}' berhasil dihapus",
+                "removed": email_lower,
+                "total": len(ALLOWED_EMAILS_LIST)
+            })
+        else:
+            return JSONResponse(status_code=500, content={"detail": "Gagal menyimpan ke file"})
+
+    except Exception as e:
+        logger.error(f"Error removing allowed email from {client_ip}: {e}")
+        return JSONResponse(status_code=500, content={"detail": f"Error: {str(e)}"})
+
+
+@app.post("/api/admin/emails/reload")
+async def reload_allowed_emails(request: Request, session=Depends(check_auth)):
+    """
+    Reload daftar email dari file (jika diedit manual di server).
+    """
+    global ALLOWED_EMAILS_LIST
+    client_ip = request.client.host if request.client else "unknown"
+    try:
+        ALLOWED_EMAILS_LIST = load_allowed_emails()
+        logger.info(f"[AUDIT] Email whitelist direload oleh {client_ip}: {len(ALLOWED_EMAILS_LIST)} email(s)")
+        return JSONResponse({
+            "status": "success",
+            "message": f"Berhasil reload {len(ALLOWED_EMAILS_LIST)} email dari file",
+            "emails": ALLOWED_EMAILS_LIST
+        })
+    except Exception as e:
+        logger.error(f"Error reloading emails: {e}")
+        return JSONResponse(status_code=500, content={"detail": f"Error: {str(e)}"})
 
 
 # ==================== CLIENT STATE ====================
