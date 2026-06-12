@@ -10514,3 +10514,68 @@ OS Name:                       Microsoft Windows 11 Home ...
 2026-06-06 12:12:47,777 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
 2026-06-06 12:12:48,291 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
 2026-06-06 12:12:48,292 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.459536, Messages: 0, Failed: 0, Clients: 0, WS: 0, Sessions: 0
+2026-06-09 07:54:47,593 - __main__ - INFO - 📧 Using default allowed emails
+2026-06-09 07:54:47,840 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-09 07:54:47,840 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-09 07:54:47,840 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-09 07:54:47,856 - __main__ - INFO - ✅ Connected to MQTT Broker at 10.190.143.166:1883
+2026-06-09 07:54:47,856 - __main__ - INFO - 🚀 MQTT client started
+2026-06-09 07:54:47,856 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-09 07:55:21,002 - __main__ - INFO - [AUDIT] Google Login berhasil: rizkyharun122@gmail.com dari 127.0.0.1
+2026-06-09 07:55:21,008 - audit - INFO - GOOGLE_LOGIN_SUCCESS | Email: rizkyharun122@gmail.com | IP: 127.0.0.1
+2026-06-09 07:55:21,351 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-09 07:55:47,871 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.271923, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 07:56:47,884 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.285141, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 07:57:47,899 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.300439, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 07:58:47,927 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.328681, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 07:59:47,924 - __main__ - INFO - 📊 Stats - Uptime: 0:05:00.325760, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:00:47,940 - __main__ - INFO - 📊 Stats - Uptime: 0:06:00.341307, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:01:47,996 - __main__ - INFO - 📊 Stats - Uptime: 0:07:00.397673, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:02:48,009 - __main__ - INFO - 📊 Stats - Uptime: 0:08:00.410130, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:03:48,017 - __main__ - INFO - 📊 Stats - Uptime: 0:09:00.418131, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:04:11,749 - asyncio - ERROR - Exception in callback _ProactorBasePipeTransport._call_connection_lost(None)
+handle: <Handle _ProactorBasePipeTransport._call_connection_lost(None)>
+Traceback (most recent call last):
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python310\lib\asyncio\events.py", line 80, in _run
+    self._context.run(self._callback, *self._args)
+  File "C:\Users\LENOVO\AppData\Local\Programs\Python\Python310\lib\asyncio\proactor_events.py", line 162, in _call_connection_lost
+    self._sock.shutdown(socket.SHUT_RDWR)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+2026-06-09 08:04:11,892 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-09 08:04:12,405 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-09 08:04:13,863 - __main__ - INFO - [AUDIT] Logout dari 127.0.0.1
+2026-06-09 08:04:13,865 - audit - INFO - LOGOUT | IP: 127.0.0.1
+2026-06-09 08:04:13,883 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-09 08:04:15,273 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-09 08:04:20,235 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967060 < 1780967062. Check that your computer's clock is set correctly.
+2026-06-09 08:04:28,467 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967068 < 1780967070. Check that your computer's clock is set correctly.
+2026-06-09 08:04:48,029 - __main__ - INFO - 📊 Stats - Uptime: 0:10:00.429991, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:05:48,038 - __main__ - INFO - 📊 Stats - Uptime: 0:11:00.438918, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:06:48,048 - __main__ - INFO - 📊 Stats - Uptime: 0:12:00.449397, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:07:48,048 - __main__ - INFO - 📊 Stats - Uptime: 0:13:00.449516, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:08:48,054 - __main__ - INFO - 📊 Stats - Uptime: 0:14:00.454816, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:09:14,625 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967354 < 1780967356. Check that your computer's clock is set correctly.
+2026-06-09 08:09:48,052 - __main__ - INFO - 📊 Stats - Uptime: 0:15:00.453052, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 0
+2026-06-09 08:09:49,251 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967389 < 1780967390. Check that your computer's clock is set correctly.
+2026-06-09 08:09:50,896 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-09 08:09:57,442 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967397 < 1780967399. Check that your computer's clock is set correctly.
+2026-06-09 08:10:02,372 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-09 08:10:02,776 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)
+2026-06-09 08:16:47,231 - __main__ - INFO - 📧 Using default allowed emails
+2026-06-09 08:16:47,627 - __main__ - INFO - 🚀 Starting Lab Monitoring System v2.1.0 (Secure Edition)
+2026-06-09 08:16:47,627 - __main__ - INFO - Configuration: USE_MQTT=True, SERVER_PORT=8800
+2026-06-09 08:16:47,627 - __main__ - WARNING - ⚠️  PASSWORD DEFAULT! Ubah password ADMIN_PASSWORD di main.py atau set environment variable LAB_PASSWORD!
+2026-06-09 08:16:47,652 - __main__ - INFO - 🚀 MQTT client started
+2026-06-09 08:16:47,654 - __main__ - INFO - ✅ Connected to MQTT Broker at 10.190.143.166:1883
+2026-06-09 08:16:47,654 - __main__ - INFO - 📡 Subscribed to: lab/monitoring/+ dan lab/command/result/+
+2026-06-09 08:17:12,068 - __main__ - WARNING - [SECURITY] Token Google tidak valid dari 127.0.0.1: Token used too early, 1780967832 < 1780967833. Check that your computer's clock is set correctly.
+2026-06-09 08:17:21,377 - __main__ - INFO - [AUDIT] Login berhasil dari 127.0.0.1
+2026-06-09 08:17:21,379 - audit - INFO - LOGIN_SUCCESS | IP: 127.0.0.1
+2026-06-09 08:17:21,723 - __main__ - INFO - 🔌 WebSocket connected. Total: 1
+2026-06-09 08:17:47,654 - __main__ - INFO - 📊 Stats - Uptime: 0:01:00.412209, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:18:47,662 - __main__ - INFO - 📊 Stats - Uptime: 0:02:00.420364, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:19:47,666 - __main__ - INFO - 📊 Stats - Uptime: 0:03:00.423933, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:20:47,685 - __main__ - INFO - 📊 Stats - Uptime: 0:04:00.443681, Messages: 0, Failed: 0, Clients: 0, WS: 1, Sessions: 1
+2026-06-09 08:21:20,848 - __main__ - INFO - 🔌 WebSocket connection removed. Remaining: 0
+2026-06-09 08:21:32,765 - __main__ - INFO - 🛑 Shutting down Lab Monitoring System
+2026-06-09 08:21:33,297 - __main__ - WARNING - ⚠️ Disconnected from MQTT Broker (rc=0)

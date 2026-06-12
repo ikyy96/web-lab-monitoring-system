@@ -817,7 +817,7 @@
                 if (res.ok) {
                     sessionToken = data.session;
                     localStorage.setItem('session_token', sessionToken);
-                    showNotification('success', `✅ Selamat datang, ${data.name || data.email}!`);
+                    showNotification('success', `✅Selamat datang, ${data.name || data.email}!`);
                     showDashboard();
                     startSessionTimer();
                 } else {
