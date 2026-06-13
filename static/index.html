@@ -316,17 +316,12 @@
                 <p class="text-xs text-cyber-border">Lab Monitoring System v2.1</p>
             </div>
 
-            <!-- Google Sign-In Button (rendered by GIS library) -->
-            <div id="google-signin-container" class="mb-4" style="min-height: 50px;">
-                <!-- GSI will render the button here -->
-            </div>
-
-            <!-- Custom Google Login Fallback Button (always visible) -->
+            <!-- Google Login Button -->
             <button id="google-login-btn" class="google-btn" onclick="loginWithGoogle()">
                 <i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i>
-                <span>Sign in with Google</span>
+                <span>Login with Google</span>
             </button>
-            <p class="text-center text-cyber-border text-[10px] mb-4">Login cepat & aman via akun Google</p>
+            <p class="text-center text-cyber-border text-[10px] mb-4">Hanya untuk email yang sudah terdaftar</p>
 
             <!-- Divider -->
             <div class="login-divider">
@@ -410,8 +405,8 @@
                 </button>
             </div>
 
-            <div class="admin-info-box">
-                ℹ️ Hanya email dalam daftar di bawah yang bisa login via <b>Sign in with Google</b>. Email lain akan ditolak dengan pesan "Akses ditolak".
+                <div class="admin-info-box">
+                ℹ️ Hanya email dalam daftar di bawah yang bisa login via <b>Login with Google</b>. Email lain akan ditolak dengan pesan "Akses ditolak".
             </div>
 
             <!-- Add Email Form -->
@@ -780,21 +775,8 @@
                         auto_select: false,
                         cancel_on_tap_outside: true
                     });
-                    // Try to render official GSI button
-                    const gsiContainer = document.getElementById('google-signin-container');
-                    if (gsiContainer) {
-                        google.accounts.id.renderButton(gsiContainer, {
-                            type: 'standard',
-                            theme: 'outline',
-                            size: 'large',
-                            text: 'signin_with',
-                            shape: 'rectangular',
-                            logo_alignment: 'left',
-                            width: 320
-                        });
-                    }
                 } catch (e) {
-                    console.warn('GIS init failed, using custom button:', e);
+                    console.warn('GIS init failed:', e);
                 }
             }
         }
@@ -817,68 +799,40 @@
                 if (res.ok) {
                     sessionToken = data.session;
                     localStorage.setItem('session_token', sessionToken);
-                    showNotification('success', `✅Selamat datang, ${data.name || data.email}!`);
+                    showNotification('success', `✅ Selamat datang, ${data.name || data.email}!`);
                     showDashboard();
                     startSessionTimer();
                 } else {
                     showNotification('error', '❌ ' + (data.detail || 'Gagal login dengan Google'));
                     if (btn) {
                         btn.disabled = false;
-                        btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Sign in with Google</span>';
+                        btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
                     }
                 }
             } catch (e) {
                 showNotification('error', '❌ Gagal terhubung ke server');
                 if (btn) {
                     btn.disabled = false;
-                    btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Sign in with Google</span>';
+                    btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
                 }
             }
         }
 
-        // Custom Google login (fallback if GIS not available, or use One Tap)
+        // Google login button click handler
         async function loginWithGoogle() {
-            // Trigger Google One Tap / popup
             if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
                 try {
                     google.accounts.id.prompt();
                 } catch (e) {
-                    // If GIS not initialized or no CLIENT_ID, use direct OAuth
-                    showNotification('info', '🔄 Membuka Google login...');
-                    const width = 500, height = 600;
-                    const left = (screen.width - width) / 2;
-                    const top = (screen.height - height) / 2;
-                    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&response_type=token&redirect_uri=${encodeURIComponent(window.location.origin + '/api/auth/google/callback')}&scope=openid%20email%20profile`;
-                    const popup = window.open(authUrl, 'Google Login', `width=${width},height=${height},left=${left},top=${top}`);
-                    if (!popup) showNotification('error', '❌ Pop-up diblokir! Izinkan pop-up di browser.');
+                    showNotification('error', '❌ Google Login tidak tersedia. Cek koneksi internet.');
                 }
             } else {
-                showNotification('error', '❌ Google Sign-In tidak tersedia. Cek koneksi internet.');
+                showNotification('error', '❌ Google Login tidak tersedia. Cek koneksi internet.');
             }
-        }
-
-        // Simple notification system
-        function showNotification(type, message) {
-            // Remove old notifications
-            document.querySelectorAll('.custom-notification').forEach(n => n.remove());
-            const n = document.createElement('div');
-            n.className = 'custom-notification';
-            const bgColor = type === 'success' ? 'bg-cyber-green' : type === 'error' ? 'bg-cyber-red' : 'bg-cyber-blue';
-            n.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 14px 20px; border-radius: 8px; color: #0a0a0f; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 99999; transform: translateX(400px); transition: transform 0.3s ease; max-width: 350px;`;
-            n.textContent = message;
-            document.body.appendChild(n);
-            // Animate in
-            setTimeout(() => { n.style.transform = 'translateX(0)'; }, 10);
-            // Auto-remove after 4s
-            setTimeout(() => {
-                n.style.transform = 'translateX(400px)';
-                setTimeout(() => n.remove(), 300);
-            }, 4000);
         }
 
         // Init Google when GIS library loads
         window.addEventListener('load', initGoogleSignIn);
-        // Also try after short delay (in case load already fired)
         setTimeout(initGoogleSignIn, 1000);
 
         async function login() {
@@ -946,6 +900,20 @@
             if (ws) { ws.close(); ws = null; }
         }
         
+        function showNotification(type, message) {
+            document.querySelectorAll('.custom-notification').forEach(n => n.remove());
+            const n = document.createElement('div');
+            n.className = 'custom-notification';
+            n.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 14px 20px; border-radius: 8px; color: #0a0a0f; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transform: translateX(400px); transition: transform 0.3s ease; max-width: 350px;`;
+            n.textContent = message;
+            document.body.appendChild(n);
+            setTimeout(() => { n.style.transform = 'translateX(0)'; }, 10);
+            setTimeout(() => {
+                n.style.transform = 'translateX(400px)';
+                setTimeout(() => n.remove(), 300);
+            }, 4000);
+        }
+
         function showDashboard() {
             document.getElementById('login-screen').classList.add('hidden');
             document.getElementById('main-header').style.display = 'block';
@@ -1243,7 +1211,10 @@
                 setTimeout(connectWebSocket, delay);
                 reconnectInterval = Math.min(reconnectInterval * 2, maxReconnectInterval);
             };
-            ws.onerror = function() {};
+            ws.onerror = function() {
+                console.error('WebSocket Error terpantau:', error);
+                ws.close(); // Memaksa close agar fungsi reconnect otomatis di atas langsung jalan
+            };
         }
         
         // Health check
