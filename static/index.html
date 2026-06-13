@@ -1173,7 +1173,7 @@
             const dd = document.getElementById('modal-command-dropdown');
             const pnc = document.getElementById('modal-process-name-container');
             const pc = document.getElementById('modal-password-container');
-            if (btn) btn.addEventListener('click', e => { e.stopPropagation(); const c = dd.value; if (!c) { alert('Select a command first'); return; } if (!currentModalHostname) { alert('Hostname not found'); return; } executeRemoteCommand(currentModalHostname, c, this); });
+            if (btn) btn.addEventListener('click', e => { e.stopPropagation(); const c = dd.value; if (!c) { alert('Select a command first'); return; } if (!currentModalHostname) { alert('Hostname not found'); return; } executeRemoteCommand(currentModalHostname, c, btn); });
             if (dd) dd.addEventListener('change', function() {
                 const dangerous = ['shutdown', 'restart', 'taskkill'];
                 pc.classList.toggle('hidden', !dangerous.includes(this.value));
