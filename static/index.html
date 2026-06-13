@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab Monitoring System - Secure Dashboard</title>
+    <title>Lab Monitoring System - Industrial Dashboard</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -11,14 +11,16 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Roboto Condensed + JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Font Awesome for Google icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <!-- favicon -->
+    
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="/static/favicon.png">
     
     <!-- Tailwind Config -->
@@ -26,9 +28,24 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { cyber: { black: '#0a0a0f', dark: '#0d0d1a', panel: '#12121f', border: '#1e1e3a', cyan: '#00f0ff', blue: '#0066ff', green: '#00ff88', yellow: '#ffee00', orange: '#ff8800', red: '#ff0044', pink: '#ff00aa', purple: '#8800ff' } },
-                    fontFamily: { orbitron: ['Orbitron', 'sans-serif'], mono: ['Share Tech Mono', 'monospace'] },
-                    boxShadow: { 'neon-cyan': '0 0 10px rgba(0, 240, 255, 0.5), 0 0 20px rgba(0, 240, 255, 0.3)', 'neon-green': '0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3)', 'neon-red': '0 0 10px rgba(255, 0, 68, 0.5), 0 0 20px rgba(255, 0, 68, 0.3)', 'neon-blue': '0 0 10px rgba(0, 102, 255, 0.5), 0 0 20px rgba(0, 102, 255, 0.3)' }
+                    colors: {
+                        metal: '#cfd3d6',
+                        'metal-light': '#e8eaec',
+                        'metal-dark': '#b0b4b8',
+                        tool: '#1f1f1f',
+                        'tool-soft': '#2B2B2B',
+                        accent: '#ffc107',
+                        'accent-hover': '#e6ac00',
+                        rust: '#8B4513',
+                        steel: '#71797E',
+                        caution: '#FFD700',
+                        surface: '#d9dde0',
+                        'surface-alt': '#e2e5e8',
+                    },
+                    fontFamily: {
+                        condensed: ['Roboto Condensed', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
                 }
             }
         }
@@ -36,654 +53,759 @@
     
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0a1a 100%); min-height: 100vh; overflow-x: hidden; }
-        .grid-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; z-index: 0; }
-        .scanlines { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.1) 2px, rgba(0, 0, 0, 0.1) 4px); pointer-events: none; z-index: 9999; opacity: 0.3; }
-        @keyframes glow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(-20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .animate-glow { animation: glow 2s ease-in-out infinite; }
-        .animate-slide-in { animation: slideIn 0.3s ease-out; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgb(10, 10, 15); }
-        ::-webkit-scrollbar-thumb { background: #1e1e3a; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #00f0ff; }
-        .progress-gradient { background: linear-gradient(90deg, #00f0ff, #00ff88, #ffee00, #ff8800, #ff0044); }
-        .pc-card { transition: all 0.3s ease; position: relative; overflow: hidden; }
-        .pc-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent); transition: left 0.5s ease; }
-        .pc-card:hover::before { left: 100%; }
-        .pc-card:hover { transform: translateY(-4px); box-shadow: 0 8px 32px rgba(0, 240, 255, 0.2); }
+        
+        :root {
+            --metal-grey: #cfd3d6;
+            --tool-black: #1f1f1f;
+            --caution-yellow: #ffc107;
+            --rust-accent: #8B4513;
+            --steel: #71797E;
+            --rubber-black: #2B2B2B;
+            --caution-yellow-bright: #FFD700;
+            --shadow-hard: 2px 2px 0px #000;
+        }
+        
+        body {
+            background-color: #cfd3d6;
+            background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
+            color: #1f1f1f;
+            font-family: 'Roboto Condensed', sans-serif;
+            min-height: 100dvh;
+            overflow-x: hidden;
+        }
+        
+        /* Utility classes */
+        .text-tool { color: #1f1f1f; }
+        .text-steel { color: #71797E; }
+        .text-rust { color: #8B4513; }
+        .text-accent { color: #ffc107; }
+        .bg-metal { background-color: #cfd3d6; }
+        .bg-surface { background-color: #d9dde0; }
+        .bg-surface-alt { background-color: #e2e5e8; }
+        .border-steel { border-color: #71797E; }
+        .border-rust { border-color: #8B4513; }
+        
+        /* Industrial card style */
+        .industrial-card {
+            background: #e2e5e8;
+            border: 2px solid #71797E;
+            border-radius: 4px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5);
+            transition: all 200ms ease-out;
+        }
+        .industrial-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.5);
+            transform: translateY(-1px);
+        }
+        
+        /* Industrial button primary */
+        .btn-primary {
+            background: #ffc107;
+            color: #1f1f1f;
+            border: 2px solid #e6ac00;
+            border-radius: 4px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            min-height: 44px;
+            letter-spacing: 0.3px;
+        }
+        .btn-primary:hover {
+            background: #e6ac00;
+            box-shadow: 0 2px 8px rgba(255,193,7,0.3);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active {
+            transform: translateY(1px);
+            box-shadow: none;
+        }
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Industrial button ghost */
+        .btn-ghost {
+            background: transparent;
+            color: #1f1f1f;
+            border: 1.5px solid #71797E;
+            border-radius: 4px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 500;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            min-height: 44px;
+        }
+        .btn-ghost:hover {
+            background: rgba(127,127,127,0.08);
+            border-color: #1f1f1f;
+        }
+        .btn-ghost:active {
+            transform: translateY(1px);
+        }
+        
+        /* Industrial danger button */
+        .btn-danger {
+            background: #8B4513;
+            color: #ffffff;
+            border: 2px solid #6d3610;
+            border-radius: 4px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 600;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 200ms ease-out;
+            min-height: 44px;
+        }
+        .btn-danger:hover {
+            background: #6d3610;
+            box-shadow: 0 2px 8px rgba(139,69,19,0.3);
+        }
+        .btn-danger:active {
+            transform: translateY(1px);
+        }
+        
+        /* Input style */
+        .industrial-input {
+            background: #f0f2f4;
+            border: 1px solid #71797E;
+            border-radius: 4px;
+            color: #1f1f1f;
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 10px 14px;
+            font-size: 15px;
+            transition: border-color 200ms, box-shadow 200ms;
+            outline: none;
+            width: 100%;
+            min-height: 44px;
+        }
+        .industrial-input:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 2px rgba(255,193,7,0.3);
+        }
+        .industrial-input::placeholder { color: #999; }
+        
+        /* Select style */
+        .industrial-select {
+            background: #f0f2f4;
+            border: 1px solid #71797E;
+            border-radius: 4px;
+            color: #1f1f1f;
+            font-family: 'Roboto Condensed', sans-serif;
+            padding: 10px 14px;
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+            min-height: 44px;
+        }
+        .industrial-select:focus {
+            border-color: #ffc107;
+            box-shadow: 0 0 0 2px rgba(255,193,7,0.3);
+        }
+        
+        /* Caution stripe pattern */
+        .caution-stripe {
+            background: repeating-linear-gradient(
+                -45deg,
+                #FFD700,
+                #FFD700 10px,
+                #1f1f1f 10px,
+                #1f1f1f 20px
+            );
+        }
+        .caution-stripe-thin {
+            height: 4px;
+            background: repeating-linear-gradient(
+                -45deg,
+                #FFD700,
+                #FFD700 6px,
+                #1f1f1f 6px,
+                #1f1f1f 12px
+            );
+        }
+        
+        /* Metallic plaque */
+        .metallic-plaque {
+            background: linear-gradient(180deg, #e8eaec 0%, #d0d3d6 100%);
+            border: 2px solid #71797E;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.6);
+            padding: 6px 12px;
+            font-family: 'Roboto Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #1f1f1f;
+        }
+        
+        /* Status dot */
         .status-dot { position: relative; }
-        .status-dot::after { content: ''; position: absolute; width: 100%; height: 100%; border-radius: 50%; animation: pulse 2s ease-in-out infinite; }
+        .status-dot::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
         @keyframes pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0; } }
-        .modal-backdrop { backdrop-filter: blur(8px); background: rgba(0, 0, 0, 0.7); }
-        .neon-text { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+        
+        /* Progress bar */
+        .progress-bar-track {
+            background: #b8bcc0;
+            border: 1px solid #71797E;
+            border-radius: 2px;
+            height: 8px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            border-radius: 1px;
+            transition: width 500ms ease-out;
+        }
+        .progress-cpu { background: linear-gradient(90deg, #4CAF50, #FFC107, #FF5722); }
+        .progress-ram { background: linear-gradient(90deg, #2196F3, #9C27B0); }
+        .progress-storage { background: linear-gradient(90deg, #607D8B, #795548); }
+        .progress-gpu { background: linear-gradient(90deg, #9C27B0, #E91E63); }
+        
+        /* Corner screws */
+        .screw-corners { position: relative; }
+        .screw-corners::before, .screw-corners::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #bbb, #888);
+            border: 1px solid #666;
+            z-index: 2;
+        }
+        .screw-corners::before { top: 6px; left: 6px; }
+        .screw-corners::after { top: 6px; right: 6px; }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #d0d3d6; }
+        ::-webkit-scrollbar-thumb { background: #71797E; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        
+        /* Animations */
+        @keyframes slideIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-in { animation: slideIn 420ms ease-out; }
+        .animate-fade-in { animation: fadeIn 200ms ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        /* Screen shake for danger commands */
         @keyframes screenShake { 0%, 100% { transform: translate(0, 0); } 10% { transform: translate(-10px, -5px); } 20% { transform: translate(10px, 5px); } 30% { transform: translate(-5px, 10px); } 40% { transform: translate(5px, -10px); } 50% { transform: translate(-10px, 5px); } 60% { transform: translate(10px, -5px); } 70% { transform: translate(-5px, -10px); } 80% { transform: translate(5px, 10px); } 90% { transform: translate(-10px, 5px); } }
         .shake-screen { animation: screenShake 0.8s ease-in-out; }
         @keyframes glitchText { 0% { opacity: 1; transform: translate(0); } 20% { opacity: 0.8; transform: translate(-3px, 2px); } 40% { opacity: 0.9; transform: translate(3px, -2px); } 60% { opacity: 0.7; transform: translate(-2px, -3px); } 80% { opacity: 1; transform: translate(2px, 3px); } 100% { opacity: 1; transform: translate(0); } }
         .glitch-text { animation: glitchText 0.3s ease-in-out 5; }
-        @keyframes sirenBlink { 0%, 100% { background-color: rgba(255, 0, 68, 0.1); } 50% { background-color: rgba(255, 0, 68, 0.4); } }
+        @keyframes sirenBlink { 0%, 100% { background-color: rgba(139,69,19,0.05); } 50% { background-color: rgba(139,69,19,0.15); } }
         .siren-blink { animation: sirenBlink 1s ease-in-out 6; }
-        @keyframes blinkCursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .hacker-terminal { font-family: 'Share Tech Mono', monospace; background: #0a0a0f; border: 1px solid #00ff41; box-shadow: 0 0 20px rgba(0, 255, 65, 0.3), inset 0 0 20px rgba(0, 255, 65, 0.05); }
-        .hacker-cursor::after { content: '█'; animation: blinkCursor 0.8s step-end infinite; color: #00ff41; }
-        .corner-decor { position: absolute; width: 20px; height: 20px; border-color: rgba(0, 240, 255, 0.5); }
-        .corner-decor.tl { top: 0; left: 0; border-top: 2px solid; border-left: 2px solid; }
-        .corner-decor.tr { top: 0; right: 0; border-top: 2px solid; border-right: 2px solid; }
-        .corner-decor.bl { bottom: 0; left: 0; border-bottom: 2px solid; border-left: 2px solid; }
-        .corner-decor.br { bottom: 0; right: 0; border-bottom: 2px solid; border-right: 2px solid; }
+        
+        /* Hacker terminal (for danger commands) */
+        .hacker-terminal {
+            font-family: 'JetBrains Mono', monospace;
+            background: #1a1a1a;
+            border: 2px solid #8B4513;
+            box-shadow: 0 0 15px rgba(139,69,19,0.3);
+        }
         
         /* Login page */
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 10000; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #0a0a0f 0%, #0d0d1a 50%, #0a0a1a 100%); padding: 16px; overflow-y: auto; }
+        #login-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10000;
+            display: flex; align-items: center; justify-content: center;
+            background-color: #cfd3d6;
+            background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');
+            padding: 16px;
+            overflow-y: auto;
+        }
         #login-screen.hidden { display: none; }
-        .login-box { background: #0d0d1a; border: 1px solid #00f0ff; border-radius: 12px; padding: 28px 24px; width: 100%; max-width: 380px; box-shadow: 0 0 30px rgba(0, 240, 255, 0.2), inset 0 0 30px rgba(0, 240, 255, 0.05); }
-        .login-box input { background: #0a0a0f; border: 1px solid #1e1e3a; color: #00f0ff; font-family: 'Share Tech Mono', monospace; padding: 12px 16px; border-radius: 6px; width: 100%; outline: none; font-size: 16px; transition: border-color 0.3s; min-height: 44px; }
-        .login-box input:focus { border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); }
-        .login-box input::placeholder { color: #1e1e3a; }
-        .login-btn { background: #00f0ff; color: #0a0a0f; border: none; padding: 12px; border-radius: 6px; width: 100%; font-family: 'Orbitron', sans-serif; font-weight: bold; font-size: 14px; cursor: pointer; transition: all 0.3s; min-height: 48px; -webkit-tap-highlight-color: transparent; }
-        .login-btn:hover { box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); transform: translateY(-2px); }
-        .login-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .login-btn:active { transform: scale(0.98); }
-        .login-error { color: #ff0044; font-size: 12px; font-family: 'Share Tech Mono', monospace; min-height: 20px; word-wrap: break-word; }
-
-        /* ============ GOOGLE LOGIN BUTTON ============ */
-        .google-btn { width: 100%; display: flex; align-items: center; justify-content: center; gap: 12px; padding: 12px 16px; background: #ffffff; color: #3c4043; border: 1px solid #dadce0; border-radius: 6px; font-family: 'Roboto', 'Segoe UI', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.3s; min-height: 48px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); -webkit-tap-highlight-color: transparent; }
-        .google-btn:hover { background: #f8f9fa; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); transform: translateY(-1px); }
-        .google-btn:active { transform: scale(0.98); }
-        .google-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        body.light-mode .google-btn { background: #ffffff; color: #3c4043; border-color: #0066ff; }
-        body.light-mode .google-btn:hover { background: #f5f7ff; }
-
-        .login-divider { display: flex; align-items: center; margin: 16px 0 12px 0; color: #0066ff; font-size: 10px; font-family: 'Orbitron', sans-serif; letter-spacing: 1px; }
-        .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: #1e1e3a; }
-        .login-divider span { padding: 0 12px; }
-        body.light-mode .login-divider { color: #0066ff; }
-        body.light-mode .login-divider::before, body.light-mode .login-divider::after { background: #c0c8e0; }
-
-        /* ============ ADMIN MODAL ============ */
-        .admin-modal-backdrop { position: fixed; inset: 0; z-index: 99990; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 16px; overflow-y: auto; }
-        .admin-modal-backdrop.open { display: flex; }
-        .admin-modal { background: #0d0d1a; border: 1px solid #00f0ff; border-radius: 12px; padding: 24px; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 40px rgba(0, 240, 255, 0.3); }
-        body.light-mode .admin-modal { background: #ffffff; border-color: #0066ff; }
-        .admin-modal-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 16px; border-bottom: 1px solid #1e1e3a; }
-        body.light-mode .admin-modal-header { border-color: #c0c8e0; }
-        .admin-modal-close { background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; cursor: pointer; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
-        .admin-modal-close:hover { background: rgba(255, 0, 68, 0.1); border-color: #ff0044; color: #ff0044; }
-        body.light-mode .admin-modal-close { border-color: #c0c8e0; color: #0066ff; }
-        .email-input-row { display: flex; gap: 8px; margin-bottom: 12px; }
-        .email-input-row input { flex: 1; background: #0a0a0f; border: 1px solid #1e1e3a; color: #00f0ff; font-family: 'Share Tech Mono', monospace; padding: 10px 12px; border-radius: 6px; outline: none; font-size: 14px; min-height: 44px; }
-        .email-input-row input:focus { border-color: #00f0ff; }
-        body.light-mode .email-input-row input { background: #f5f7ff; border-color: #c0c8e0; color: #0066ff; }
-        .email-add-btn { background: #00ff88; color: #0a0a0f; border: none; padding: 10px 16px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-weight: bold; font-size: 12px; cursor: pointer; min-height: 44px; min-width: 80px; }
-        .email-add-btn:hover { background: #00cc6e; }
-        .email-add-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        body.light-mode .email-add-btn { background: #0066ff; color: #ffffff; }
-        body.light-mode .email-add-btn:hover { background: #0052cc; }
-        .email-list { display: flex; flex-direction: column; gap: 6px; max-height: 320px; overflow-y: auto; padding: 4px; }
-        .email-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; font-family: 'Share Tech Mono', monospace; font-size: 13px; color: #00f0ff; min-height: 44px; gap: 8px; }
-        .email-item .email-text { word-break: break-all; flex: 1; }
-        .email-item .email-remove-btn { background: transparent; border: 1px solid rgba(255, 0, 68, 0.5); color: #ff0044; padding: 6px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; min-width: 32px; min-height: 32px; }
-        .email-item .email-remove-btn:hover { background: rgba(255, 0, 68, 0.15); }
-        body.light-mode .email-item { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
-        .empty-email-state { text-align: center; padding: 24px; color: #0066ff; font-size: 12px; }
-        .admin-info-box { padding: 10px 12px; background: rgba(0, 240, 255, 0.05); border: 1px solid rgba(0, 240, 255, 0.2); border-radius: 6px; font-size: 11px; color: #0066ff; margin-bottom: 12px; line-height: 1.5; }
-        body.light-mode .admin-info-box { background: rgba(0, 102, 255, 0.05); border-color: rgba(0, 102, 255, 0.3); color: #0066ff; }
-        .admin-menu-btn { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border: 1px solid #00f0ff; padding: 6px 10px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold; cursor: pointer; min-height: 32px; }
-        .admin-menu-btn:hover { background: rgba(0, 240, 255, 0.2); }
-        body.light-mode .admin-menu-btn { background: rgba(0, 102, 255, 0.1); color: #0066ff; border-color: #0066ff; }
-        body.light-mode .admin-menu-btn:hover { background: rgba(0, 102, 255, 0.2); }
-
-        /* ============ HAMBURGER MENU ============ */
-        .hamburger-btn { display: none; background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; padding: 6px 8px; cursor: pointer; color: #00f0ff; min-width: 38px; min-height: 38px; align-items: center; justify-content: center; }
-        .hamburger-btn:hover { background: rgba(0, 240, 255, 0.1); border-color: rgba(0, 240, 255, 0.5); }
-        .hamburger-btn:active { transform: scale(0.95); }
-        .hamburger-icon { display: inline-block; width: 22px; height: 16px; position: relative; }
-        .hamburger-icon span { display: block; position: absolute; height: 2px; width: 100%; background: currentColor; border-radius: 2px; transition: all 0.3s ease; }
-        .hamburger-icon span:nth-child(1) { top: 0; }
-        .hamburger-icon span:nth-child(2) { top: 7px; }
-        .hamburger-icon span:nth-child(3) { top: 14px; }
-        .hamburger-btn.active .hamburger-icon span:nth-child(1) { top: 7px; transform: rotate(45deg); }
-        .hamburger-btn.active .hamburger-icon span:nth-child(2) { opacity: 0; }
-        .hamburger-btn.active .hamburger-icon span:nth-child(3) { top: 7px; transform: rotate(-45deg); }
-
-        .mobile-menu-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); z-index: 9998; opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        
+        /* Modal */
+        .modal-backdrop { backdrop-filter: blur(4px); background: rgba(0,0,0,0.4); }
+        
+        /* Mobile menu */
+        .mobile-menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(2px);
+            z-index: 9998; opacity: 0; visibility: hidden;
+            transition: opacity 300ms, visibility 300ms;
+        }
         .mobile-menu-overlay.open { opacity: 1; visibility: visible; }
-
-        .mobile-menu { position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw; height: 100%; background: linear-gradient(135deg, #0d0d1a 0%, #12121f 100%); border-left: 1px solid #1e1e3a; box-shadow: -4px 0 20px rgba(0, 240, 255, 0.15); z-index: 9999; transform: translateX(100%); transition: transform 0.3s ease; overflow-y: auto; padding: 16px; }
+        .mobile-menu {
+            position: fixed; top: 0; right: 0; width: 280px; max-width: 85vw; height: 100%;
+            background: #e2e5e8;
+            border-left: 3px solid #71797E;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 9999;
+            transform: translateX(100%);
+            transition: transform 300ms ease;
+            overflow-y: auto; padding: 16px;
+        }
         .mobile-menu.open { transform: translateX(0); }
-        .mobile-menu-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 12px; margin-bottom: 12px; border-bottom: 1px solid #1e1e3a; }
-        .mobile-menu-close { background: transparent; border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; cursor: pointer; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
-        .mobile-menu-close:hover { background: rgba(255, 0, 68, 0.1); border-color: #ff0044; color: #ff0044; }
-        .mobile-menu-close:active { transform: scale(0.95); }
-        .mobile-menu-section { margin-bottom: 16px; }
-        .mobile-menu-section-title { font-family: 'Orbitron', sans-serif; font-size: 10px; color: #0066ff; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; padding-left: 4px; }
-        .mobile-menu-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; margin-bottom: 6px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; font-size: 13px; color: #00f0ff; min-height: 44px; }
-        .mobile-menu-item .item-label { color: #0066ff; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .mobile-menu-item .item-value { color: #00f0ff; font-weight: bold; font-size: 12px; }
-        .mobile-menu-item .item-value.green { color: #00ff88; }
-        .mobile-menu-item .item-value.red { color: #ff0044; }
-        .mobile-menu-item .item-value.yellow { color: #ffee00; }
-        .mobile-menu-divider { height: 1px; background: #1e1e3a; margin: 12px 0; }
-        .mobile-menu-actions { display: flex; flex-direction: column; gap: 8px; }
-        .mobile-menu-action-btn { display: flex; align-items: center; justify-content: flex-start; gap: 10px; padding: 12px 14px; background: rgba(18, 18, 31, 0.6); border: 1px solid #1e1e3a; border-radius: 6px; color: #00f0ff; font-family: 'Orbitron', sans-serif; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; min-height: 48px; transition: all 0.3s ease; }
-        .mobile-menu-action-btn:active { transform: scale(0.98); }
-        .mobile-menu-action-btn.logout { color: #ff0044; border-color: rgba(255, 0, 68, 0.3); }
-        .mobile-menu-action-btn.logout:active { background: rgba(255, 0, 68, 0.15); }
-        .mobile-menu-action-btn .action-icon { font-size: 16px; }
-
-        body.light-mode .mobile-menu { background: linear-gradient(135deg, #ffffff 0%, #f0f4ff 100%); border-left-color: #c0c8e0; }
-        body.light-mode .mobile-menu-section-title { color: #0066ff; }
-        body.light-mode .mobile-menu-item { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
-        body.light-mode .mobile-menu-item .item-label { color: #0066ff; }
-        body.light-mode .mobile-menu-item .item-value { color: #0066ff; }
-        body.light-mode .mobile-menu-divider { background: #c0c8e0; }
-        body.light-mode .mobile-menu-action-btn { background: rgba(240, 244, 255, 0.6); border-color: #c0c8e0; color: #0066ff; }
-        body.light-mode .mobile-menu-action-btn.logout { color: #ff0044; }
-
-        /* ============ MOBILE RESPONSIVE ============ */
+        
+        /* Hamburger */
+        .hamburger-btn {
+            display: none;
+            background: transparent; border: 2px solid #71797E; border-radius: 4px;
+            padding: 6px 8px; cursor: pointer; color: #1f1f1f;
+            min-width: 40px; min-height: 40px;
+            align-items: center; justify-content: center;
+        }
+        .hamburger-btn:hover { background: rgba(127,127,127,0.1); }
+        .hamburger-icon { display: inline-block; width: 20px; height: 14px; position: relative; }
+        .hamburger-icon span { display: block; position: absolute; height: 2px; width: 100%; background: currentColor; border-radius: 2px; transition: all 300ms; }
+        .hamburger-icon span:nth-child(1) { top: 0; }
+        .hamburger-icon span:nth-child(2) { top: 6px; }
+        .hamburger-icon span:nth-child(3) { top: 12px; }
+        .hamburger-btn.active .hamburger-icon span:nth-child(1) { top: 6px; transform: rotate(45deg); }
+        .hamburger-btn.active .hamburger-icon span:nth-child(2) { opacity: 0; }
+        .hamburger-btn.active .hamburger-icon span:nth-child(3) { top: 6px; transform: rotate(-45deg); }
+        
+        /* Table */
+        .industrial-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .industrial-table th {
+            text-align: left; padding: 8px 12px;
+            background: #d0d3d6;
+            border-bottom: 2px solid #71797E;
+            font-weight: 600; text-transform: uppercase;
+            letter-spacing: 0.5px; font-size: 11px;
+            color: #71797E;
+        }
+        .industrial-table td {
+            padding: 8px 12px;
+            border-bottom: 1px solid #c0c3c6;
+        }
+        .industrial-table tr:hover td {
+            background: rgba(255,193,7,0.05);
+        }
+        
+        /* Command output */
+        .command-output-box {
+            background: #1a1a1a;
+            border: 2px solid #71797E;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #4CAF50;
+            max-height: 384px;
+            overflow-y: auto;
+        }
+        
+        /* Tooltip-style labels */
+        .field-label {
+            font-family: 'Roboto Condensed', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: #71797E;
+            margin-bottom: 4px;
+        }
+        
+        /* Responsive */
         * { -webkit-tap-highlight-color: transparent; }
         html, body { overflow-x: hidden; max-width: 100vw; }
         .pc-card:active { transform: scale(0.98); }
-
-        @media (max-width: 768px) {
-            /* Header compact - mobile only shows logo + hamburger */
-            #main-header .container, #main-content { padding-left: 12px !important; padding-right: 12px !important; }
-            #main-header { font-size: 11px; }
-            .header-title-text { font-size: 13px !important; }
-            .header-version { display: none !important; }
-            .header-desktop-actions { display: none !important; }
-            .hamburger-btn { display: inline-flex !important; }
-
-            /* Login */
-            .login-box { padding: 24px 20px !important; }
-            .login-box h1 { font-size: 18px !important; }
-
-            /* Stats grid - 2 columns */
-            .stats-grid-mobile { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
-            .stat-value-mobile { font-size: 18px !important; }
-            .stat-label-mobile { font-size: 9px !important; }
-
-            /* PC cards */
-            .pc-card-mobile { padding: 10px !important; }
-            .pc-name-mobile { font-size: 12px !important; }
-
-            /* Modal full width */
-            #detail-modal { padding: 0 !important; }
-            #detail-modal > div:last-child { padding: 0 !important; align-items: stretch !important; }
-            #detail-modal .modal-content { max-width: 100% !important; max-height: 100vh !important; height: 100vh !important; border-radius: 0 !important; border-left: none !important; border-right: none !important; }
-            #detail-modal .modal-pad { padding: 12px !important; }
-            #detail-modal .modal-sticky-pad { padding: 10px 12px !important; }
-            #detail-modal .modal-title { font-size: 14px !important; }
-            #detail-modal .modal-info { font-size: 10px !important; }
-            #detail-modal .modal-section-pad { padding: 10px !important; }
-            #detail-modal .modal-grid-2 { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-            #detail-modal .modal-grid-4 { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-            #detail-modal table { font-size: 10px !important; }
-            #detail-modal th, #detail-modal td { padding: 4px 6px !important; }
-
-            /* Tables horizontal scroll */
-            .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-            /* Forms */
-            .form-row-mobile { flex-direction: column !important; align-items: stretch !important; }
-            .form-row-mobile > * { width: 100% !important; margin-bottom: 6px; }
-
-            /* Modal close button bigger */
-            #detail-modal .modal-close-btn { padding: 8px !important; min-width: 44px; min-height: 44px; }
-
-            /* PC grid - 1 column on mobile */
-            .pc-grid-container { grid-template-columns: 1fr !important; }
-
-            /* Hide sparkline on mobile to save space */
-            .sparkline-container { display: none !important; }
-
-            /* Smaller corner decor */
-            .corner-decor { width: 10px !important; height: 10px !important; }
-
-            /* Reduce motion on small screens for performance */
-            .scanlines { opacity: 0.15 !important; }
-        }
-
-        @media (max-width: 480px) {
-            .login-box { padding: 20px 16px !important; }
-            .stat-value-mobile { font-size: 16px !important; }
-        }
-
-        /* Touch-friendly tap targets */
+        
+        /* Touch-friendly */
         @media (hover: none) and (pointer: coarse) {
             .pc-card { cursor: pointer; }
-            button, select, input { font-size: 16px !important; } /* Prevent iOS zoom on focus */
+            button, select, input { font-size: 16px !important; }
         }
-
-        /* ============ LIGHT MODE CYBERPUNK ============ */
-        body.light-mode { background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 50%, #d0d8ff 100%) !important; transition: background 0.5s ease; }
-        body.light-mode .grid-bg { background-image: linear-gradient(rgba(0, 102, 255, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 102, 255, 0.08) 1px, transparent 1px) !important; }
-        body.light-mode .scanlines { background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px) !important; opacity: 0.15; }
-        body.light-mode #login-screen { background: linear-gradient(135deg, #f0f4ff 0%, #e0e8ff 50%, #d0d8ff 100%) !important; }
-        body.light-mode .login-box { background: #ffffff !important; border: 1px solid #0066ff !important; box-shadow: 0 0 30px rgba(0, 102, 255, 0.15), inset 0 0 30px rgba(0, 102, 255, 0.05) !important; }
-        body.light-mode .login-box input { background: #f5f7ff !important; border: 1px solid #c0c8e0 !important; color: #0066ff !important; }
-        body.light-mode .login-box input::placeholder { color: #8090a0 !important; }
-        body.light-mode .login-btn { background: #0066ff !important; color: #ffffff !important; }
-        body.light-mode #main-header { background: rgba(255, 255, 255, 0.9) !important; border-bottom: 1px solid #c0c8e0 !important; }
-        body.light-mode .text-cyber-cyan { color: #0066ff !important; }
-        body.light-mode .text-cyber-blue { color: #00aa66 !important; }
-        body.light-mode .text-cyber-border { color: #7080a0 !important; }
-        body.light-mode .bg-cyber-panel { background-color: #ffffff !important; }
-        body.light-mode .bg-cyber-dark { background-color: #ffffff !important; }
-        body.light-mode .bg-cyber-black { background-color: #f0f4ff !important; }
-        body.light-mode .bg-cyber-panel\/80 { background-color: rgba(255, 255, 255, 0.9) !important; }
-        body.light-mode .bg-cyber-panel\/50 { background-color: rgba(240, 244, 255, 0.7) !important; }
-        body.light-mode .border-cyber-border { border-color: #c0c8e0 !important; }
-        body.light-mode .neon-text { text-shadow: 0 0 5px rgba(0, 102, 255, 0.4), 0 0 10px rgba(0, 102, 255, 0.3) !important; }
-        body.light-mode .corner-decor { border-color: rgba(0, 102, 255, 0.5) !important; }
-        body.light-mode .hacker-terminal { background: #1a1a2e !important; }
-        body.light-mode ::-webkit-scrollbar-track { background: #f0f4ff !important; }
-        body.light-mode ::-webkit-scrollbar-thumb { background: #c0c8e0 !important; }
-        body.light-mode ::-webkit-scrollbar-thumb:hover { background: #0066ff !important; }
-        body.light-mode .bg-cyber-green\/20 { background-color: rgba(0, 200, 100, 0.15) !important; }
-        body.light-mode .bg-cyber-red\/20 { background-color: rgba(255, 0, 68, 0.12) !important; }
-        body.light-mode #detail-modal .bg-cyber-dark\/95 { background-color: rgba(255, 255, 255, 0.95) !important; }
-        body.light-mode #modal-processes td, body.light-mode #modal-files td { border-color: #e0e8f0 !important; }
-        body.light-mode #modal-processes th, body.light-mode #modal-files th { border-color: #e0e8f0 !important; }
-        body.light-mode .command-dropdown { background: #ffffff !important; color: #0066ff !important; border-color: #0066ff !important; }
-        body.light-mode #modal-process-name-input, body.light-mode #modal-admin-password { background: #f5f7ff !important; color: #0066ff !important; }
-        body.light-mode .pc-card { background: #ffffff !important; border: 1px solid #c0c8e0 !important; box-shadow: 0 2px 8px rgba(0, 102, 255, 0.08) !important; }
-        body.light-mode .pc-card:hover { box-shadow: 0 8px 32px rgba(0, 102, 255, 0.2) !important; }
-        body.light-mode .shadow-neon-cyan { box-shadow: 0 0 10px rgba(0, 102, 255, 0.4), 0 0 20px rgba(0, 102, 255, 0.2) !important; }
-        body.light-mode .shadow-neon-green { box-shadow: 0 0 10px rgba(0, 200, 100, 0.4), 0 0 20px rgba(0, 200, 100, 0.2) !important; }
-        body.light-mode .shadow-neon-red { box-shadow: 0 0 10px rgba(255, 0, 68, 0.4), 0 0 20px rgba(255, 0, 68, 0.2) !important; }
-        body.light-mode #main-content .text-cyber-cyan { color: #0066ff !important; }
-        body.light-mode #main-content .text-cyber-border { color: #7080a0 !important; }
-        /* Theme toggle button styles */
-        .theme-toggle-btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border-radius: 6px; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold; cursor: pointer; transition: all 0.3s ease; border: 1px solid; text-transform: uppercase; letter-spacing: 0.5px; }
-        .theme-toggle-btn .toggle-icon { font-size: 14px; line-height: 1; }
-        body:not(.light-mode) .theme-toggle-btn { background: rgba(0, 240, 255, 0.1); color: #00f0ff; border-color: rgba(0, 240, 255, 0.5); }
-        body:not(.light-mode) .theme-toggle-btn:hover { background: rgba(0, 240, 255, 0.2); box-shadow: 0 0 12px rgba(0, 240, 255, 0.4); transform: translateY(-1px); }
-        body.light-mode .theme-toggle-btn { background: rgba(0, 102, 255, 0.1); color: #0066ff; border-color: rgba(0, 102, 255, 0.5); }
-        body.light-mode .theme-toggle-btn:hover { background: rgba(0, 102, 255, 0.2); box-shadow: 0 0 12px rgba(0, 102, 255, 0.4); transform: translateY(-1px); }
+        
+        @media (max-width: 768px) {
+            #main-header .container, #main-content { padding-left: 12px !important; padding-right: 12px !important; }
+            .header-desktop-actions { display: none !important; }
+            .hamburger-btn { display: inline-flex !important; }
+            .pc-grid-container { grid-template-columns: 1fr !important; }
+            #detail-modal { padding: 0 !important; }
+            #detail-modal > div:last-child { padding: 0 !important; align-items: stretch !important; }
+            #detail-modal .modal-content { max-width: 100% !important; max-height: 100vh !important; height: 100vh !important; border-radius: 0 !important; }
+            .sparkline-container { display: none !important; }
+        }
     </style>
 </head>
-<body class="font-mono text-cyber-cyan">
-    <!-- Background effects -->
-    <div class="grid-bg"></div>
-    <div class="scanlines"></div>
+<body class="font-condensed text-tool">
     
-    <!-- Login Screen -->
+    <!-- ========== LOGIN SCREEN ========== -->
     <div id="login-screen">
-        <div class="login-box animate-slide-in">
+        <div class="industrial-card screw-corners p-8 w-full max-w-[400px] animate-slide-in" style="border-width: 3px;">
+            <div class="caution-stripe-thin mb-6"></div>
             <div class="text-center mb-6">
-                <div class="w-4 h-4 bg-cyber-green rounded-full mx-auto mb-4 animate-glow"></div>
-                <h1 class="text-2xl font-orbitron font-bold text-cyber-cyan neon-text mb-2">SECURE ACCESS</h1>
-                <p class="text-xs text-cyber-border">Lab Monitoring System v2.1</p>
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded border-2 border-accent bg-accent/10 mb-4">
+                    <i data-lucide="shield-check" class="w-6 h-6 text-accent"></i>
+                </div>
+                <h1 class="text-2xl font-bold tracking-tight uppercase" style="color: #1f1f1f;">Secure Access</h1>
+                <p class="text-sm mt-1" style="color: #71797E;">Lab Monitoring System</p>
             </div>
 
             <!-- Google Login Button -->
-            <button id="google-login-btn" class="google-btn" onclick="loginWithGoogle()">
-                <i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i>
+            <button id="google-login-btn" class="btn-primary w-full flex items-center justify-center gap-3 mb-2" onclick="loginWithGoogle()" style="background: #fff; border-color: #dadce0; color: #3c4043;">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
                 <span>Login with Google</span>
             </button>
-            <p class="text-center text-cyber-border text-[10px] mb-4">Hanya untuk email yang sudah terdaftar</p>
+            <p class="text-center text-xs mb-4" style="color: #71797E;">Registered emails only</p>
 
             <!-- Divider -->
-            <div class="login-divider">
-                <span>ATAU LOGIN DENGAN PASSWORD</span>
+            <div class="flex items-center gap-3 my-4">
+                <div class="flex-1 h-px" style="background: #71797E;"></div>
+                <span class="text-xs font-semibold uppercase tracking-wider" style="color: #71797E;">Or use password</span>
+                <div class="flex-1 h-px" style="background: #71797E;"></div>
             </div>
 
             <div class="space-y-4">
                 <div>
-                    <label class="text-xs text-cyber-blue block mb-2">ADMIN PASSWORD</label>
-                    <input id="login-password" type="password" placeholder="Masukkan password admin..."
+                    <label class="field-label block mb-2">Admin Password</label>
+                    <input id="login-password" type="password" class="industrial-input" placeholder="Enter admin password..."
                            onkeydown="if(event.key==='Enter') login()">
                 </div>
-                <div id="login-error" class="login-error"></div>
-                <button id="login-btn" class="login-btn" onclick="login()">
-                    ⚡ AUTHENTICATE
+                <div id="login-error" class="text-sm font-medium" style="color: #c62828; min-height: 20px;"></div>
+                <button id="login-btn" class="btn-primary w-full" onclick="login()">
+                    Authenticate
                 </button>
-                <div class="text-center text-cyber-border text-[10px]">
+                <div class="text-center text-xs" style="color: #71797E;">
                     Unauthorized access is prohibited
                 </div>
             </div>
+            <div class="caution-stripe-thin mt-6"></div>
         </div>
     </div>
     
-    <!-- Header -->
-    <header id="main-header" class="relative z-10 border-b border-cyber-border bg-cyber-dark/80 backdrop-blur-sm" style="display:none;">
-        <div class="container mx-auto px-3 sm:px-4 md:px-6 py-2 md:py-4">
-            <div class="flex items-center justify-between flex-wrap gap-2">
-                <!-- Brand: Always visible (left) -->
-                <div class="flex items-center space-x-2 md:space-x-4 min-w-0 flex-1">
-                    <div class="flex items-center space-x-2 md:space-x-3 min-w-0">
-                        <div class="w-2.5 h-2.5 md:w-3 md:h-3 bg-cyber-green rounded-full status-dot animate-glow flex-shrink-0"></div>
-                        <h1 class="text-sm md:text-xl font-orbitron font-bold text-cyber-cyan neon-text header-title-text truncate">
-                            LAB MONITORING
-                        </h1>
-                    </div>
-                    <span class="header-version text-xs text-cyber-border px-2 md:px-3 py-1 border border-cyber-border rounded">v2.0</span>
+    <!-- ========== HEADER ========== -->
+    <header id="main-header" class="sticky top-0 z-[100] border-b-2 border-steel" style="background: #d0d3d6; background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png'); display:none;">
+        <div class="container mx-auto px-4 md:px-6 py-3">
+            <div class="flex items-center justify-between gap-3">
+                <!-- Brand -->
+                <div class="flex items-center gap-3 min-w-0 flex-1">
+                    <div class="w-3 h-3 rounded-full bg-green-600 status-dot flex-shrink-0" style="box-shadow: 0 0 6px rgba(76,175,80,0.5);"></div>
+                    <h1 class="text-lg md:text-xl font-bold uppercase tracking-tight truncate" style="color: #1f1f1f;">
+                        Lab Monitoring
+                    </h1>
+                    <div class="metallic-plaque hidden md:block">v2.0</div>
                 </div>
-                <!-- Hamburger button (mobile only) -->
+                
+                <!-- Hamburger -->
                 <button id="hamburger-btn" class="hamburger-btn" onclick="toggleMobileMenu()" aria-label="Open menu">
                     <span class="hamburger-icon"><span></span><span></span><span></span></span>
                 </button>
-                <!-- Desktop status bar -->
+                
+                <!-- Desktop actions -->
                 <div class="header-desktop-actions hidden md:flex items-center gap-3">
-                    <div class="header-status-item flex items-center space-x-1">
-                        <span class="header-status-label text-xs text-cyber-blue">MQTT:</span>
-                        <span id="mqtt-status" class="text-xs px-2 py-1 rounded bg-cyber-panel border border-cyber-border">Connecting...</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold uppercase" style="color: #71797E;">MQTT:</span>
+                        <span id="mqtt-status" class="metallic-plaque text-xs" style="font-size: 10px;">Connecting...</span>
                     </div>
-                    <div class="header-status-item flex items-center space-x-1">
-                        <span class="header-status-label text-xs text-cyber-blue">WS:</span>
-                        <span id="ws-status" class="text-xs px-2 py-1 rounded bg-cyber-panel border border-cyber-border">Disconnected</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold uppercase" style="color: #71797E;">WS:</span>
+                        <span id="ws-status" class="metallic-plaque text-xs" style="font-size: 10px;">Disconnected</span>
                     </div>
-                    <div class="header-time text-xs text-cyber-blue"><span id="current-time"></span></div>
-                    <div class="header-pcs-info flex items-center space-x-1">
-                        <span class="pcs-label text-xs text-cyber-blue">PCs:</span>
-                        <span id="pc-count" class="text-cyber-green font-bold">0</span>
-                        <span class="text-cyber-border">/</span>
-                        <span id="online-count" class="text-cyber-green font-bold">0</span>
-                        <span class="pcs-label text-xs text-cyber-blue">Online</span>
+                    <div class="text-xs font-mono" style="color: #1f1f1f;"><span id="current-time"></span></div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-semibold uppercase" style="color: #71797E;">PCs:</span>
+                        <span id="pc-count" class="font-bold text-sm" style="color: #1f1f1f;">0</span>
+                        <span style="color: #71797E;">/</span>
+                        <span id="online-count" class="font-bold text-sm" style="color: #1f1f1f;">0</span>
                     </div>
-                    <div id="session-timer" class="header-session-timer text-xs text-cyber-yellow"></div>
-                    <button id="theme-toggle-btn" onclick="toggleTheme()" class="header-btn theme-toggle-btn" title="Switch to Light Cyberpunk">
-                        <span class="toggle-icon">🌙</span>
-                        <span class="toggle-text">LIGHT</span>
+                    <div id="session-timer" class="text-xs font-mono" style="color: #8B4513;"></div>
+                    <button onclick="logout()" class="btn-ghost text-xs py-1 px-3" style="min-height: 32px; color: #8B4513; border-color: #8B4513;">
+                        Logout
                     </button>
-                    <button onclick="logout()" class="header-btn text-xs text-cyber-red hover:text-cyber-orange border border-cyber-red/30 px-3 py-1 rounded hover:bg-cyber-red/10 transition-all">LOGOUT</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- ============ ADMIN EMAIL MANAGER MODAL ============ -->
-    <div id="admin-modal-backdrop" class="admin-modal-backdrop" onclick="closeAdminModal(event)">
-        <div class="admin-modal animate-slide-in" onclick="event.stopPropagation()">
-            <div class="admin-modal-header">
-                <div>
-                    <div class="font-orbitron text-cyber-cyan text-lg font-bold">📧 EMAIL WHITELIST</div>
-                    <div class="text-[10px] text-cyber-blue mt-1" id="admin-modal-subtitle">Kelola email yang boleh login via Google</div>
-                </div>
-                <button class="admin-modal-close" onclick="closeAdminModal()" aria-label="Close">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-                <div class="admin-info-box">
-                ℹ️ Hanya email dalam daftar di bawah yang bisa login via <b>Login with Google</b>. Email lain akan ditolak dengan pesan "Akses ditolak".
-            </div>
-
-            <!-- Add Email Form -->
-            <div class="email-input-row">
-                <input type="email" id="new-email-input" placeholder="email@contoh.com" autocomplete="off">
-                <button class="email-add-btn" id="add-email-btn" onclick="addEmail()">+ ADD</button>
-            </div>
-
-            <!-- Email List -->
-            <div class="email-list" id="email-list">
-                <div class="empty-email-state">Loading emails...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Menu Overlay -->
+    <!-- ========== MOBILE MENU ========== -->
     <div id="mobile-menu-overlay" class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-
-    <!-- Mobile Menu Drawer -->
     <div id="mobile-menu" class="mobile-menu">
-        <div class="mobile-menu-header">
+        <div class="flex items-center justify-between pb-3 mb-3 border-b-2 border-steel">
             <div>
-                <div class="font-orbitron text-cyber-cyan text-sm font-bold">SYSTEM MENU</div>
-                <div class="text-[10px] text-cyber-blue mt-1">Lab Monitoring v2.0</div>
+                <div class="font-bold uppercase tracking-tight text-sm">System Menu</div>
+                <div class="text-xs mt-1" style="color: #71797E;">Lab Monitoring v2.0</div>
             </div>
-            <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close menu">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            <button class="btn-ghost p-2" style="min-width: 36px; min-height: 36px;" onclick="closeMobileMenu()" aria-label="Close menu">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
 
-        <div class="mobile-menu-section">
-            <div class="mobile-menu-section-title">Connection Status</div>
-            <div class="mobile-menu-item">
-                <span class="item-label">MQTT</span>
-                <span id="mobile-mqtt-status" class="item-value">Connecting...</span>
+        <div class="space-y-3">
+            <div>
+                <div class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: #71797E;">Connection Status</div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 bg-white/50 rounded border border-steel/30">
+                        <span class="text-sm font-medium" style="color: #71797E;">MQTT</span>
+                        <span id="mobile-mqtt-status" class="text-sm font-bold">Connecting...</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-white/50 rounded border border-steel/30">
+                        <span class="text-sm font-medium" style="color: #71797E;">WebSocket</span>
+                        <span id="mobile-ws-status" class="text-sm font-bold">Disconnected</span>
+                    </div>
+                </div>
             </div>
-            <div class="mobile-menu-item">
-                <span class="item-label">WebSocket</span>
-                <span id="mobile-ws-status" class="item-value">Disconnected</span>
-            </div>
-        </div>
 
-        <div class="mobile-menu-section">
-            <div class="mobile-menu-section-title">System Info</div>
-            <div class="mobile-menu-item">
-                <span class="item-label">Time</span>
-                <span id="mobile-current-time" class="item-value">--:--:--</span>
+            <div>
+                <div class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: #71797E;">System Info</div>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between p-2 bg-white/50 rounded border border-steel/30">
+                        <span class="text-sm font-medium" style="color: #71797E;">Time</span>
+                        <span id="mobile-current-time" class="text-sm font-mono font-bold">--:--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-white/50 rounded border border-steel/30">
+                        <span class="text-sm font-medium" style="color: #71797E;">PCs Online</span>
+                        <span class="text-sm font-bold"><span id="mobile-pc-count">0</span> / <span id="mobile-online-count">0</span></span>
+                    </div>
+                    <div class="flex items-center justify-between p-2 bg-white/50 rounded border border-steel/30">
+                        <span class="text-sm font-medium" style="color: #71797E;">Session</span>
+                        <span id="mobile-session-timer" class="text-sm font-mono font-bold">--:--</span>
+                    </div>
+                </div>
             </div>
-            <div class="mobile-menu-item">
-                <span class="item-label">PCs Online</span>
-                <span class="item-value"><span id="mobile-pc-count">0</span> / <span id="mobile-online-count">0</span></span>
-            </div>
-            <div class="mobile-menu-item">
-                <span class="item-label">Session</span>
-                <span id="mobile-session-timer" class="item-value">--:--</span>
-            </div>
-        </div>
 
-        <div class="mobile-menu-divider"></div>
-
-        <div class="mobile-menu-section">
-            <div class="mobile-menu-section-title">Actions</div>
-            <div class="mobile-menu-actions">
-                <button id="mobile-theme-toggle-btn" onclick="toggleTheme()" class="mobile-menu-action-btn">
-                    <span class="action-icon">🌙</span>
-                    <span class="mobile-theme-text">Switch to Light</span>
-                </button>
-                <button onclick="closeMobileMenu(); logout();" class="mobile-menu-action-btn logout">
-                    <span class="action-icon">⏻</span>
-                    <span>Logout</span>
-                </button>
+            <div class="pt-2">
+                <div class="text-xs font-semibold uppercase tracking-wider mb-2" style="color: #71797E;">Actions</div>
+                <div class="space-y-2">
+                    <button onclick="closeMobileMenu(); logout();" class="btn-danger w-full flex items-center justify-center gap-2">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
     
-    <!-- Main Content -->
-    <main id="main-content" class="relative z-10 container mx-auto px-3 sm:px-4 md:px-6 py-3 md:py-6" style="display:none;">
+    <!-- ========== MAIN CONTENT ========== -->
+    <main id="main-content" class="container mx-auto px-4 md:px-6 py-6" style="max-width: 1280px; display:none;">
         <!-- Stats Bar -->
-        <div class="stats-grid-mobile grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 mb-4 md:mb-6">
-            <div class="bg-cyber-panel/80 backdrop-blur border border-cyber-border rounded-lg p-3 md:p-4 relative">
-                <div class="corner-decor tl"></div>
-                <div class="corner-decor br"></div>
-                <div class="stat-label-mobile text-[10px] md:text-xs text-cyber-blue mb-1">TOTAL</div>
-                <div id="stat-total" class="stat-value-mobile text-xl md:text-3xl font-orbitron font-bold text-cyber-cyan">0</div>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-6">
+            <div class="industrial-card screw-corners p-4">
+                <div class="field-label">Total Systems</div>
+                <div id="stat-total" class="text-2xl md:text-3xl font-bold font-mono" style="color: #1f1f1f;">0</div>
             </div>
-            <div class="bg-cyber-panel/80 backdrop-blur border border-cyber-border rounded-lg p-3 md:p-4 relative">
-                <div class="corner-decor tl"></div>
-                <div class="corner-decor br"></div>
-                <div class="stat-label-mobile text-[10px] md:text-xs text-cyber-blue mb-1">ONLINE</div>
-                <div id="stat-online" class="stat-value-mobile text-xl md:text-3xl font-orbitron font-bold text-cyber-green">0</div>
+            <div class="industrial-card screw-corners p-4">
+                <div class="field-label">Online</div>
+                <div id="stat-online" class="text-2xl md:text-3xl font-bold font-mono" style="color: #2E7D32;">0</div>
             </div>
-            <div class="bg-cyber-panel/80 backdrop-blur border border-cyber-border rounded-lg p-3 md:p-4 relative">
-                <div class="corner-decor tl"></div>
-                <div class="corner-decor br"></div>
-                <div class="stat-label-mobile text-[10px] md:text-xs text-cyber-blue mb-1">AVG CPU</div>
-                <div id="stat-cpu" class="stat-value-mobile text-xl md:text-3xl font-orbitron font-bold text-cyber-yellow">0%</div>
+            <div class="industrial-card screw-corners p-4">
+                <div class="field-label">Avg CPU</div>
+                <div id="stat-cpu" class="text-2xl md:text-3xl font-bold font-mono" style="color: #8B4513;">0%</div>
             </div>
-            <div class="bg-cyber-panel/80 backdrop-blur border border-cyber-border rounded-lg p-3 md:p-4 relative">
-                <div class="corner-decor tl"></div>
-                <div class="corner-decor br"></div>
-                <div class="stat-label-mobile text-[10px] md:text-xs text-cyber-blue mb-1">AVG RAM</div>
-                <div id="stat-ram" class="stat-value-mobile text-xl md:text-3xl font-orbitron font-bold text-cyber-pink">0%</div>
+            <div class="industrial-card screw-corners p-4">
+                <div class="field-label">Avg RAM</div>
+                <div id="stat-ram" class="text-2xl md:text-3xl font-bold font-mono" style="color: #6A1B9A;">0%</div>
             </div>
         </div>
 
         <!-- PC Grid -->
-        <div id="pc-grid" class="pc-grid-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4"></div>
+        <div id="pc-grid" class="pc-grid-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"></div>
         
         <!-- Empty State -->
         <div id="empty-state" class="hidden flex-col items-center justify-center py-20">
-            <div class="text-6xl mb-4">🖥️</div>
-            <h2 class="text-xl font-orbitron text-cyber-cyan mb-2">NO SYSTEMS DETECTED</h2>
-            <p class="text-cyber-border text-sm">Waiting for MQTT data from agent.py...</p>
+            <i data-lucide="monitor-off" class="w-16 h-16 mb-4" style="color: #71797E;"></i>
+            <h2 class="text-xl font-bold uppercase tracking-tight mb-2" style="color: #1f1f1f;">No Systems Detected</h2>
+            <p class="text-sm" style="color: #71797E;">Waiting for data from agent.py...</p>
         </div>
     </main>
     
-    <!-- Detail Modal -->
-    <div id="detail-modal" class="fixed inset-0 z-50 hidden">
+    <!-- ========== DETAIL MODAL ========== -->
+    <div id="detail-modal" class="fixed inset-0 z-[300] hidden">
         <div class="modal-backdrop absolute inset-0" onclick="closeModal()"></div>
         <div class="relative h-full w-full flex items-center justify-center p-4">
-            <div class="modal-content bg-cyber-dark border border-cyber-cyan/30 rounded-lg max-w-5xl w-full max-h-[90vh] overflow-y-auto animate-slide-in relative">
-                <div class="modal-sticky-pad sticky top-0 bg-cyber-dark/95 backdrop-blur border-b border-cyber-border p-4 z-10">
+            <div class="modal-content industrial-card w-full max-w-5xl max-h-[90vh] overflow-y-auto animate-slide-in relative" style="border-width: 3px;">
+                <!-- Sticky header -->
+                <div class="sticky top-0 z-10 p-4 border-b-2 border-steel" style="background: #d9dde0; background-image: url('https://www.transparenttextures.com/patterns/brushed-alum.png');">
                     <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-2 md:space-x-4 min-w-0 flex-1">
+                        <div class="flex items-center gap-3 min-w-0 flex-1">
                             <div id="modal-status-dot" class="w-3 h-3 rounded-full status-dot flex-shrink-0"></div>
                             <div class="min-w-0">
-                                <h2 id="modal-pc-name" class="modal-title text-lg md:text-xl font-orbitron font-bold text-cyber-cyan truncate"></h2>
-                                <p id="modal-pc-info" class="modal-info text-xs text-cyber-blue truncate"></p>
+                                <h2 id="modal-pc-name" class="text-lg font-bold uppercase tracking-tight truncate"></h2>
+                                <p id="modal-pc-info" class="text-xs truncate" style="color: #71797E;"></p>
                             </div>
                         </div>
-                        <button onclick="closeModal()" class="modal-close-btn text-cyber-cyan hover:text-cyber-red transition-colors flex-shrink-0 ml-2">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        <button onclick="closeModal()" class="btn-ghost p-2 flex-shrink-0 ml-2" style="min-width: 38px; min-height: 38px;">
+                            <i data-lucide="x" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </div>
-                <div class="modal-pad p-3 md:p-6 space-y-3 md:space-y-6">
+                
+                <div class="p-4 md:p-6 space-y-4 md:space-y-6">
                     <!-- System Info -->
-                    <div class="modal-grid-4 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-                        <div class="modal-section-pad bg-cyber-panel/50 border border-cyber-border rounded-lg p-3 md:p-4"><div class="text-xs text-cyber-blue mb-2">OS</div><div id="modal-os" class="text-sm text-cyber-cyan"></div></div>
-                        <div class="modal-section-pad bg-cyber-panel/50 border border-cyber-border rounded-lg p-3 md:p-4"><div class="text-xs text-cyber-blue mb-2">UPTIME</div><div id="modal-uptime" class="text-sm text-cyber-cyan"></div></div>
-                        <div class="modal-section-pad bg-cyber-panel/50 border border-cyber-border rounded-lg p-3 md:p-4"><div class="text-xs text-cyber-blue mb-2">USER</div><div id="modal-user" class="text-sm text-cyber-cyan"></div></div>
-                        <div class="modal-section-pad bg-cyber-panel/50 border border-cyber-border rounded-lg p-3 md:p-4"><div class="text-xs text-cyber-blue mb-2">LAST SEEN</div><div id="modal-last-seen" class="text-sm text-cyber-cyan"></div></div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-white/50 border border-steel/30 rounded p-3">
+                            <div class="field-label">OS</div>
+                            <div id="modal-os" class="text-sm font-medium"></div>
+                        </div>
+                        <div class="bg-white/50 border border-steel/30 rounded p-3">
+                            <div class="field-label">Uptime</div>
+                            <div id="modal-uptime" class="text-sm font-medium"></div>
+                        </div>
+                        <div class="bg-white/50 border border-steel/30 rounded p-3">
+                            <div class="field-label">User</div>
+                            <div id="modal-user" class="text-sm font-medium"></div>
+                        </div>
+                        <div class="bg-white/50 border border-steel/30 rounded p-3">
+                            <div class="field-label">Last Seen</div>
+                            <div id="modal-last-seen" class="text-sm font-medium"></div>
+                        </div>
                     </div>
 
                     <!-- Network Info -->
-                    <div class="modal-section-pad bg-cyber-panel/50 border border-cyber-border rounded-lg p-3 md:p-4">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-3 md:mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"></path></svg>NETWORK</h3>
-                        <div class="modal-grid-4 grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4">
-                            <div><div class="text-xs text-cyber-blue mb-1">IP Address</div><div id="modal-ip" class="text-sm text-cyber-cyan font-mono"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">MAC Address</div><div id="modal-mac" class="text-sm text-cyber-cyan font-mono text-xs"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">Interface</div><div id="modal-iface" class="text-sm text-cyber-cyan"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">Latency</div><div id="modal-latency" class="text-sm text-cyber-cyan"></div></div>
+                    <div class="bg-white/50 border border-steel/30 rounded p-4">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="wifi" class="w-4 h-4" style="color: #71797E;"></i>
+                            Network
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div><div class="field-label">IP Address</div><div id="modal-ip" class="text-sm font-mono"></div></div>
+                            <div><div class="field-label">MAC Address</div><div id="modal-mac" class="text-sm font-mono text-xs"></div></div>
+                            <div><div class="field-label">Interface</div><div id="modal-iface" class="text-sm"></div></div>
+                            <div><div class="field-label">Latency</div><div id="modal-latency" class="text-sm font-mono"></div></div>
                         </div>
                     </div>
                     
-                    <!-- GPU Details -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4" id="modal-gpu-section" style="display: none;">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>GPU INFORMATION</h3>
+                    <!-- GPU -->
+                    <div class="bg-white/50 border border-steel/30 rounded p-4" id="modal-gpu-section" style="display: none;">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="cpu" class="w-4 h-4" style="color: #6A1B9A;"></i>
+                            GPU Information
+                        </h3>
                         <div id="modal-gpu-list"></div>
                     </div>
 
                     <!-- CPU Details -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4" id="modal-cpu-section">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path></svg>CPU SPECIFICATIONS</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div><div class="text-xs text-cyber-blue mb-1">Cores</div><div id="modal-cpu-cores" class="text-sm text-cyber-cyan"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">Threads</div><div id="modal-cpu-threads" class="text-sm text-cyber-cyan"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">Base Clock</div><div id="modal-cpu-ghz" class="text-sm text-cyber-cyan"></div></div>
-                            <div><div class="text-xs text-cyber-blue mb-1">Max Clock</div><div id="modal-cpu-max-ghz" class="text-sm text-cyber-cyan"></div></div>
+                    <div class="bg-white/50 border border-steel/30 rounded p-4">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="cpu" class="w-4 h-4" style="color: #71797E;"></i>
+                            CPU Specifications
+                        </h3>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div><div class="field-label">Cores</div><div id="modal-cpu-cores" class="text-sm font-mono font-bold"></div></div>
+                            <div><div class="field-label">Threads</div><div id="modal-cpu-threads" class="text-sm font-mono font-bold"></div></div>
+                            <div><div class="field-label">Base Clock</div><div id="modal-cpu-ghz" class="text-sm font-mono font-bold"></div></div>
+                            <div><div class="field-label">Max Clock</div><div id="modal-cpu-max-ghz" class="text-sm font-mono font-bold"></div></div>
                         </div>
                     </div>
                     
                     <!-- Top Processes -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>TOP PROCESSES</h3>
+                    <div class="bg-white/50 border border-steel/30 rounded p-4">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="list" class="w-4 h-4" style="color: #71797E;"></i>
+                            Top Processes
+                        </h3>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead><tr class="text-cyber-blue border-b border-cyber-border"><th class="text-left py-2 px-3">#</th><th class="text-left py-2 px-3">Process</th><th class="text-right py-2 px-3">CPU %</th><th class="text-right py-2 px-3">MEM (GB)</th></tr></thead>
+                            <table class="industrial-table">
+                                <thead><tr><th>#</th><th>Process</th><th class="text-right">CPU %</th><th class="text-right">MEM (GB)</th></tr></thead>
                                 <tbody id="modal-processes"></tbody>
                             </table>
                         </div>
                     </div>
                     
                     <!-- Top Files -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>LARGEST FILES</h3>
+                    <div class="bg-white/50 border border-steel/30 rounded p-4">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="hard-drive" class="w-4 h-4" style="color: #71797E;"></i>
+                            Largest Files
+                        </h3>
                         <div class="overflow-x-auto">
-                            <table class="w-full text-sm">
-                                <thead><tr class="text-cyber-blue border-b border-cyber-border"><th class="text-left py-2 px-3">#</th><th class="text-left py-2 px-3">File Name</th><th class="text-left py-2 px-3">Path</th><th class="text-right py-2 px-3">Size (MB)</th></tr></thead>
+                            <table class="industrial-table">
+                                <thead><tr><th>#</th><th>File Name</th><th>Path</th><th class="text-right">Size (MB)</th></tr></thead>
                                 <tbody id="modal-files"></tbody>
                             </table>
                         </div>
                     </div>
                     
-                    <!-- COMMAND EXECUTION with Password Confirmation -->
-                    <div class="bg-cyber-panel/50 border border-cyber-border rounded-lg p-4">
-                        <h3 class="text-sm font-orbitron text-cyber-cyan mb-4 flex items-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>REMOTE COMMAND EXECUTION</h3>
+                    <!-- Command Execution -->
+                    <div class="bg-white/50 border border-steel/30 rounded p-4">
+                        <h3 class="flex items-center gap-2 text-sm font-bold uppercase tracking-tight mb-3">
+                            <i data-lucide="terminal" class="w-4 h-4" style="color: #8B4513;"></i>
+                            Remote Command Execution
+                        </h3>
                         <div class="space-y-3">
-                            <div class="form-row-mobile flex items-center space-x-2">
-                                <select id="modal-command-dropdown" class="command-dropdown flex-1 bg-cyber-dark border border-cyber-cyan rounded px-3 py-2 text-xs text-cyber-cyan focus:outline-none focus:border-cyber-green">
-                                    <option value="">Pilih Command...</option>
-                                    <option value="tasklist">📋 Task List</option>
-                                    <option value="ipconfig">🌐 IP Config</option>
-                                    <option value="whoami">👤 Who Am I</option>
-                                    <option value="systeminfo">💻 System Info</option>
-                                    <option value="taskkill">🔪 Kill Process</option>
-                                    <option value="shutdown" style="color:#ff0044;">⛔ SHUTDOWN PC</option>
-                                    <option value="restart" style="color:#ff8800;">🔄 RESTART PC</option>
-                                    <option value="cancel_shutdown" style="color:#00ff88;">✅ Cancel Shutdown</option>
+                            <div class="flex items-center gap-2 flex-wrap md:flex-nowrap">
+                                <select id="modal-command-dropdown" class="industrial-select flex-1 min-w-0">
+                                    <option value="">Select Command...</option>
+                                    <option value="tasklist">Task List</option>
+                                    <option value="ipconfig">IP Config</option>
+                                    <option value="whoami">Who Am I</option>
+                                    <option value="systeminfo">System Info</option>
+                                    <option value="taskkill">Kill Process</option>
+                                    <option value="shutdown">Shutdown PC</option>
+                                    <option value="restart">Restart PC</option>
+                                    <option value="cancel_shutdown">Cancel Shutdown</option>
                                 </select>
-                                <button id="modal-command-btn" class="command-btn bg-cyber-cyan text-cyber-black px-4 py-2 rounded text-xs font-bold hover:bg-cyber-green hover:shadow-neon-green transition-all duration-200">RUN</button>
+                                <button id="modal-command-btn" class="btn-primary flex-shrink-0" style="min-width: 80px;">Run</button>
                             </div>
                             <div id="modal-process-name-container" class="hidden">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-cyber-blue text-xs">Process Name:</span>
-                                    <input id="modal-process-name-input" type="text" placeholder="e.g. chrome.exe" class="flex-1 bg-cyber-dark border border-cyber-orange rounded px-3 py-2 text-xs text-cyber-cyan focus:outline-none focus:border-cyber-green font-mono"
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-medium" style="color: #71797E;">Process Name:</span>
+                                    <input id="modal-process-name-input" type="text" class="industrial-input flex-1" placeholder="e.g. chrome.exe"
                                         onkeydown="if(event.key==='Enter') document.getElementById('modal-command-btn').click()">
                                 </div>
                             </div>
-                            <!-- Password confirmation for dangerous commands -->
                             <div id="modal-password-container" class="hidden">
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-cyber-red text-xs font-bold">🔒 Admin Password:</span>
-                                    <input id="modal-admin-password" type="password" placeholder="Masukkan password admin..." class="flex-1 bg-cyber-dark border border-cyber-red rounded px-3 py-2 text-xs text-cyber-cyan focus:outline-none focus:border-cyber-green font-mono"
+                                <div class="flex items-center gap-2">
+                                    <span class="text-sm font-bold" style="color: #8B4513;">Admin Password:</span>
+                                    <input id="modal-admin-password" type="password" class="industrial-input flex-1" placeholder="Enter admin password..."
                                         onkeydown="if(event.key==='Enter') document.getElementById('modal-command-btn').click()">
                                 </div>
-                                <div class="text-[10px] text-cyber-yellow mt-1">⚠️ Command berbahaya memerlukan verifikasi password admin!</div>
+                                <div class="text-xs mt-1" style="color: #8B4513;">Warning: Dangerous command requires admin password verification</div>
                             </div>
-                            <div id="modal-command-output" class="command-output hidden bg-cyber-black border border-cyber-border rounded p-3 max-h-96 overflow-y-auto text-xs font-mono text-cyber-green"></div>
+                            <div id="modal-command-output" class="command-output-box hidden"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- JavaScript -->
-    <script>
 
-        // ==================== THEME MANAGER ====================
-        const THEME_KEY = 'cyberpunk_theme';
-        function getCurrentTheme() { try { return localStorage.getItem(THEME_KEY) || 'dark'; } catch (e) { return 'dark'; } }
-        function applyTheme(theme) {
-            if (theme === 'light') { document.body.classList.add('light-mode'); }
-            else { document.body.classList.remove('light-mode'); }
-            try { localStorage.setItem(THEME_KEY, theme); } catch (e) {}
-            const btn = document.getElementById('theme-toggle-btn');
-            if (btn) {
-                const iconEl = btn.querySelector('.toggle-icon');
-                const textEl = btn.querySelector('.toggle-text');
-                if (iconEl) iconEl.textContent = theme === 'dark' ? '☀️' : '🌙';
-                if (textEl) textEl.textContent = theme === 'dark' ? 'LIGHT' : 'DARK';
-                btn.title = theme === 'dark' ? 'Switch to Light Cyberpunk' : 'Switch to Dark Cyberpunk';
-            }
-            // Update mobile menu theme button
-            const mobileThemeBtn = document.querySelector('.mobile-theme-text');
-            const mobileThemeIcon = document.querySelector('#mobile-theme-toggle-btn .action-icon');
-            if (mobileThemeBtn) mobileThemeBtn.textContent = theme === 'dark' ? 'Switch to Light' : 'Switch to Dark';
-            if (mobileThemeIcon) mobileThemeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-        function toggleTheme() { applyTheme(getCurrentTheme() === 'dark' ? 'light' : 'dark'); }
-        // Apply theme on initial load (before login)
-        (function() { applyTheme(getCurrentTheme()); })();
+    <!-- ========== ADMIN EMAIL MODAL ========== -->
+    <div id="admin-modal-backdrop" class="fixed inset-0 z-[300] hidden" style="background: rgba(0,0,0,0.4); backdrop-filter: blur(4px);" onclick="closeAdminModal(event)">
+        <div class="industrial-card animate-slide-in mx-auto mt-20 p-6 w-full max-w-[520px] max-h-[80vh] overflow-y-auto" style="border-width: 3px;" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between pb-3 mb-4 border-b-2 border-steel">
+                <div>
+                    <div class="font-bold uppercase tracking-tight text-lg">Email Whitelist</div>
+                    <div class="text-xs mt-1" style="color: #71797E;">Manage emails allowed for Google login</div>
+                </div>
+                <button class="btn-ghost p-2" style="min-width: 36px; min-height: 36px;" onclick="closeAdminModal()" aria-label="Close">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            <div class="p-3 rounded border border-accent/50 mb-4" style="background: rgba(255,193,7,0.08);">
+                <div class="text-xs" style="color: #71797E;">Only emails in this list can login via Google. Others will be denied.</div>
+            </div>
+            <div class="flex gap-2 mb-4">
+                <input type="email" id="new-email-input" class="industrial-input flex-1" placeholder="email@example.com" autocomplete="off">
+                <button class="btn-primary flex-shrink-0" id="add-email-btn" onclick="addEmail()" style="min-width: 80px;">+ Add</button>
+            </div>
+            <div id="email-list" class="space-y-2 max-h-[320px] overflow-y-auto">
+                <div class="text-center py-6 text-sm" style="color: #71797E;">Loading emails...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== JAVASCRIPT ========== -->
+    <script>
+        // ==================== INIT LUCIDE ICONS ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+        });
+        // Re-create icons when content changes
+        function refreshIcons() { if (typeof lucide !== 'undefined') lucide.createIcons(); }
 
         // ==================== HAMBURGER MENU ====================
         function toggleMobileMenu() {
             const btn = document.getElementById('hamburger-btn');
             const menu = document.getElementById('mobile-menu');
             const overlay = document.getElementById('mobile-menu-overlay');
-            const isOpen = menu.classList.contains('open');
-            if (isOpen) closeMobileMenu();
+            if (menu.classList.contains('open')) closeMobileMenu();
             else {
                 btn.classList.add('active');
                 menu.classList.add('open');
@@ -693,48 +815,22 @@
             }
         }
         function closeMobileMenu() {
-            const btn = document.getElementById('hamburger-btn');
-            const menu = document.getElementById('mobile-menu');
-            const overlay = document.getElementById('mobile-menu-overlay');
-            btn.classList.remove('active');
-            menu.classList.remove('open');
-            overlay.classList.remove('open');
+            document.getElementById('hamburger-btn').classList.remove('active');
+            document.getElementById('mobile-menu').classList.remove('open');
+            document.getElementById('mobile-menu-overlay').classList.remove('open');
             document.body.style.overflow = '';
         }
         function syncMobileMenuValues() {
-            // Sync MQTT status
-            const mqttEl = document.getElementById('mqtt-status');
-            const mobileMqtt = document.getElementById('mobile-mqtt-status');
-            if (mqttEl && mobileMqtt) {
-                mobileMqtt.textContent = mqttEl.textContent;
-                mobileMqtt.className = mqttEl.className.includes('green') ? 'item-value green' : mqttEl.className.includes('red') ? 'item-value red' : mqttEl.className.includes('yellow') ? 'item-value yellow' : 'item-value';
-            }
-            // Sync WS status
-            const wsEl = document.getElementById('ws-status');
-            const mobileWs = document.getElementById('mobile-ws-status');
-            if (wsEl && mobileWs) {
-                mobileWs.textContent = wsEl.textContent;
-                mobileWs.className = wsEl.className.includes('green') ? 'item-value green' : wsEl.className.includes('red') ? 'item-value red' : 'item-value';
-            }
-            // Sync Time
-            const timeEl = document.getElementById('current-time');
-            const mobileTime = document.getElementById('mobile-current-time');
-            if (timeEl && mobileTime) mobileTime.textContent = timeEl.textContent;
-            // Sync PC counts
-            const pcEl = document.getElementById('pc-count');
-            const onlineEl = document.getElementById('online-count');
-            const mobilePc = document.getElementById('mobile-pc-count');
-            const mobileOnline = document.getElementById('mobile-online-count');
-            if (pcEl && mobilePc) mobilePc.textContent = pcEl.textContent;
-            if (onlineEl && mobileOnline) mobileOnline.textContent = onlineEl.textContent;
-            // Sync Session timer
-            const sessionEl = document.getElementById('session-timer');
-            const mobileSession = document.getElementById('mobile-session-timer');
-            if (sessionEl && mobileSession) {
-                mobileSession.textContent = sessionEl.textContent || '--:--';
-            }
+            const sync = (srcId, tgtId, prop) => { const s = document.getElementById(srcId); const t = document.getElementById(tgtId); if (s && t) t.textContent = s.textContent; };
+            sync('mqtt-status', 'mobile-mqtt-status');
+            sync('ws-status', 'mobile-ws-status');
+            sync('current-time', 'mobile-current-time');
+            sync('pc-count', 'mobile-pc-count');
+            sync('online-count', 'mobile-online-count');
+            const st = document.getElementById('session-timer');
+            const ms = document.getElementById('mobile-session-timer');
+            if (st && ms) ms.textContent = st.textContent || '--:--';
         }
-        // Update mobile menu values periodically
         setInterval(syncMobileMenuValues, 1000);
 
         // ==================== AUTH STATE ====================
@@ -742,100 +838,36 @@
         let sessionTimer = null;
         let sessionRemaining = 3600;
         
-        // ==================== CHECK AUTH ON LOAD ====================
         async function checkAuth() {
             try {
-                const res = await fetch('/api/auth/check', { 
-                    credentials: 'same-origin',
-                    headers: { 'Authorization': `Bearer ${sessionToken}` }
-                });
+                const res = await fetch('/api/auth/check', { credentials: 'same-origin', headers: { 'Authorization': `Bearer ${sessionToken}` } });
                 const data = await res.json();
-                if (data.authenticated) {
-                    sessionRemaining = data.session_remaining || 3600;
-                    showDashboard();
-                    startSessionTimer();
-                } else {
-                    showLogin();
-                }
-            } catch {
-                showLogin();
-            }
+                if (data.authenticated) { sessionRemaining = data.session_remaining || 3600; showDashboard(); startSessionTimer(); }
+                else showLogin();
+            } catch { showLogin(); }
         }
         
         // ==================== GOOGLE OAUTH ====================
         const GOOGLE_CLIENT_ID = '1024514167323-0pc62a62d85jrjor7tqaeme12lt7pk2n.apps.googleusercontent.com';
-
-        // Initialize Google Sign-In (GIS library)
         function initGoogleSignIn() {
             if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-                try {
-                    google.accounts.id.initialize({
-                        client_id: GOOGLE_CLIENT_ID,
-                        callback: handleGoogleCredential,
-                        auto_select: false,
-                        cancel_on_tap_outside: true
-                    });
-                } catch (e) {
-                    console.warn('GIS init failed:', e);
-                }
+                try { google.accounts.id.initialize({ client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select: false, cancel_on_tap_outside: true }); } catch (e) { console.warn('GIS init failed:', e); }
             }
         }
-
-        // Handle Google credential response
         async function handleGoogleCredential(response) {
             const btn = document.getElementById('google-login-btn');
-            if (btn) {
-                btn.disabled = true;
-                btn.innerHTML = '<span>⏳ Authenticating...</span>';
-            }
+            if (btn) { btn.disabled = true; btn.innerHTML = '<span>Authenticating...</span>'; }
             try {
-                const res = await fetch('/api/auth/google', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id_token: response.credential }),
-                    credentials: 'same-origin'
-                });
+                const res = await fetch('/api/auth/google', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id_token: response.credential }), credentials: 'same-origin' });
                 const data = await res.json();
-                if (res.ok) {
-                    sessionToken = data.session;
-                    localStorage.setItem('session_token', sessionToken);
-                    showNotification('success', `✅ Selamat datang, ${data.name || data.email}!`);
-                    showDashboard();
-                    startSessionTimer();
-                } else {
-                    // Show specific error message from server
-                    const errorMsg = data.detail || data.message || `Login gagal (HTTP ${res.status})`;
-                    showNotification('error', '❌ ' + errorMsg);
-                    console.error('[Google Auth] Server returned', res.status, ':', data);
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
-                    }
-                }
-            } catch (e) {
-                console.error('[Google Auth] Network error:', e);
-                showNotification('error', '❌ Gagal terhubung ke server: ' + e.message);
-                if (btn) {
-                    btn.disabled = false;
-                    btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
-                }
-            }
+                if (res.ok) { sessionToken = data.session; localStorage.setItem('session_token', sessionToken); showNotification('success', 'Welcome, ' + (data.name || data.email) + '!'); showDashboard(); startSessionTimer(); }
+                else { showNotification('error', data.detail || 'Google login failed'); console.error('[Google Auth]', res.status, data); if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Login with Google</span>'; } }
+            } catch (e) { showNotification('error', 'Connection error: ' + e.message); if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 01-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg><span>Login with Google</span>'; } }
         }
-
-        // Google login button click handler
         async function loginWithGoogle() {
-            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
-                try {
-                    google.accounts.id.prompt();
-                } catch (e) {
-                    showNotification('error', '❌ Google Login tidak tersedia. Cek koneksi internet.');
-                }
-            } else {
-                showNotification('error', '❌ Google Login tidak tersedia. Cek koneksi internet.');
-            }
+            if (typeof google !== 'undefined' && google.accounts && google.accounts.id) { try { google.accounts.id.prompt(); } catch (e) { showNotification('error', 'Google Login unavailable. Check internet connection.'); } }
+            else showNotification('error', 'Google Login unavailable. Check internet connection.');
         }
-
-        // Init Google when GIS library loads
         window.addEventListener('load', initGoogleSignIn);
         setTimeout(initGoogleSignIn, 1000);
 
@@ -843,56 +875,19 @@
             const password = document.getElementById('login-password').value;
             const btn = document.getElementById('login-btn');
             const error = document.getElementById('login-error');
-
-            if (!password) {
-                error.textContent = '⚠️ Masukkan password!';
-                return;
-            }
-            
-            btn.disabled = true;
-            btn.textContent = '⏳ AUTHENTICATING...';
-            error.textContent = '';
-            
+            if (!password) { error.textContent = 'Enter password!'; return; }
+            btn.disabled = true; btn.textContent = 'Authenticating...'; error.textContent = '';
             try {
-                const res = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password }),
-                    credentials: 'same-origin'
-                });
+                const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }), credentials: 'same-origin' });
                 const data = await res.json();
-                
-                if (res.ok) {
-                    sessionToken = data.session;
-                    localStorage.setItem('session_token', sessionToken);
-                    error.textContent = '';
-                    showDashboard();
-                    startSessionTimer();
-                } else {
-                    error.textContent = `❌ ${data.detail || 'Login gagal!'}`;
-                    if (data.remaining !== undefined) {
-                        error.textContent += ` (${data.remaining} percobaan tersisa)`;
-                    }
-                    btn.disabled = false;
-                    btn.textContent = '⚡ AUTHENTICATE';
-                    document.getElementById('login-password').value = '';
-                }
-            } catch (e) {
-                error.textContent = '❌ Gagal terhubung ke server!';
-                btn.disabled = false;
-                btn.textContent = '⚡ AUTHENTICATE';
-            }
+                if (res.ok) { sessionToken = data.session; localStorage.setItem('session_token', sessionToken); error.textContent = ''; showDashboard(); startSessionTimer(); }
+                else { error.textContent = data.detail || 'Login failed!'; if (data.remaining !== undefined) error.textContent += ' (' + data.remaining + ' attempts left)'; btn.disabled = false; btn.textContent = 'Authenticate'; document.getElementById('login-password').value = ''; }
+            } catch { error.textContent = 'Connection error!'; btn.disabled = false; btn.textContent = 'Authenticate'; }
         }
         
         async function logout() {
-            try {
-                await fetch('/api/logout', { 
-                    method: 'POST', credentials: 'same-origin',
-                    headers: { 'Authorization': `Bearer ${sessionToken}` }
-                });
-            } catch {}
-            sessionToken = '';
-            localStorage.removeItem('session_token');
+            try { await fetch('/api/logout', { method: 'POST', credentials: 'same-origin', headers: { 'Authorization': `Bearer ${sessionToken}` } }); } catch {}
+            sessionToken = ''; localStorage.removeItem('session_token');
             if (sessionTimer) clearInterval(sessionTimer);
             showLogin();
         }
@@ -908,14 +903,12 @@
             document.querySelectorAll('.custom-notification').forEach(n => n.remove());
             const n = document.createElement('div');
             n.className = 'custom-notification';
-            n.style.cssText = `position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 14px 20px; border-radius: 8px; color: #0a0a0f; font-weight: bold; font-family: 'Orbitron', sans-serif; font-size: 13px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); transform: translateX(400px); transition: transform 0.3s ease; max-width: 350px;`;
+            const bgColor = type === 'success' ? '#4CAF50' : '#8B4513';
+            n.style.cssText = 'position:fixed;top:20px;right:20px;z-index:99999;padding:14px 20px;border-radius:4px;border:2px solid ' + (type === 'success' ? '#2E7D32' : '#6d3610') + ';color:#fff;font-weight:600;font-family:"Roboto Condensed",sans-serif;font-size:13px;box-shadow:0 4px 12px rgba(0,0,0,0.2);transform:translateX(400px);transition:transform 300ms ease;max-width:350px;background:' + bgColor + ';';
             n.textContent = message;
             document.body.appendChild(n);
             setTimeout(() => { n.style.transform = 'translateX(0)'; }, 10);
-            setTimeout(() => {
-                n.style.transform = 'translateX(400px)';
-                setTimeout(() => n.remove(), 300);
-            }, 4000);
+            setTimeout(() => { n.style.transform = 'translateX(400px)'; setTimeout(() => n.remove(), 300); }, 4000);
         }
 
         function showDashboard() {
@@ -924,31 +917,19 @@
             document.getElementById('main-content').style.display = 'block';
             document.getElementById('login-password').value = '';
             document.getElementById('login-btn').disabled = false;
-            document.getElementById('login-btn').textContent = '⚡ AUTHENTICATE';
-            connectWebSocket();
-            scheduleNextHealthCheck();
+            document.getElementById('login-btn').textContent = 'Authenticate';
+            connectWebSocket(); scheduleNextHealthCheck();
         }
         
         function startSessionTimer() {
             if (sessionTimer) clearInterval(sessionTimer);
             sessionTimer = setInterval(() => {
                 sessionRemaining--;
-                if (sessionRemaining <= 0) {
-                    clearInterval(sessionTimer);
-                    logout();
-                    return;
-                }
+                if (sessionRemaining <= 0) { clearInterval(sessionTimer); logout(); return; }
                 const mins = Math.floor(sessionRemaining / 60);
                 const secs = sessionRemaining % 60;
                 const el = document.getElementById('session-timer');
-                el.textContent = `⏱ ${mins}:${secs.toString().padStart(2, '0')}`;
-                if (sessionRemaining < 300) {
-                    el.className = 'text-xs text-cyber-red animate-glow';
-                } else if (sessionRemaining < 600) {
-                    el.className = 'text-xs text-cyber-yellow';
-                } else {
-                    el.className = 'text-xs text-cyber-blue';
-                }
+                el.textContent = mins + ':' + String(secs).padStart(2, '0');
             }, 1000);
         }
         
@@ -964,70 +945,68 @@
         let healthCheckFailures = 0;
         let healthCheckTimer = null;
         
-        // Update current time
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('current-time').textContent = now.toLocaleTimeString('en-US', { hour12: false });
-        }
-        setInterval(updateTime, 1000);
-        updateTime();
+        function updateTime() { document.getElementById('current-time').textContent = new Date().toLocaleTimeString('en-US', { hour12: false }); }
+        setInterval(updateTime, 1000); updateTime();
         
-        function getStatusColor(percent) {
-            if (percent < 50) return 'text-cyber-green';
-            if (percent < 75) return 'text-cyber-yellow';
-            if (percent < 90) return 'text-cyber-orange';
-            return 'text-cyber-red';
-        }
-        function getStatusDotColor(status) {
-            if (status === 'online') return 'bg-cyber-green shadow-neon-green';
-            return 'bg-cyber-red shadow-neon-red';
-        }
+        function getStatusColor(percent) { if (percent < 50) return '#2E7D32'; if (percent < 75) return '#E65100'; if (percent < 90) return '#BF360C'; return '#c62828'; }
+        function getStatusDotColor(status) { return status === 'online' ? 'bg-green-600' : 'bg-red-600'; }
         
-        // Create sparkline chart
         function createSparkline(canvasId, data, color) {
             const canvas = document.getElementById(canvasId);
             if (!canvas) return;
-            if (canvas._chart) { canvas._chart.destroy(); }
-            const ctx = canvas.getContext('2d');
-            canvas._chart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: data.map((_, i) => i),
-                    datasets: [{ data: data, borderColor: color, backgroundColor: color.replace(')', ', 0.1)').replace('rgb', 'rgba'), borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 0 }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } },
-                    scales: { x: { display: false }, y: { display: false, min: 0, max: 100 } },
-                    animation: { duration: 300 }
-                }
+            if (canvas._chart) canvas._chart.destroy();
+            canvas._chart = new Chart(canvas.getContext('2d'), {
+                type: 'line', data: { labels: data.map((_, i) => i), datasets: [{ data: data, borderColor: color, backgroundColor: color + '20', borderWidth: 2, fill: true, tension: 0.4, pointRadius: 0, pointHoverRadius: 0 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false, min: 0, max: 100 } }, animation: { duration: 300 } }
             });
         }
         
-        // Create PC card (simplified)
         function createPCCard(client) {
             const card = document.createElement('div');
-            card.className = 'pc-card bg-cyber-panel/80 backdrop-blur border border-cyber-border rounded-lg p-4 cursor-pointer relative';
+            card.className = 'industrial-card screw-corners p-4 cursor-pointer';
             card.onclick = () => openModal(client.id);
-            const statusColor = getStatusDotColor(client.status);
             const cpuColor = getStatusColor(client.cpu_percent);
             const ramColor = getStatusColor(client.ram_percent);
+            const storageColor = getStatusColor(client.storage_percent);
+            const statusBg = client.status === 'online' ? 'background:#E8F5E9;border-color:#4CAF50;' : 'background:#FFEBEE;border-color:#c62828;';
+            const statusText = client.status === 'online' ? 'color:#2E7D32;' : 'color:#c62828;';
             card.innerHTML = `
-                <div class="corner-decor tl"></div><div class="corner-decor br"></div>
                 <div class="flex items-start justify-between mb-3">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-3 h-3 rounded-full ${statusColor} status-dot"></div>
-                        <div><h3 class="font-orbitron font-bold text-cyber-cyan text-sm">${client.id}</h3><p class="text-xs text-cyber-blue font-mono">${client.ip || 'N/A'}</p></div>
+                    <div class="flex items-center gap-2 min-w-0">
+                        <div class="w-2.5 h-2.5 rounded-full ${getStatusDotColor(client.status)} status-dot flex-shrink-0"></div>
+                        <div class="min-w-0">
+                            <h3 class="font-bold text-sm uppercase tracking-tight truncate">${client.id}</h3>
+                            <p class="text-xs font-mono" style="color: #71797E;">${client.ip || 'N/A'}</p>
+                        </div>
                     </div>
-                    <span class="text-xs px-2 py-1 rounded ${client.status === 'online' ? 'bg-cyber-green/20 text-cyber-green border border-cyber-green/30' : 'bg-cyber-red/20 text-cyber-red border border-cyber-red/30'}">${client.status.toUpperCase()}</span>
+                    <span class="text-xs font-bold uppercase px-2 py-0.5 rounded border" style="${statusBg}${statusText}font-size:10px;letter-spacing:0.5px;">${client.status}</span>
                 </div>
-                <div class="space-y-3">
-                    <div><div class="flex justify-between text-xs mb-1"><span class="text-cyber-blue">CPU</span><span class="${cpuColor} font-bold">${client.cpu_percent.toFixed(1)}%</span></div><div class="w-full bg-cyber-dark rounded-full h-2"><div class="h-2 rounded-full progress-gradient transition-all duration-500" style="width: ${client.cpu_percent}%"></div></div>${client.cpu_name ? `<div class="text-[10px] text-cyber-blue mt-1 truncate" title="${client.cpu_name}">${client.cpu_name}</div>` : ''}<div class="mt-1 h-8"><canvas id="sparkline-cpu-${client.id}" class="w-full h-full"></canvas></div></div>
-                    <div><div class="flex justify-between text-xs mb-1"><span class="text-cyber-blue">RAM</span><span class="${ramColor} font-bold">${client.ram_percent.toFixed(1)}%</span></div><div class="w-full bg-cyber-dark rounded-full h-2"><div class="h-2 rounded-full progress-gradient transition-all duration-500" style="width: ${client.ram_percent}%"></div></div><div class="text-xs text-cyber-cyan mt-1">${client.ram_used_gb.toFixed(1)} / ${client.ram_total_gb.toFixed(1)} GB</div></div>
-                    <div><div class="flex justify-between text-xs mb-1"><span class="text-cyber-blue">STORAGE</span><span class="${getStatusColor(client.storage_percent)} font-bold">${client.storage_percent.toFixed(1)}%</span></div><div class="w-full bg-cyber-dark rounded-full h-2"><div class="h-2 rounded-full progress-gradient transition-all duration-500" style="width: ${client.storage_percent}%"></div></div><div class="text-xs text-cyber-cyan mt-1">${client.storage_used_gb.toFixed(0)} / ${client.storage_total_gb.toFixed(0)} GB</div></div>
-                    ${client.gpu && client.gpu.length > 0 ? `<div><div class="flex justify-between text-xs mb-1"><span class="text-cyber-blue">GPU</span><span class="text-cyber-purple font-bold">${client.gpu[0].utilization}%</span></div><div class="w-full bg-cyber-dark rounded-full h-2"><div class="h-2 rounded-full bg-cyber-purple transition-all duration-500" style="width: ${client.gpu[0].utilization}%"></div></div><div class="text-xs text-cyber-cyan mt-1 truncate">${client.gpu[0].name}</div>${client.gpu[0].temperature > 0 ? `<div class="text-xs text-cyber-yellow mt-1">Temp: ${client.gpu[0].temperature}°C</div>` : ''}</div>` : ''}
-                    <div class="grid grid-cols-2 gap-2 pt-2 border-t border-cyber-border"><div class="text-xs"><span class="text-cyber-blue">↓</span> <span class="text-cyber-cyan">${client.down_mbps.toFixed(1)} Mbps</span></div><div class="text-xs"><span class="text-cyber-blue">LAT</span> <span class="${client.latency_ms < 50 ? 'text-cyber-green' : 'text-cyber-yellow'}">${client.latency_ms.toFixed(0)} ms</span></div></div>
-                    <div class="flex justify-between text-xs pt-2 border-t border-cyber-border"><span class="text-cyber-blue">User: <span class="text-cyber-cyan">${client.user || 'N/A'}</span></span><span class="text-cyber-blue">Seen: <span class="text-cyber-cyan">${client.last_seen || '--:--:--'}</span></span></div>
+                <div class="space-y-2">
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span style="color: #71797E;">CPU</span><span class="font-mono font-bold" style="color: ${cpuColor};">${client.cpu_percent.toFixed(1)}%</span></div>
+                        <div class="progress-bar-track"><div class="progress-bar-fill progress-cpu" style="width: ${client.cpu_percent}%"></div></div>
+                        ${client.cpu_name ? '<div class="text-xs mt-1 truncate" style="color: #71797E;" title="' + client.cpu_name + '">' + client.cpu_name + '</div>' : ''}
+                        <div class="mt-1 h-8"><canvas id="sparkline-cpu-${client.id}" class="w-full h-full"></canvas></div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span style="color: #71797E;">RAM</span><span class="font-mono font-bold" style="color: ${ramColor};">${client.ram_percent.toFixed(1)}%</span></div>
+                        <div class="progress-bar-track"><div class="progress-bar-fill progress-ram" style="width: ${client.ram_percent}%"></div></div>
+                        <div class="text-xs font-mono mt-1">${client.ram_used_gb.toFixed(1)} / ${client.ram_total_gb.toFixed(1)} GB</div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs mb-1"><span style="color: #71797E;">Storage</span><span class="font-mono font-bold" style="color: ${storageColor};">${client.storage_percent.toFixed(1)}%</span></div>
+                        <div class="progress-bar-track"><div class="progress-bar-fill progress-storage" style="width: ${client.storage_percent}%"></div></div>
+                        <div class="text-xs font-mono mt-1">${client.storage_used_gb.toFixed(0)} / ${client.storage_total_gb.toFixed(0)} GB</div>
+                    </div>
+                    ${client.gpu && client.gpu.length > 0 ? '<div><div class="flex justify-between text-xs mb-1"><span style="color: #71797E;">GPU</span><span class="font-mono font-bold" style="color: #6A1B9A;">' + client.gpu[0].utilization + '%</span></div><div class="progress-bar-track"><div class="progress-bar-fill progress-gpu" style="width: ' + client.gpu[0].utilization + '%"></div></div><div class="text-xs mt-1 truncate">' + client.gpu[0].name + '</div></div>' : ''}
+                    <div class="flex justify-between text-xs pt-2 border-t" style="border-color: #c0c3c6;">
+                        <span style="color: #71797E;"><i data-lucide="arrow-down" class="w-3 h-3 inline-block align-middle"></i> ${client.down_mbps.toFixed(1)} Mbps</span>
+                        <span style="color: #71797E;"><i data-lucide="activity" class="w-3 h-3 inline-block align-middle"></i> ${client.latency_ms.toFixed(0)} ms</span>
+                    </div>
+                    <div class="flex justify-between text-xs pt-2 border-t" style="border-color: #c0c3c6;">
+                        <span style="color: #71797E;">User: <span class="font-medium" style="color: #1f1f1f;">${client.user || 'N/A'}</span></span>
+                        <span style="color: #71797E;">Seen: <span class="font-mono" style="color: #1f1f1f;">${client.last_seen || '--:--:--'}</span></span>
+                    </div>
                 </div>`;
             return card;
         }
@@ -1035,42 +1014,37 @@
         function updateDashboard(data) {
             const grid = document.getElementById('pc-grid');
             const emptyState = document.getElementById('empty-state');
-            data.forEach(clientData => { clients[clientData.id] = clientData; });
-            const currentIds = new Set(data.map(c => c.id));
-            document.querySelectorAll('.pc-card').forEach(card => {
-                const pcName = card.querySelector('h3').textContent;
-                if (!currentIds.has(pcName)) { card.remove(); delete clients[pcName]; }
+            data.forEach(c => { clients[c.id] = c; });
+            const ids = new Set(data.map(c => c.id));
+            document.querySelectorAll('.industrial-card').forEach(card => {
+                const h3 = card.querySelector('h3');
+                if (h3 && !ids.has(h3.textContent.trim())) { card.remove(); delete clients[h3.textContent.trim()]; }
             });
-            data.forEach(clientData => {
-                const existingCard = Array.from(grid.children).find(card => card.querySelector('h3')?.textContent === clientData.id);
-                if (existingCard) { const newCard = createPCCard(clientData); grid.replaceChild(newCard, existingCard); }
-                else { grid.appendChild(createPCCard(clientData)); }
-                if (clientData.cpu_history && clientData.cpu_history.length > 1) {
-                    setTimeout(() => { createSparkline(`sparkline-cpu-${clientData.id}`, clientData.cpu_history, 'rgb(0, 240, 255)'); }, 100);
-                }
+            data.forEach(c => {
+                const existing = Array.from(grid.children).find(card => { const h = card.querySelector('h3'); return h && h.textContent.trim() === c.id; });
+                if (existing) grid.replaceChild(createPCCard(c), existing);
+                else grid.appendChild(createPCCard(c));
+                if (c.cpu_history && c.cpu_history.length > 1) setTimeout(() => createSparkline('sparkline-cpu-' + c.id, c.cpu_history, '#ffc107'), 100);
             });
             if (data.length === 0) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
             else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
             const total = data.length;
             const online = data.filter(c => c.status === 'online').length;
-            const avgCpu = total > 0 ? data.reduce((sum, c) => sum + c.cpu_percent, 0) / total : 0;
-            const avgRam = total > 0 ? data.reduce((sum, c) => sum + c.ram_percent, 0) / total : 0;
             document.getElementById('stat-total').textContent = total;
             document.getElementById('stat-online').textContent = online;
-            document.getElementById('stat-cpu').textContent = avgCpu.toFixed(1) + '%';
-            document.getElementById('stat-ram').textContent = avgRam.toFixed(1) + '%';
+            document.getElementById('stat-cpu').textContent = (total > 0 ? data.reduce((s, c) => s + c.cpu_percent, 0) / total : 0).toFixed(1) + '%';
+            document.getElementById('stat-ram').textContent = (total > 0 ? data.reduce((s, c) => s + c.ram_percent, 0) / total : 0).toFixed(1) + '%';
             document.getElementById('pc-count').textContent = total;
             document.getElementById('online-count').textContent = online;
+            refreshIcons();
         }
         
-        // Open modal
         function openModal(clientId) {
             const client = clients[clientId];
             if (!client) return;
-            const modal = document.getElementById('detail-modal');
-            document.getElementById('modal-status-dot').className = `w-3 h-3 rounded-full status-dot ${getStatusDotColor(client.status)}`;
+            document.getElementById('modal-status-dot').className = 'w-3 h-3 rounded-full status-dot flex-shrink-0 ' + getStatusDotColor(client.status);
             document.getElementById('modal-pc-name').textContent = client.id;
-            document.getElementById('modal-pc-info').textContent = `${client.ip || 'N/A'} | ${client.os || 'N/A'}`;
+            document.getElementById('modal-pc-info').textContent = (client.ip || 'N/A') + ' | ' + (client.os || 'N/A');
             document.getElementById('modal-os').textContent = client.os || 'N/A';
             document.getElementById('modal-uptime').textContent = client.uptime || 'N/A';
             document.getElementById('modal-user').textContent = client.user || 'N/A';
@@ -1078,425 +1052,219 @@
             document.getElementById('modal-ip').textContent = client.ip || 'N/A';
             document.getElementById('modal-mac').textContent = client.mac || 'N/A';
             document.getElementById('modal-iface').textContent = client.iface || 'N/A';
-            document.getElementById('modal-latency').textContent = `${client.latency_ms.toFixed(1)} ms`;
+            document.getElementById('modal-latency').textContent = client.latency_ms.toFixed(1) + ' ms';
             document.getElementById('modal-cpu-cores').textContent = client.cpu_cores || 'N/A';
             document.getElementById('modal-cpu-threads').textContent = client.cpu_threads || 'N/A';
-            document.getElementById('modal-cpu-ghz').textContent = `${client.cpu_ghz.toFixed(2)} GHz` || 'N/A';
-            document.getElementById('modal-cpu-max-ghz').textContent = `${client.cpu_max_ghz.toFixed(2)} GHz` || 'N/A';
+            document.getElementById('modal-cpu-ghz').textContent = (client.cpu_ghz || 0).toFixed(2) + ' GHz';
+            document.getElementById('modal-cpu-max-ghz').textContent = (client.cpu_max_ghz || 0).toFixed(2) + ' GHz';
             
-            // Processes
-            const processesBody = document.getElementById('modal-processes');
-            processesBody.innerHTML = '';
+            const pb = document.getElementById('modal-processes'); pb.innerHTML = '';
             if (client.top_processes && client.top_processes.length > 0) {
-                client.top_processes.slice(0, 5).forEach((proc, i) => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-cyber-border/50 hover:bg-cyber-cyan/5';
-                    row.innerHTML = `<td class="py-2 px-3 text-cyber-blue">${i + 1}</td><td class="py-2 px-3 text-cyber-cyan">${proc.name}</td><td class="py-2 px-3 text-right ${getStatusColor(proc.cpu)}">${proc.cpu.toFixed(1)}%</td><td class="py-2 px-3 text-right text-cyber-cyan">${proc.mem.toFixed(2)}</td>`;
-                    processesBody.appendChild(row);
+                client.top_processes.slice(0, 5).forEach((p, i) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td style="color:#71797E;">' + (i+1) + '</td><td class="font-medium">' + escapeHtml(p.name) + '</td><td class="text-right font-mono font-bold" style="color:' + getStatusColor(p.cpu) + ';">' + p.cpu.toFixed(1) + '%</td><td class="text-right font-mono">' + p.mem.toFixed(2) + '</td>';
+                    pb.appendChild(tr);
                 });
-            } else {
-                processesBody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-cyber-border">No process data available</td></tr>';
-            }
+            } else pb.innerHTML = '<tr><td colspan="4" class="text-center py-4" style="color: #71797E;">No process data available</td></tr>';
             
-            // Files
-            const filesBody = document.getElementById('modal-files');
-            filesBody.innerHTML = '';
+            const fb = document.getElementById('modal-files'); fb.innerHTML = '';
             if (client.top_files && client.top_files.length > 0) {
-                client.top_files.slice(0, 5).forEach((file, i) => {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b border-cyber-border/50 hover:bg-cyber-cyan/5';
-                    row.innerHTML = `<td class="py-2 px-3 text-cyber-blue">${i + 1}</td><td class="py-2 px-3 text-cyber-cyan truncate max-w-xs">${file.name}</td><td class="py-2 px-3 text-cyber-border text-xs truncate max-w-xs">${file.path}</td><td class="py-2 px-3 text-right text-cyber-yellow">${file.size_mb.toFixed(1)}</td>`;
-                    filesBody.appendChild(row);
+                client.top_files.slice(0, 5).forEach((f, i) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = '<td style="color:#71797E;">' + (i+1) + '</td><td class="font-medium truncate max-w-xs">' + escapeHtml(f.name) + '</td><td class="text-xs truncate max-w-xs" style="color: #71797E;">' + escapeHtml(f.path) + '</td><td class="text-right font-mono font-bold" style="color: #8B4513;">' + f.size_mb.toFixed(1) + '</td>';
+                    fb.appendChild(tr);
                 });
-            } else {
-                filesBody.innerHTML = '<tr><td colspan="4" class="py-4 text-center text-cyber-border">No file data available</td></tr>';
-            }
+            } else fb.innerHTML = '<tr><td colspan="4" class="text-center py-4" style="color: #71797E;">No file data available</td></tr>';
             
-            // GPU info
-            const gpuSection = document.getElementById('modal-gpu-section');
-            const gpuList = document.getElementById('modal-gpu-list');
-            gpuList.innerHTML = '';
+            const gs = document.getElementById('modal-gpu-section'); const gl = document.getElementById('modal-gpu-list'); gl.innerHTML = '';
             if (client.gpu && client.gpu.length > 0) {
-                gpuSection.style.display = 'block';
-                client.gpu.forEach((gpu, i) => {
-                    const gpuCard = document.createElement('div');
-                    gpuCard.className = 'bg-cyber-dark/50 border border-cyber-border rounded-lg p-4';
-                    const utilColor = getStatusColor(gpu.utilization);
-                    const tempText = gpu.temperature > 0 ? `<span class="text-cyber-yellow"> | Temp: ${gpu.temperature}°C</span>` : '';
-                    const memText = gpu.memory_total_gb > 0 ? `<div class="text-xs text-cyber-blue mt-1">VRAM: ${gpu.memory_used_gb.toFixed(1)} / ${gpu.memory_total_gb.toFixed(1)} GB</div>` : '';
-                    gpuCard.innerHTML = `
-                        <div class="flex items-center justify-between mb-2">
-                            <div class="flex items-center space-x-2"><div class="w-2 h-2 rounded-full bg-cyber-purple"></div><span class="text-sm font-orbitron text-cyber-cyan">${gpu.name}</span></div>
-                            <span class="text-xs px-2 py-1 rounded ${gpu.type === 'NVIDIA' ? 'bg-cyber-green/20 text-cyber-green' : 'bg-cyber-blue/20 text-cyber-blue'}">${gpu.type}</span>
-                        </div>
-                        <div class="flex items-center justify-between text-xs"><span class="${utilColor} font-bold">Utilization: ${gpu.utilization}%</span><span class="text-cyber-yellow">${tempText}</span></div>
-                        ${gpu.memory_total_gb > 0 ? `<div class="w-full bg-cyber-dark rounded-full h-2 mt-2"><div class="h-2 rounded-full bg-cyber-purple transition-all duration-500" style="width: ${(gpu.memory_used_gb / gpu.memory_total_gb * 100).toFixed(0)}%"></div></div>${memText}` : ''}`;
-                    gpuList.appendChild(gpuCard);
+                gs.style.display = 'block';
+                client.gpu.forEach(gpu => {
+                    const div = document.createElement('div');
+                    div.className = 'p-3 rounded border mb-2';
+                    div.style.cssText = 'background:#d9dde0;border-color:#71797E;';
+                    const memText = gpu.memory_total_gb > 0 ? '<div class="text-xs mt-1" style="color: #71797E;">VRAM: ' + gpu.memory_used_gb.toFixed(1) + ' / ' + gpu.memory_total_gb.toFixed(1) + ' GB</div>' : '';
+                    div.innerHTML = '<div class="flex items-center justify-between mb-1"><span class="font-bold text-sm">' + escapeHtml(gpu.name) + '</span><span class="text-xs font-bold uppercase px-2 py-0.5 rounded" style="background:' + (gpu.type === 'NVIDIA' ? '#E8F5E9' : '#E3F2FD') + ';color:' + (gpu.type === 'NVIDIA' ? '#2E7D32' : '#1565C0') + ';">' + gpu.type + '</span></div><div class="text-xs font-mono font-bold" style="color:' + getStatusColor(gpu.utilization) + ';">Utilization: ' + gpu.utilization + '%</div>' + memText;
+                    gl.appendChild(div);
                 });
-            } else { gpuSection.style.display = 'none'; }
+            } else gs.style.display = 'none';
             
-            // Setup command section
             currentModalHostname = client.id;
-            const modalDropdown = document.getElementById('modal-command-dropdown');
-            const modalOutput = document.getElementById('modal-command-output');
-            if (modalDropdown) modalDropdown.value = '';
-            if (modalOutput) { modalOutput.classList.add('hidden'); modalOutput.innerHTML = ''; modalOutput.style.borderColor = ''; }
+            document.getElementById('modal-command-dropdown').value = '';
+            const mo = document.getElementById('modal-command-output');
+            mo.classList.add('hidden'); mo.innerHTML = ''; mo.style.borderColor = '';
             document.getElementById('modal-password-container').classList.add('hidden');
             document.getElementById('modal-admin-password').value = '';
             setupModalCommandButton();
-            modal.classList.remove('hidden');
+            document.getElementById('detail-modal').classList.remove('hidden');
+            refreshIcons();
         }
         
         function closeModal() { document.getElementById('detail-modal').classList.add('hidden'); }
         
         // ==================== HACKER EFFECTS ====================
-        function triggerScreenShake() { document.body.classList.add('shake-screen'); setTimeout(() => { document.body.classList.remove('shake-screen'); }, 800); }
-        function triggerGlitchText(element, times = 5) { if (!element) return; element.classList.add('glitch-text'); setTimeout(() => { element.classList.remove('glitch-text'); }, 300 * times); }
-        function triggerSirenBlink() { document.body.classList.add('siren-blink'); setTimeout(() => { document.body.classList.remove('siren-blink'); }, 6000); }
-        function showHackerTerminal(outputDiv, command, isDanger = false) {
-            outputDiv.classList.remove('hidden');
-            outputDiv.className = 'command-output hacker-terminal rounded p-3 max-h-96 overflow-y-auto text-xs font-mono';
-            outputDiv.style.borderColor = isDanger ? '#ff0044' : '#00ff41';
-            const dangerIcon = isDanger ? '⚠️ DANGER: ' : '';
-            const commands = [`[${new Date().toLocaleTimeString()}] ${dangerIcon} Executing remote command...`,`[${new Date().toLocaleTimeString()}] Target: ${currentModalHostname}`,`[${new Date().toLocaleTimeString()}] Command: ${command.toUpperCase()}`,`[${new Date().toLocaleTimeString()}] Establishing secure channel...`,`[${new Date().toLocaleTimeString()}] ════════════════════════════════════`,``,];
-            outputDiv.innerHTML = '';
-            let lineIdx = 0;
-            function typeLine() { if (lineIdx < commands.length) { const line = document.createElement('div'); line.style.color = '#00ff41'; line.textContent = commands[lineIdx]; outputDiv.appendChild(line); lineIdx++; setTimeout(typeLine, isDanger ? 400 : 150); } }
-            typeLine();
+        function triggerScreenShake() { document.body.classList.add('shake-screen'); setTimeout(() => document.body.classList.remove('shake-screen'), 800); }
+        function triggerGlitchText(el, t = 5) { if (!el) return; el.classList.add('glitch-text'); setTimeout(() => el.classList.remove('glitch-text'), 300 * t); }
+        function triggerSirenBlink() { document.body.classList.add('siren-blink'); setTimeout(() => document.body.classList.remove('siren-blink'), 6000); }
+        function showHackerTerminal(out, cmd) {
+            out.classList.remove('hidden'); out.className = 'command-output-box'; out.style.borderColor = '#8B4513';
+            const lines = ['[' + new Date().toLocaleTimeString() + '] Executing remote command...','[' + new Date().toLocaleTimeString() + '] Target: ' + currentModalHostname,'[' + new Date().toLocaleTimeString() + '] Command: ' + cmd.toUpperCase(),'[' + new Date().toLocaleTimeString() + '] Establishing secure channel...','[' + new Date().toLocaleTimeString() + '] ════════════════════════════════════',''];
+            out.innerHTML = ''; let i = 0;
+            function type() { if (i < lines.length) { const d = document.createElement('div'); d.style.color = '#4CAF50'; d.textContent = lines[i]; out.appendChild(d); i++; setTimeout(type, 200); } }
+            type();
         }
-        function triggerHackerTakeover(command, outputDiv, buttonElement) {
-            triggerScreenShake();
-            triggerSirenBlink();
-            showHackerTerminal(outputDiv, command, true);
-            document.querySelectorAll('.pc-card h3').forEach(h3 => triggerGlitchText(h3));
-            const modalTitle = document.getElementById('modal-pc-name');
-            triggerGlitchText(modalTitle);
-            let shakeCount = 0;
-            const shakeInterval = setInterval(() => { if (shakeCount < 3) { triggerScreenShake(); shakeCount++; } else clearInterval(shakeInterval); }, 1200);
+        function triggerHackerTakeover(cmd, out, btn) {
+            triggerScreenShake(); triggerSirenBlink(); showHackerTerminal(out, cmd);
+            document.querySelectorAll('.industrial-card h3').forEach(h => triggerGlitchText(h));
+            triggerGlitchText(document.getElementById('modal-pc-name'));
+            let sc = 0; const si = setInterval(() => { if (sc < 3) { triggerScreenShake(); sc++; } else clearInterval(si); }, 1200);
             setTimeout(() => {
                 const now = new Date().toLocaleTimeString();
-                const dangerMsg = command === 'shutdown' ? `💀 PC ${currentModalHostname} SHUTDOWN INITIATED. Sistem akan mati dalam 30 detik!` : `💀 PC ${currentModalHostname} RESTART INITIATED. Sistem akan restart dalam 30 detik!`;
-                outputDiv.classList.remove('hidden');
-                outputDiv.style.borderColor = '#ff0044';
-                outputDiv.innerHTML = `<div style="color:#ff0044;font-weight:bold;font-size:13px;margin-bottom:8px;">${dangerMsg}</div><div style="color:#ff8800;font-size:11px;margin-bottom:4px;">⚠️ PERINGATAN: Perintah sudah dikirim ke PC target. Efek hacker akan muncul di terminal PC tersebut.</div><div style="color:#888;font-size:10px;margin-top:8px;">[${now}] Command successfully transmitted</div><div style="color:#888;font-size:10px;">[${now}] Remote execution completed</div>`;
-                buttonElement.disabled = false;
-                buttonElement.textContent = 'RUN';
-                buttonElement.style.opacity = '1';
-                if (pendingCommands.size > 0) pendingCommands.forEach((_, key) => pendingCommands.delete(key));
+                const msg = cmd === 'shutdown' ? 'SHUTDOWN INITIATED on ' + currentModalHostname + '. System will power off in 30 seconds!' : 'RESTART INITIATED on ' + currentModalHostname + '. System will restart in 30 seconds!';
+                out.style.borderColor = '#c62828';
+                out.innerHTML = '<div style="color:#c62828;font-weight:bold;font-size:13px;margin-bottom:8px;">' + msg + '</div><div style="color:#8B4513;font-size:11px;margin-bottom:4px;">Warning: Command sent to target PC.</div><div style="color:#999;font-size:10px;margin-top:8px;">[' + now + '] Command transmitted</div>';
+                btn.disabled = false; btn.textContent = 'Run'; btn.style.opacity = '1';
+                pendingCommands.forEach((_, k) => pendingCommands.delete(k));
             }, 5000);
         }
         
-        // WebSocket connection
+        // WebSocket
         function connectWebSocket() {
-            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            const wsUrl = `${protocol}//${window.location.host}/ws`;
-            ws = new WebSocket(wsUrl);
+            const proto = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(proto + '//' + window.location.host + '/ws');
             ws.onopen = function() {
                 document.getElementById('ws-status').textContent = 'Connected';
-                document.getElementById('ws-status').className = 'text-xs px-2 py-1 rounded bg-cyber-green/20 text-cyber-green border border-cyber-green/30';
-                reconnectInterval = 1000;
-                reconnectAttempts = 0;
-                healthCheckFailures = 0;
-                healthCheckInterval = 10000;
-                resetHealthCheck();
+                reconnectInterval = 1000; reconnectAttempts = 0; healthCheckFailures = 0; healthCheckInterval = 10000; resetHealthCheck();
             };
-            ws.onmessage = function(event) {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.type === 'initial' || data.type === 'update') updateDashboard(data.clients);
-                } catch (e) { console.error('Error parsing WebSocket message:', e); }
-            };
-            ws.onclose = function(event) {
+            ws.onmessage = function(e) { try { const d = JSON.parse(e.data); if (d.type === 'initial' || d.type === 'update') updateDashboard(d.clients); } catch (err) { console.error('WS parse error:', err); } };
+            ws.onclose = function() {
                 document.getElementById('ws-status').textContent = 'Disconnected';
-                document.getElementById('ws-status').className = 'text-xs px-2 py-1 rounded bg-cyber-red/20 text-cyber-red border border-cyber-red/30';
-                reconnectAttempts++;
-                const jitter = Math.random() * reconnectJitter;
-                const delay = reconnectInterval + jitter;
-                setTimeout(connectWebSocket, delay);
+                reconnectAttempts++; setTimeout(connectWebSocket, reconnectInterval + Math.random() * reconnectJitter);
                 reconnectInterval = Math.min(reconnectInterval * 2, maxReconnectInterval);
             };
-            ws.onerror = function(err) {
-                console.error('WebSocket Error:', err);
-                ws.close(); // Force close to trigger reconnect logic in onclose
-            };
+            ws.onerror = function(err) { console.error('WS error:', err); ws.close(); };
         }
         
         // Health check
         async function checkHealth() {
             try {
-                const response = await fetch('/health', { method: 'GET', signal: AbortSignal.timeout(5000) });
-                if (!response.ok) throw new Error('HTTP error!');
-                const data = await response.json();
-                healthCheckFailures = 0;
-                healthCheckInterval = 10000;
-                const mqttStatus = document.getElementById('mqtt-status');
-                if (data.mqtt_connected) { mqttStatus.textContent = 'Connected'; mqttStatus.className = 'text-xs px-2 py-1 rounded bg-cyber-green/20 text-cyber-green border border-cyber-green/30'; }
-                else { mqttStatus.textContent = 'Disconnected'; mqttStatus.className = 'text-xs px-2 py-1 rounded bg-cyber-red/20 text-cyber-red border border-cyber-red/30'; }
-            } catch (e) {
-                healthCheckFailures++;
-                healthCheckInterval = Math.min(healthCheckInterval * 1.5, maxHealthCheckInterval);
-                if (healthCheckFailures >= 3) {
-                    const mqttStatus = document.getElementById('mqtt-status');
-                    mqttStatus.textContent = 'Error';
-                    mqttStatus.className = 'text-xs px-2 py-1 rounded bg-cyber-yellow/20 text-cyber-yellow border border-cyber-yellow/30';
-                }
-            } finally { scheduleNextHealthCheck(); }
+                const r = await fetch('/health', { method: 'GET', signal: AbortSignal.timeout(5000) });
+                if (!r.ok) throw new Error('HTTP error');
+                const d = await r.json();
+                healthCheckFailures = 0; healthCheckInterval = 10000;
+                const ms = document.getElementById('mqtt-status');
+                ms.textContent = d.mqtt_connected ? 'Connected' : 'Disconnected';
+            } catch { healthCheckFailures++; healthCheckInterval = Math.min(healthCheckInterval * 1.5, maxHealthCheckInterval); }
+            finally { scheduleNextHealthCheck(); }
         }
         function scheduleNextHealthCheck() { if (healthCheckTimer) clearTimeout(healthCheckTimer); healthCheckTimer = setTimeout(checkHealth, healthCheckInterval); }
         function resetHealthCheck() { healthCheckFailures = 0; healthCheckInterval = 10000; scheduleNextHealthCheck(); }
         
-        // ==================== REMOTE COMMAND EXECUTION ====================
+        // ==================== REMOTE COMMAND ====================
         const pendingCommands = new Map();
         let currentModalHostname = '';
         let modalCommandSetupDone = false;
         
         function setupModalCommandButton() {
-            const modalBtn = document.getElementById('modal-command-btn');
-            const modalDropdown = document.getElementById('modal-command-dropdown');
-            const processNameContainer = document.getElementById('modal-process-name-container');
-            const passwordContainer = document.getElementById('modal-password-container');
-            
             if (modalCommandSetupDone) return;
-            
-            if (modalBtn) {
-                modalBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    const command = modalDropdown.value;
-                    if (!command) { alert('Pilih command terlebih dahulu'); return; }
-                    if (!currentModalHostname) { alert('Hostname tidak ditemukan'); return; }
-                    executeRemoteCommand(currentModalHostname, command, this);
-                });
-            }
-            
-            if (modalDropdown) {
-                modalDropdown.addEventListener('change', function() {
-                    const btn = document.getElementById('modal-command-btn');
-                    const dangerous = ['shutdown', 'restart', 'taskkill'];
-                    if (dangerous.includes(this.value)) {
-                        passwordContainer.classList.remove('hidden');
-                    } else {
-                        passwordContainer.classList.add('hidden');
-                        document.getElementById('modal-admin-password').value = '';
-                    }
-                    if (this.value === 'taskkill') {
-                        processNameContainer.classList.remove('hidden');
-                        if (btn) { btn.style.backgroundColor = '#ff8800'; btn.textContent = '🔪 KILL ▶'; }
-                    } else {
-                        processNameContainer.classList.add('hidden');
-                        if (this.value && btn) { btn.style.backgroundColor = '#00ff88'; btn.textContent = 'RUN ▶'; }
-                    }
-                });
-            }
+            const btn = document.getElementById('modal-command-btn');
+            const dd = document.getElementById('modal-command-dropdown');
+            const pnc = document.getElementById('modal-process-name-container');
+            const pc = document.getElementById('modal-password-container');
+            if (btn) btn.addEventListener('click', e => { e.stopPropagation(); const c = dd.value; if (!c) { alert('Select a command first'); return; } if (!currentModalHostname) { alert('Hostname not found'); return; } executeRemoteCommand(currentModalHostname, c, this); });
+            if (dd) dd.addEventListener('change', function() {
+                const dangerous = ['shutdown', 'restart', 'taskkill'];
+                pc.classList.toggle('hidden', !dangerous.includes(this.value));
+                if (!dangerous.includes(this.value)) document.getElementById('modal-admin-password').value = '';
+                pnc.classList.toggle('hidden', this.value !== 'taskkill');
+                if (btn) { btn.textContent = this.value === 'taskkill' ? 'Kill' : 'Run'; }
+            });
             modalCommandSetupDone = true;
         }
         
         async function executeRemoteCommand(hostname, command, buttonElement) {
-            let outputDiv = document.getElementById('modal-command-output');
-            if (!outputDiv) { console.error('Output div tidak ditemukan'); return; }
-            
+            let out = document.getElementById('modal-command-output');
             let processName = '';
             if (command === 'taskkill') {
                 processName = (document.getElementById('modal-process-name-input')?.value || '').trim();
-                if (!processName) {
-                    outputDiv.classList.remove('hidden');
-                    outputDiv.innerHTML = '<span style="color: #ff8800;">⚠️ Masukkan nama proses yang akan dimatikan</span>';
-                    outputDiv.style.borderColor = '#ff8800';
-                    return;
-                }
+                if (!processName) { out.classList.remove('hidden'); out.style.borderColor = '#FF8F00'; out.innerHTML = '<span style="color:#FF8F00;">Enter process name to kill</span>'; return; }
             }
-            
-            // Get admin password for dangerous commands
             const dangerous = ['shutdown', 'restart', 'taskkill'];
-            let adminPassword = '';
-            if (dangerous.includes(command)) {
-                adminPassword = document.getElementById('modal-admin-password')?.value || '';
-            }
-            
+            let adminPassword = dangerous.includes(command) ? (document.getElementById('modal-admin-password')?.value || '') : '';
             try {
-                buttonElement.disabled = true;
-                buttonElement.textContent = '⏳ RUNNING...';
-                buttonElement.style.opacity = '0.5';
-                outputDiv.classList.remove('hidden');
-                outputDiv.textContent = '⏳ Menjalankan command...';
-                outputDiv.style.borderColor = '#ffee00';
-                
-                const requestBody = { hostname, command };
-                if (command === 'taskkill' && processName) requestBody.process_name = processName;
-                if (adminPassword) requestBody.admin_password = adminPassword;
-                
-                const response = await fetch('/api/command', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-                    body: JSON.stringify(requestBody)
-                });
-                
-                const data = await response.json();
-                
-                if (!response.ok) {
-                    // Jika butuh password
-                    if (data.need_password) {
-                        outputDiv.innerHTML = `<span style="color: #ff8800;">🔒 ${data.message}</span>`;
-                        outputDiv.style.borderColor = '#ff8800';
-                        buttonElement.disabled = false;
-                        buttonElement.textContent = 'RUN';
-                        buttonElement.style.opacity = '1';
-                        return;
-                    }
-                    throw new Error(data.error || data.detail || 'Gagal menjalankan command');
+                buttonElement.disabled = true; buttonElement.textContent = 'Running...'; buttonElement.style.opacity = '0.5';
+                out.classList.remove('hidden'); out.style.borderColor = '#ffc107'; out.textContent = 'Executing command...';
+                const body = { hostname, command };
+                if (command === 'taskkill' && processName) body.process_name = processName;
+                if (adminPassword) body.admin_password = adminPassword;
+                const r = await fetch('/api/command', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + sessionToken }, body: JSON.stringify(body) });
+                const d = await r.json();
+                if (!r.ok) {
+                    if (d.need_password) { out.innerHTML = '<span style="color:#8B4513;">Admin password required</span>'; out.style.borderColor = '#8B4513'; buttonElement.disabled = false; buttonElement.textContent = 'Run'; buttonElement.style.opacity = '1'; return; }
+                    throw new Error(d.error || d.detail || 'Command failed');
                 }
-                
-                const requestId = data.request_id;
-                pendingCommands.set(requestId, { hostname, command, outputDiv, buttonElement });
-                
-                // Shutdown/restart trigger hacker effects
-                if (command === 'shutdown' || command === 'restart') {
-                    triggerHackerTakeover(command, outputDiv, buttonElement);
-                    pendingCommands.delete(requestId);
-                    return;
-                }
-                
-                await pollCommandResult(requestId, 30);
-                
-            } catch (error) {
-                outputDiv.innerHTML = `<span style="color: #ff0044;">❌ Error: ${error.message}</span>`;
-                outputDiv.style.borderColor = '#ff0044';
-                buttonElement.disabled = false;
-                buttonElement.textContent = 'RUN';
-                buttonElement.style.opacity = '1';
-            }
+                const rid = d.request_id;
+                pendingCommands.set(rid, { hostname, command, outputDiv: out, buttonElement });
+                if (command === 'shutdown' || command === 'restart') { triggerHackerTakeover(command, out, buttonElement); pendingCommands.delete(rid); return; }
+                await pollCommandResult(rid, 30);
+            } catch (e) { out.innerHTML = '<span style="color:#c62828;">Error: ' + e.message + '</span>'; out.style.borderColor = '#c62828'; buttonElement.disabled = false; buttonElement.textContent = 'Run'; buttonElement.style.opacity = '1'; }
         }
         
-        async function pollCommandResult(requestId, maxAttempts = 30) {
-            const info = pendingCommands.get(requestId);
-            if (!info) return;
-            const { outputDiv, buttonElement, command } = info;
-            let attempts = 0;
-            while (attempts < maxAttempts) {
+        async function pollCommandResult(rid, max = 30) {
+            const info = pendingCommands.get(rid); if (!info) return;
+            const { outputDiv: out, buttonElement: btn } = info;
+            let a = 0;
+            while (a < max) {
                 try {
-                    const response = await fetch(`/api/command/result/${requestId}`, {
-                        headers: { 'Authorization': `Bearer ${sessionToken}` }
-                    });
-                    const data = await response.json();
-                    if (data.status === 'completed') {
-                        const result = data.result.result;
-                        outputDiv.style.borderColor = result.status === 'success' ? '#00ff88' : '#ff0044';
-                        outputDiv.innerHTML = formatCommandOutput(command, result);
-                        buttonElement.disabled = false;
-                        buttonElement.textContent = 'RUN';
-                        buttonElement.style.opacity = '1';
-                        pendingCommands.delete(requestId);
-                        return;
-                    }
-                    outputDiv.textContent = `⏳ Menjalankan command... (${attempts + 1}s)`;
-                } catch (error) { console.error('Error polling result:', error); }
-                attempts++;
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                    const r = await fetch('/api/command/result/' + rid, { headers: { 'Authorization': 'Bearer ' + sessionToken } });
+                    const d = await r.json();
+                    if (d.status === 'completed') { const res = d.result.result; out.style.borderColor = res.status === 'success' ? '#4CAF50' : '#c62828'; out.innerHTML = formatCommandOutput(info.command, res); btn.disabled = false; btn.textContent = 'Run'; btn.style.opacity = '1'; pendingCommands.delete(rid); return; }
+                    out.textContent = 'Executing... (' + (a+1) + 's)';
+                } catch (e) { console.error('Poll error:', e); }
+                a++; await new Promise(r => setTimeout(r, 1000));
             }
-            outputDiv.innerHTML = '<span style="color: #ff8800;">⚠️ Timeout - command mungkin masih running di PC</span>';
-            outputDiv.style.borderColor = '#ff8800';
-            buttonElement.disabled = false;
-            buttonElement.textContent = 'RUN';
-            buttonElement.style.opacity = '1';
-            pendingCommands.delete(requestId);
+            out.innerHTML = '<span style="color:#FF8F00;">Timeout - command may still be running</span>'; out.style.borderColor = '#FF8F00';
+            btn.disabled = false; btn.textContent = 'Run'; btn.style.opacity = '1'; pendingCommands.delete(rid);
         }
         
-        // ==================== OUTPUT FORMATTERS ====================
-        function formatCommandOutput(command, result) {
-            if (result.status !== 'success') return `<span style="color:#ff0044;">❌ Error: ${result.error || 'Unknown error'}</span>`;
-            const output = result.output || '';
-            if (command === 'tasklist') return formatTasklist(output);
-            if (command === 'ipconfig') return formatIpconfig(output);
-            if (command === 'systeminfo') return formatSysteminfo(output);
-            if (command === 'whoami') return formatWhoami(output);
-            return `<pre style="white-space:pre-wrap;color:#00ff88;font-size:11px;">${escapeHtml(output)}</pre>`;
+        // Output formatters
+        function formatCommandOutput(cmd, result) {
+            if (result.status !== 'success') return '<span style="color:#c62828;">Error: ' + (result.error || 'Unknown') + '</span>';
+            const o = result.output || '';
+            if (cmd === 'tasklist') return formatTasklist(o);
+            if (cmd === 'ipconfig') return formatIpconfig(o);
+            if (cmd === 'systeminfo') return formatSysteminfo(o);
+            if (cmd === 'whoami') return formatWhoami(o);
+            return '<pre style="white-space:pre-wrap;color:#4CAF50;font-size:11px;">' + escapeHtml(o) + '</pre>';
         }
-        function escapeHtml(str) { return str.replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>'); }
-        
+        function escapeHtml(s) { return s.replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>'); }
         function formatTasklist(output) {
-            const lines = output.split('\n').filter(l => l.trim());
-            const processes = [];
-            for (const line of lines) {
-                if (line.startsWith('Image Name') || line.startsWith('===')) continue;
-                const match = line.match(/^(.+?)\s{2,}(\d+)\s+(\S+)\s+\S+\s+([\d.,]+)\s*K/);
-                if (match) processes.push({ name: match[1].trim(), pid: parseInt(match[2]), session: match[3], mem: parseFloat(match[4].replace(',', '')) });
-            }
-            processes.sort((a, b) => b.mem - a.mem);
-            const grouped = {};
-            for (const p of processes) { const key = p.name.toLowerCase(); if (!grouped[key]) grouped[key] = { name: p.name, count: 0, totalMem: 0, pids: [] }; grouped[key].count++; grouped[key].totalMem += p.mem; grouped[key].pids.push(p.pid); }
-            const sorted = Object.values(grouped).sort((a, b) => b.totalMem - a.totalMem);
-            let html = `<div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;"><span style="color:#00f0ff;font-size:11px;">📋 ${processes.length} proses berjalan (${sorted.length} unik)</span><input id="proc-filter" type="text" placeholder="🔍 Filter proses..." style="background:#0a0a0f;border:1px solid #1e1e3a;color:#00f0ff;padding:3px 8px;border-radius:4px;font-size:11px;width:160px;" oninput="filterProcessTable(this.value)"></div><div style="overflow-y:auto;max-height:280px;"><table id="proc-table" style="width:100%;border-collapse:collapse;font-size:11px;"><thead><tr style="border-bottom:1px solid #1e1e3a;position:sticky;top:0;background:#0a0a0f;"><th style="text-align:left;padding:5px 8px;color:#0066ff;">Proses</th><th style="text-align:center;padding:5px 8px;color:#0066ff;">Jumlah</th><th style="text-align:right;padding:5px 8px;color:#0066ff;">Total RAM</th></tr></thead><tbody>`;
-            for (const p of sorted) {
-                const memMb = (p.totalMem / 1024).toFixed(1);
-                const memColor = p.totalMem > 200000 ? '#ff0044' : p.totalMem > 50000 ? '#ffee00' : '#00ff88';
-                const isHighlight = ['chrome.exe','msedge.exe','firefox.exe','python.exe','node.exe','java.exe','game','valorant','steam'].some(k => p.name.toLowerCase().includes(k));
-                html += `<tr class="proc-row" style="border-bottom:1px solid #1e1e3a22;${isHighlight ? 'background:rgba(0,240,255,0.04);' : ''}"><td style="padding:4px 8px;color:#00f0ff;">${escapeHtml(p.name)}</td><td style="padding:4px 8px;text-align:center;color:#888;">${p.count}x</td><td style="padding:4px 8px;text-align:right;color:${memColor};font-weight:bold;">${memMb} MB</td></tr>`;
-            }
-            html += `</tbody></table></div>`;
-            return html;
+            const lines = output.split('\n').filter(l => l.trim()); const procs = [];
+            for (const l of lines) { if (l.startsWith('Image Name') || l.startsWith('===')) continue; const m = l.match(/^(.+?)\s{2,}(\d+)\s+(\S+)\s+\S+\s+([\d.,]+)\s*K/); if (m) procs.push({ name: m[1].trim(), pid: parseInt(m[2]), mem: parseFloat(m[4].replace(',','')) }); }
+            procs.sort((a,b) => b.mem - a.mem); const g = {}; for (const p of procs) { const k = p.name.toLowerCase(); if (!g[k]) g[k] = { name: p.name, count: 0, totalMem: 0 }; g[k].count++; g[k].totalMem += p.mem; }
+            const s = Object.values(g).sort((a,b) => b.totalMem - a.totalMem);
+            let h = '<div style="margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;"><span style="font-size:11px;color:#1f1f1f;">' + procs.length + ' processes (' + s.length + ' unique)</span><input id="proc-filter" type="text" placeholder="Filter..." style="background:#f0f2f4;border:1px solid #71797E;padding:3px 8px;border-radius:4px;font-size:11px;width:140px;" oninput="filterProcessTable(this.value)"></div><div style="overflow-y:auto;max-height:280px;"><table id="proc-table" class="industrial-table"><thead><tr><th>Process</th><th style="text-align:center;">Count</th><th style="text-align:right;">Total RAM</th></tr></thead><tbody>';
+            for (const p of s) { const mb = (p.totalMem/1024).toFixed(1); const mc = p.totalMem > 200000 ? '#c62828' : p.totalMem > 50000 ? '#E65100' : '#2E7D32'; h += '<tr class="proc-row"><td class="font-medium">' + escapeHtml(p.name) + '</td><td style="text-align:center;color:#71797E;">' + p.count + 'x</td><td style="text-align:right;font-weight:bold;color:' + mc + ';">' + mb + ' MB</td></tr>'; }
+            h += '</tbody></table></div>'; return h;
         }
-        function filterProcessTable(val) { const rows = document.querySelectorAll('#proc-table .proc-row'); const q = val.toLowerCase(); rows.forEach(row => { const name = row.cells[0].textContent.toLowerCase(); row.style.display = name.includes(q) ? '' : 'none'; }); }
-        
+        function filterProcessTable(v) { const q = v.toLowerCase(); document.querySelectorAll('#proc-table .proc-row').forEach(r => { r.style.display = r.cells[0].textContent.toLowerCase().includes(q) ? '' : 'none'; }); }
         function formatIpconfig(output) {
-            const lines = output.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
-            let html = ''; let dataFound = false; let inAdapter = false;
-            for (const line of lines) {
-                const trimmed = line.trim();
-                if (trimmed.toLowerCase().includes('adapter') && trimmed.match(/^(.+adapter\s+.+):\s*$/i)) { html += `<div style="color:#00f0ff;font-weight:bold;margin-top:10px;margin-bottom:4px;">🔌 ${escapeHtml(trimmed)}</div>`; inAdapter = true; continue; }
-                if (!inAdapter || !trimmed) continue;
-                if (trimmed.includes(':')) {
-                    const colonIdx = trimmed.indexOf(':');
-                    let key = trimmed.substring(0, colonIdx).trim().replace(/\.\s*/g, '').replace(/\s+/g, ' ').trim();
-                    let val = trimmed.substring(colonIdx + 1).trim().replace(/\s+/g, ' ').trim();
-                    if (!key) continue;
-                    if (!val) { if (trimmed.toLowerCase().includes('disconnected') || key.toLowerCase().includes('connection')) html += `<div style="display:flex;gap:8px;padding:2px 12px;"><span style="color:#0066ff;min-width:180px;flex-shrink:0;">${escapeHtml(key)}</span><span style="color:#ff0044;">Disconnected</span></div>`; continue; }
-                    dataFound = true;
-                    const isIp = val.match(/^\d+\.\d+\.\d+\.\d+/);
-                    const isMac = val.match(/^[0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}[-:][0-9A-Fa-f]{2}/);
-                    html += `<div style="display:flex;gap:8px;padding:2px 12px;"><span style="color:#0066ff;min-width:180px;flex-shrink:0;">${escapeHtml(key)}</span><span style="color:${isIp ? '#00ff88' : isMac ? '#ff8800' : '#ccc'};">${escapeHtml(val)}</span></div>`;
-                }
-            }
-            if (!dataFound) return `<pre style="white-space:pre-wrap;color:#00ff88;font-size:11px;">${escapeHtml(output)}</pre>`;
-            return '<div style="font-size:11px;">' + html + '</div>';
+            const lines = output.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n'); let h = ''; let found = false; let inA = false;
+            for (const l of lines) { const t = l.trim(); if (t.toLowerCase().includes('adapter') && t.match(/^(.+adapter\s+.+):\s*$/i)) { h += '<div style="font-weight:bold;margin-top:10px;margin-bottom:4px;">' + escapeHtml(t) + '</div>'; inA = true; continue; } if (!inA || !t) continue; if (t.includes(':')) { const ci = t.indexOf(':'); let k = t.substring(0,ci).trim().replace(/\.\s*/g,'').replace(/\s+/g,' ').trim(); let v = t.substring(ci+1).trim().replace(/\s+/g,' ').trim(); if (!k) continue; if (!v) continue; found = true; const isIp = v.match(/^\d+\.\d+\.\d+\.\d+/); h += '<div style="display:flex;gap:8px;padding:2px 12px;"><span style="color:#71797E;min-width:180px;flex-shrink:0;">' + escapeHtml(k) + '</span><span style="color:' + (isIp ? '#2E7D32' : '#1f1f1f') + ';">' + escapeHtml(v) + '</span></div>'; } }
+            if (!found) return '<pre style="white-space:pre-wrap;color:#4CAF50;font-size:11px;">' + escapeHtml(output) + '</pre>';
+            return '<div style="font-size:11px;">' + h + '</div>';
         }
-        
         function formatSysteminfo(output) {
-            const lines = output.split('\n');
-            const important = ['Host Name','OS Name','OS Version','System Manufacturer','System Model','Processor','Total Physical Memory','Available Physical Memory','Windows Directory','System Directory','Boot Time','Domain'];
-            let html = '<div style="font-size:11px;">';
-            for (const line of lines) {
-                if (!line.includes(':')) continue;
-                const [key, ...valParts] = line.split(':');
-                const val = valParts.join(':').trim();
-                if (!val || !key.trim()) continue;
-                if (!important.some(k => key.trim().includes(k))) continue;
-                html += `<div style="display:flex;gap:8px;padding:3px 0;border-bottom:1px solid #1e1e3a33;"><span style="color:#0066ff;min-width:200px;flex-shrink:0;">${escapeHtml(key.trim())}</span><span style="color:#00ff88;">${escapeHtml(val)}</span></div>`;
-            }
-            html += '</div>';
-            return html;
+            const lines = output.split('\n'); const imp = ['Host Name','OS Name','OS Version','System Manufacturer','System Model','Processor','Total Physical Memory','Available Physical Memory','Windows Directory','System Directory','Boot Time','Domain'];
+            let h = '<div style="font-size:11px;">';
+            for (const l of lines) { if (!l.includes(':')) continue; const [k,...vp] = l.split(':'); const v = vp.join(':').trim(); if (!v || !k.trim()) continue; if (!imp.some(i => k.trim().includes(i))) continue; h += '<div style="display:flex;gap:8px;padding:3px 0;border-bottom:1px solid #c0c3c6;"><span style="color:#71797E;min-width:200px;flex-shrink:0;">' + escapeHtml(k.trim()) + '</span><span style="color:#2E7D32;">' + escapeHtml(v) + '</span></div>'; }
+            h += '</div>'; return h;
         }
+        function formatWhoami(o) { const u = o.trim(); const p = u.split('\\'); return '<div style="font-size:13px;padding:8px 0;"><span style="color:#71797E;">Domain\User: </span><span style="font-weight:bold;">' + escapeHtml(u) + '</span>' + (p.length > 1 ? '<div style="color:#999;font-size:11px;margin-top:4px;">User: ' + escapeHtml(p[1]) + '</div>' : '') + '</div>'; }
         
-        function formatWhoami(output) {
-            const user = output.trim();
-            const parts = user.split('\\');
-            return `<div style="font-size:13px;padding:8px 0;"><span style="color:#0066ff;">Domain\\User: </span><span style="color:#00ff88;font-weight:bold;">${escapeHtml(user)}</span>${parts.length > 1 ? `<div style="color:#888;font-size:11px;margin-top:4px;">User: ${escapeHtml(parts[1])}</div>` : ''}</div>`;
-        }
-        
-        // Initialize - check auth first
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            const emptyState = document.getElementById('empty-state');
-            emptyState.classList.remove('hidden');
-            emptyState.classList.add('flex');
-        });
-        
-        // Handle escape key
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                const menu = document.getElementById('mobile-menu');
-                if (menu && menu.classList.contains('open')) closeMobileMenu();
-                else closeModal();
-            }
-        });
+        // Init
+        document.addEventListener('DOMContentLoaded', function() { checkAuth(); document.getElementById('empty-state').classList.remove('hidden'); document.getElementById('empty-state').classList.add('flex'); });
+        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') { const m = document.getElementById('mobile-menu'); if (m && m.classList.contains('open')) closeMobileMenu(); else closeModal(); } });
     </script>
 </body>
 </html>
