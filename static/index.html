@@ -1016,15 +1016,16 @@
             const emptyState = document.getElementById('empty-state');
             data.forEach(c => { clients[c.id] = c; });
             const ids = new Set(data.map(c => c.id));
-            document.querySelectorAll('.industrial-card').forEach(card => {
+            // Only remove PC cards inside the grid, not other industrial-cards (modals, stats)
+            grid.querySelectorAll('.industrial-card').forEach(card => {
                 const h3 = card.querySelector('h3');
                 if (h3 && !ids.has(h3.textContent.trim())) { card.remove(); delete clients[h3.textContent.trim()]; }
             });
-            data.forEach(c => {
+            data.forEach((c, idx) => {
                 const existing = Array.from(grid.children).find(card => { const h = card.querySelector('h3'); return h && h.textContent.trim() === c.id; });
                 if (existing) grid.replaceChild(createPCCard(c), existing);
                 else grid.appendChild(createPCCard(c));
-                if (c.cpu_history && c.cpu_history.length > 1) setTimeout(() => createSparkline('sparkline-cpu-' + c.id, c.cpu_history, '#ffc107'), 100);
+                if (c.cpu_history && c.cpu_history.length > 1) setTimeout(() => createSparkline('sparkline-cpu-' + c.id, c.cpu_history, '#ffc107'), 100 + idx * 50);
             });
             if (data.length === 0) { emptyState.classList.remove('hidden'); emptyState.classList.add('flex'); }
             else { emptyState.classList.add('hidden'); emptyState.classList.remove('flex'); }
@@ -1036,13 +1037,14 @@
             document.getElementById('stat-ram').textContent = (total > 0 ? data.reduce((s, c) => s + c.ram_percent, 0) / total : 0).toFixed(1) + '%';
             document.getElementById('pc-count').textContent = total;
             document.getElementById('online-count').textContent = online;
-            refreshIcons();
+            setTimeout(refreshIcons, 50);
         }
         
         function openModal(clientId) {
             const client = clients[clientId];
             if (!client) return;
-            document.getElementById('modal-status-dot').className = 'w-3 h-3 rounded-full status-dot flex-shrink-0 ' + getStatusDotColor(client.status);
+            const statusDot = document.getElementById('modal-status-dot');
+            if (statusDot) statusDot.className = 'w-3 h-3 rounded-full status-dot flex-shrink-0 ' + getStatusDotColor(client.status);
             document.getElementById('modal-pc-name').textContent = client.id;
             document.getElementById('modal-pc-info').textContent = (client.ip || 'N/A') + ' | ' + (client.os || 'N/A');
             document.getElementById('modal-os').textContent = client.os || 'N/A';
