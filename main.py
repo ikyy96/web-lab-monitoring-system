@@ -406,9 +406,9 @@ async def security_middleware(request: Request, call_next):
     # Rate limiting per IP
     client_ip = request.client.host if request.client else "unknown"
     
-    # Skip rate limit untuk static files dan login
+    # Skip rate limit untuk static files, login, dan auth endpoints
     path = request.url.path
-    if not path.startswith("/static") and path != "/" and path != "/login" and path != "/api/login":
+    if not path.startswith("/static") and path != "/" and path != "/login" and path != "/api/login" and path != "/api/auth/google" and path != "/api/auth/check":
         if not api_rate_limiter.is_allowed(f"api:{client_ip}"):
             return JSONResponse(
                 status_code=429,
@@ -514,6 +514,13 @@ async def google_auth(request: Request):
     """Login dengan Google"""
     client_ip = request.client.host if request.client else "unknown"
     
+    # Cek apakah Google OAuth library tersedia
+    if not GOOGLE_AUTH_AVAILABLE:
+        logger.error("[GOOGLE AUTH] google-auth library tidak terinstall. Jalankan: pip install google-auth")
+        return JSONResponse(status_code=503, content={
+            "detail": "Google Login belum tersedia. Library google-auth belum terinstall."
+        })
+    
     # Cek apakah Google OAuth sudah dikonfigurasi
     if not GOOGLE_CLIENT_ID:
         return JSONResponse(status_code=400, content={
@@ -525,6 +532,7 @@ async def google_auth(request: Request):
         id_token_str = data.get("id_token", "")
         
         if not id_token_str:
+            logger.warning(f"[SECURITY] Google login tanpa token dari {client_ip}")
             return JSONResponse(status_code=400, content={"detail": "Token tidak ditemukan"})
         
         # Verifikasi token dengan Google
@@ -536,11 +544,16 @@ async def google_auth(request: Request):
             )
         except ValueError as e:
             logger.warning(f"[SECURITY] Token Google tidak valid dari {client_ip}: {e}")
-            return JSONResponse(status_code=401, content={"detail": "Token Google tidak valid"})
+            return JSONResponse(status_code=401, content={"detail": "Token Google tidak valid. Silakan coba lagi."})
+        except Exception as e:
+            logger.error(f"[GOOGLE AUTH] Error verifikasi token dari {client_ip}: {type(e).__name__}: {e}")
+            return JSONResponse(status_code=401, content={"detail": f"Gagal memverifikasi token Google: {type(e).__name__}"})
         
         # Ambil email dari token
         user_email = token_info.get("email", "").lower()
         user_name = token_info.get("name", user_email)
+        
+        logger.info(f"[GOOGLE AUTH] Token valid untuk: {user_email} dari {client_ip}")
         
         # Cek apakah email diizinkan
         if ALLOWED_EMAILS_LIST and user_email not in ALLOWED_EMAILS_LIST:
@@ -573,8 +586,10 @@ async def google_auth(request: Request):
         })
 
     except Exception as e:
-        logger.error(f"Google Auth error: {e}")
-        return JSONResponse(status_code=400, content={"detail": "Gagal autentikasi dengan Google"})
+        logger.error(f"Google Auth error: {type(e).__name__}: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        return JSONResponse(status_code=400, content={"detail": f"Gagal autentikasi dengan Google: {type(e).__name__}"})
 
 
 # ==================== EMAIL WHITELIST MANAGEMENT (ADMIN) ====================

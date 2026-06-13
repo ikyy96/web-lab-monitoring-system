@@ -803,14 +803,18 @@
                     showDashboard();
                     startSessionTimer();
                 } else {
-                    showNotification('error', '❌ ' + (data.detail || 'Gagal login dengan Google'));
+                    // Show specific error message from server
+                    const errorMsg = data.detail || data.message || `Login gagal (HTTP ${res.status})`;
+                    showNotification('error', '❌ ' + errorMsg);
+                    console.error('[Google Auth] Server returned', res.status, ':', data);
                     if (btn) {
                         btn.disabled = false;
                         btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
                     }
                 }
             } catch (e) {
-                showNotification('error', '❌ Gagal terhubung ke server');
+                console.error('[Google Auth] Network error:', e);
+                showNotification('error', '❌ Gagal terhubung ke server: ' + e.message);
                 if (btn) {
                     btn.disabled = false;
                     btn.innerHTML = '<i class="fab fa-google" style="font-size:18px; color:#4285F4;"></i><span>Login with Google</span>';
@@ -1211,9 +1215,9 @@
                 setTimeout(connectWebSocket, delay);
                 reconnectInterval = Math.min(reconnectInterval * 2, maxReconnectInterval);
             };
-            ws.onerror = function() {
-                console.error('WebSocket Error terpantau:', error);
-                ws.close(); // Memaksa close agar fungsi reconnect otomatis di atas langsung jalan
+            ws.onerror = function(err) {
+                console.error('WebSocket Error:', err);
+                ws.close(); // Force close to trigger reconnect logic in onclose
             };
         }
         
