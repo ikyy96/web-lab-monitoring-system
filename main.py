@@ -114,7 +114,7 @@ def save_allowed_emails(emails_list):
 
 
 # ==================== KONFIGURASI ====================
-MQTT_BROKER = "10.190.143.166"
+MQTT_BROKER = "10.190.143.25"
 MQTT_PORT = 1883
 MQTT_TOPIC = "lab/monitoring/+"
 MQTT_COMMAND_RESULT_TOPIC = "lab/command/result/+"
@@ -956,11 +956,19 @@ async def safe_broadcast_update():
 
 # ==================== MQTT SETUP ====================
 mqtt_message_queue = queue.Queue()
-mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_ID, protocol=mqtt.MQTTv311)
 mqtt_reconnect_delay = INITIAL_RECONNECT_DELAY
 
+# Support both paho-mqtt v1 and v2
+try:
+    from paho.mqtt.enums import CallbackAPIVersion
+    mqtt_client = mqtt.Client(callback_api_version=CallbackAPIVersion.VERSION2, client_id=MQTT_CLIENT_ID, protocol=mqtt.MQTTv311)
+    MQTT_V2 = True
+except (ImportError, AttributeError):
+    mqtt_client = mqtt.Client(client_id=MQTT_CLIENT_ID, protocol=mqtt.MQTTv311)
+    MQTT_V2 = False
 
-def on_mqtt_connect(client, userdata, flags, rc):
+
+def on_mqtt_connect(client, userdata, flags, rc, properties=None):
     if rc == 0:
         logger.info(f"✅ Connected to MQTT Broker at {MQTT_BROKER}:{MQTT_PORT}")
         client.subscribe(MQTT_TOPIC)
@@ -1022,11 +1030,11 @@ def on_mqtt_message(client, userdata, msg):
         logger.error(f"Error processing MQTT message: {e}")
 
 
-def on_mqtt_disconnect(client, userdata, rc):
+def on_mqtt_disconnect(client, userdata, disconnect_flags=None, rc=None, properties=None):
     logger.warning(f"⚠️ Disconnected from MQTT Broker (rc={rc})")
 
 
-def on_mqtt_connect_failure(client, userdata, rc):
+def on_mqtt_connect_failure(client, userdata, connect_flags=None, rc=None, properties=None):
     global mqtt_reconnect_delay
     mqtt_reconnect_delay = min(mqtt_reconnect_delay * 2, MAX_RECONNECT_DELAY)
 
