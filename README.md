@@ -1,8 +1,8 @@
-# 🔒 Lab Monitoring System - Secure Edition v2.1
+# 🔒 Lab Monitoring System - Secure Edition v2.2.0
 
-Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk theme**, fitur keamanan multi-layer, remote command execution, efek hacker, dan dukungan **Google Login** (OAuth 2.0). Bisa diakses dari **HP via ZeroTier**.
+Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk theme**, fitur keamanan multi-layer, remote command execution, efek hacker, dukungan **Google Login** (OAuth 2.0), dan **manajemen whitelist email via API**. Bisa diakses dari **HP via ZeroTier**.
 
-![Version](https://img.shields.io/badge/version-2.1.0-blue)
+![Version](https://img.shields.io/badge/version-2.2.0-blue)
 ![Python](https://img.shields.io/badge/python-3.8%2B-green)
 ![License](https://img.shields.io/badge/license-MIT-yellow)
 
@@ -13,6 +13,7 @@ Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk them
 - [✨ Fitur Utama](#-fitur-utama)
 - [🖥️ Monitoring](#️-monitoring)
 - [🔐 Autentikasi & Keamanan](#-autentikasi--keamanan)
+- [📧 Email Whitelist Management](#-email-whitelist-management)
 - [📱 Akses Mobile & ZeroTier](#-akses-mobile--zerotier)
 - [💀 Hacker Effects](#-hacker-effects-pc-target)
 - [🎯 Remote Command](#-remote-command-execution)
@@ -32,12 +33,12 @@ Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk them
 | Fitur | Deskripsi |
 |---|---|
 | **Real-time** | Update data via WebSocket setiap 1 detik |
-| **MQTT Integration** | Data dari agent PC via broker MQTT |
+| **MQTT Integration** | Data dari agent PC via broker MQTT (support paho-mqtt v1 & v2) |
 | **Grid View** | Semua PC dalam card informatif (1/2/3/4 kolom responsive) |
 | **Detail Modal** | Info lengkap: OS, CPU, RAM, Storage, GPU, Network, Processes, Files |
 | **GPU Monitoring** | NVIDIA (pynvml), AMD/Intel (WMI) dengan temperature & VRAM |
 | **Storage Full Scan** | Akumulasi semua partisi/mount di PC |
-| **Sparkline Charts** | History CPU real-time per PC |
+| **Sparkline Charts** | History CPU & RAM real-time per PC |
 | **Live Stats** | Total systems, online, avg CPU, avg RAM |
 
 ### 🔐 Autentikasi & Keamanan
@@ -52,6 +53,21 @@ Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk them
 | **📝 Audit Log** | Semua login (password & Google) tercatat di `audit.log` |
 | **🔒 Security Headers** | XSS, Clickjacking, nosniff protection |
 | **📧 Whitelist Email** | Hanya email yang didaftarkan yang bisa Google-login |
+| **🔧 Email Management API** | Kelola whitelist email via REST API (CRUD + reload) |
+| **⚡ Circuit Breaker** | Pencegah cascade failure pada broadcast WebSocket |
+
+### 📧 Email Whitelist Management (NEW in v2.2.0)
+| Endpoint | Method | Deskripsi |
+|---|---|---|
+| `/api/admin/emails` | GET | Lihat semua email terdaftar |
+| `/api/admin/emails` | POST | Tambah email baru (single/batch) |
+| `/api/admin/emails/{email}` | DELETE | Hapus email dari whitelist |
+| `/api/admin/emails/reload` | POST | Reload email dari file |
+
+- Daftar email disimpan di `allowed_emails.json` (persistensi)
+- Support fallback: file JSON → environment variable → default
+- Validasi format email otomatis
+- Minimal 1 email harus tetap terdaftar
 
 ### 💀 Hacker Effects (PC Target!)
 Saat **Shutdown** atau **Restart** dijalankan, terminal **PC target** menampilkan:
@@ -137,6 +153,19 @@ pip install -r requirements.txt
 - Modern browser (Chrome/Edge/Firefox/Safari)
 - (Opsional) ZeroTier untuk akses HP
 
+### Dependencies
+| Package | Versi | Fungsi |
+|---|---|---|
+| `fastapi` | 0.109.0 | Backend web framework |
+| `uvicorn` | 0.27.0 | ASGI server |
+| `paho-mqtt` | 1.6.1 | MQTT client (v1 & v2 compatible) |
+| `psutil` | 5.9.8 | System monitoring |
+| `pynvml` | 13.0.1 | NVIDIA GPU monitoring |
+| `pywin32` | 311 | Windows WMI (AMD/Intel GPU) |
+| `google-auth` | 2.28.1 | Google OAuth verification |
+| `requests` | 2.31.0 | HTTP requests |
+| `itsdangerous` | 2.1.2 | Session signing |
+
 ---
 
 ## ⚙️ Konfigurasi
@@ -166,12 +195,63 @@ Ringkasan:
 4. Set di `main.py`:
 ```python
 GOOGLE_CLIENT_ID = "123456789-xxxxx.apps.googleusercontent.com"
-ALLOWED_EMAILS = "email.anda@gmail.com,email.teman@gmail.com"
 ```
 
-### 🌐 3. Konfigurasi IP
+### 📧 3. Kelola Whitelist Email (NEW in v2.2.0)
+Daftar email yang diizinkan login via Google bisa dikelola dengan 3 cara:
+
+**Cara 1: Via REST API (Recommended)**
+```bash
+# Lihat semua email
+curl -H "Authorization: Bearer <session_token>" http://localhost:8800/api/admin/emails
+
+# Tambah email
+curl -X POST -H "Authorization: Bearer <session_token>" \
+  -H "Content-Type: application/json" \
+  -d '{"email": "user@gmail.com"}' \
+  http://localhost:8800/api/admin/emails
+
+# Tambah multiple email
+curl -X POST -H "Authorization: Bearer <session_token>" \
+  -H "Content-Type: application/json" \
+  -d '{"emails": ["a@gmail.com", "b@gmail.com"]}' \
+  http://localhost:8800/api/admin/emails
+
+# Hapus email
+curl -X DELETE -H "Authorization: Bearer <session_token>" \
+  http://localhost:8800/api/admin/emails/user@gmail.com
+```
+
+**Cara 2: Edit File `allowed_emails.json`**
+```json
+{
+  "emails": [
+    "email1@gmail.com",
+    "email2@gmail.com"
+  ],
+  "last_updated": "2024-01-15T10:30:00",
+  "total": 2
+}
+```
+Setelah edit, reload via API: `POST /api/admin/emails/reload`
+
+**Cara 3: Environment Variable**
+```bash
+set ALLOWED_EMAILS=email1@gmail.com,email2@gmail.com
+```
+
+### 🌐 4. Konfigurasi IP
 **Device A (Server):** `MQTT_BROKER = "localhost"` di `main.py`  
 **Device B (Client):** `BROKER_URL = "192.168.2.2"` di `agent.py`
+
+### 🔑 5. Environment Variables
+| Variable | Default | Deskripsi |
+|---|---|---|
+| `LAB_PASSWORD` | `admin123` | Password admin login |
+| `LAB_SECRET_KEY` | (random) | Secret key untuk session cookie |
+| `LAB_AGENT_TOKEN` | `lab-token-2024` | Token autentikasi agent |
+| `GOOGLE_CLIENT_ID` | - | Google OAuth Client ID |
+| `ALLOWED_EMAILS` | - | Daftar email (comma-separated) |
 
 ---
 
@@ -196,6 +276,23 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 # 4. Buka browser HP: http://[ZEROTIER_IP_SERVER]:8800
 ```
 
+### 🔍 Health Check
+```bash
+curl http://localhost:8800/health
+```
+Response:
+```json
+{
+  "status": "healthy",
+  "mode": "mqtt",
+  "mqtt_connected": true,
+  "active_clients": 8,
+  "websocket_connections": 2,
+  "active_sessions": 1,
+  "uptime": "2:30:00"
+}
+```
+
 ---
 
 ## 🌐 API Endpoints
@@ -214,6 +311,10 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 | `/api/command` | POST | ✅ | Execute remote command |
 | `/api/command/result/{id}` | GET | ✅ | Hasil command |
 | `/api/commands/whitelist` | GET | ✅ | Available commands |
+| `/api/admin/emails` | GET | ✅ | List email whitelist |
+| `/api/admin/emails` | POST | ✅ | Tambah email ke whitelist |
+| `/api/admin/emails/{email}` | DELETE | ✅ | Hapus email dari whitelist |
+| `/api/admin/emails/reload` | POST | ✅ | Reload email dari file |
 | `/health` | GET | ❌ | Health check (MQTT status) |
 
 ---
@@ -226,7 +327,7 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 | IP diblokir 5 menit | Tunggu atau restart server |
 | Session expired | Login ulang (session 1 jam) |
 | Google Sign-In button tidak muncul | Cek koneksi internet, atau `GOOGLE_CLIENT_ID` di main.py |
-| "Email tidak terdaftar" | Tambahkan email ke `ALLOWED_EMAILS_LIST` di main.py |
+| "Email tidak terdaftar" | Tambahkan email ke `allowed_emails.json` atau via API `/api/admin/emails` |
 | Google login popup error 400 | Cek **Authorized JavaScript origins** di Google Console |
 | Login gagal di HP | Pastikan URL di HP sama dengan yang didaftarkan di Google Console |
 | Dashboard tidak responsive di HP | Refresh browser, clear cache |
@@ -234,6 +335,8 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 | MQTT connection failed | Pastikan Mosquitto running, cek firewall port 1883 |
 | Tidak ada data di dashboard | Pastikan agent.py berjalan di PC client |
 | Agent "Connection Refused" | Verifikasi IP broker di agent.py |
+| Email whitelist tidak update | Gunakan `POST /api/admin/emails/reload` atau restart server |
+| Circuit breaker OPEN | Tunggu 60 detik untuk recovery atau restart server |
 
 ---
 
@@ -245,19 +348,22 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 ├── requirements.txt     # Python dependencies
 ├── static/
 │   └── index.html       # Frontend dashboard (responsive + Google Login + Hamburger Menu)
+│   └── favicon.png      # Icon dashboard
+├── allowed_emails.json  # Whitelist email untuk Google OAuth (auto-generated)
 ├── commands.log         # Log remote commands
 ├── audit.log            # Log keamanan (login, Google auth, dll)
 ├── lab_monitoring.log   # Log backend
 ├── README.md            # Dokumentasi ini
+├── design.md            # Design system reference
 ├── SETUP_HP_ACCESS.md   # Panduan setup HP
 ├── SETUP_ZEROTIER.md    # Panduan ZeroTier
 ├── SETUP_GOOGLE_AUTH.md # Panduan Google OAuth
 ├── SETUP_SERVER_NOW.md  # Quick start server
 ├── SETUP_ZEROTIER_DNS_GUIDE.md  # Setup DNS custom
 ├── SETUP_HOSTS_FILE.md  # Setup hosts file
+├── SETUP_MULTI_DEVICE.md # Setup multi-device
 ├── IMPLEMENTATION_SUMMARY.txt   # Catatan implementasi
-├── run_diagnostic.bat   # Diagnostic script
-└── lab_monitoring.log   # Log file utama
+└── run_diagnostic.bat   # Diagnostic script
 ```
 
 ---
@@ -291,6 +397,7 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 - **Command Limiter**: 5 command/menit per IP
 - **Login Blocker**: 5x gagal → IP diblokir 5 menit
 - **Session Timeout**: Auto logout setelah 1 jam
+- **Circuit Breaker**: Threshold 10 kegagalan broadcast → OPEN selama 60 detik
 
 ### 📝 Audit Trail
 File `audit.log` mencatat:
@@ -302,13 +409,26 @@ COMMAND | IP: ... | Target: PC-LAB-01 | Command: shutdown
 DANGEROUS_CMD_NO_PASS | IP: ... | Command: restart
 LOGOUT | IP: ...
 UNAUTHORIZED_CMD | IP: ... | Command: format
+EMAILS_ADDED | IP: ... | Emails: newuser@gmail.com
+EMAIL_REMOVED | IP: ... | Email: olduser@gmail.com
 ```
 
 ---
 
 ## 📝 Changelog
 
-### v2.1.0 (Current) - 2024
+### v2.2.0 (Current) - 2025
+- 📧 **Email Whitelist Management API** - CRUD whitelist email via REST API
+- 💾 **Persistent Email Storage** - `allowed_emails.json` untuk persistensi
+- 🔄 **Email Reload** - Reload email whitelist tanpa restart server
+- ⚡ **Circuit Breaker Pattern** - Pencegah cascade failure pada broadcast WebSocket
+- 🔌 **paho-mqtt v1 & v2 Compatibility** - Auto-detect versi paho-mqtt
+- 📊 **Enhanced Health Check** - Detail info: mode, MQTT status, sessions, circuit breaker
+- 🛡️ **Improved Error Handling** - Global exception handler + structured error responses
+- 📝 **Enhanced Audit Trail** - Email management actions tercatat di audit.log
+- 📖 **Updated Documentation** - API endpoint lengkap + environment variables reference
+
+### v2.1.0 - 2024
 - 🔑 **Login dengan Google OAuth** (whitelist email)
 - 🔔 **Notification system** (toast animasi success/error)
 - 📱 **Hamburger Menu** untuk HP (drawer slide-in)
