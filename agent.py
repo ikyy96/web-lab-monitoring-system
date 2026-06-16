@@ -23,11 +23,16 @@ except:
     WIN32_AVAILABLE = False
 
 # --- KONFIGURASI ---
+# --- KONFIGURASI BARU (MENGGUNAKAN CLOUDFLARE WEBSOCKET) ---
 HOSTNAME = socket.gethostname()
 TOPIC = f"lab/monitoring/{HOSTNAME}"
-BROKER_URL = "10.190.143.25"
-PORT = 1883
+# Menggunakan subdomain khusus WebSocket yang diarahkan oleh Cloudflare
+BROKER_URL = "ws-mqtt.ikyypantau.my.id" 
+PORT = 443                            # Wajib port 443 untuk traffic HTTPS/WSS Cloudflare
 PING_TARGET = "8.8.8.8"
+
+# Tambahkan Token Keamanan (Harus SAMA dengan AGENT_TOKEN di main.py)
+AGENT_TOKEN = "lab-token-2024"
 
 CPU_THREADS = psutil.cpu_count(logical=True)
 CPU_CORES = psutil.cpu_count(logical=False)
@@ -609,11 +614,20 @@ def execute_command(command_name, params=None):
                 "execution_time": round(time.time() - start_time, 2)}
 
 
+import threading  # Pastikan library ini di-import di bagian paling atas agent.py
+
 def on_message(client, userdata, msg):
     """Handle incoming MQTT messages (for remote commands)"""
     try:
         payload_str = msg.payload.decode('utf-8')
         payload = json.loads(payload_str)
+
+        # 1. VALIDASI KEAMANAN TOKEN
+        # Memastikan perintah datang dari server resmi kita
+        received_token = payload.get('agent_token', '')
+        if received_token != AGENT_TOKEN:
+            print(f"[⚠️] PERINGATAN: Mencoba eksekusi command dengan Token Tidak Valid! Topik: {msg.topic}")
+            return  # Langsung blokir eksekusi jika token tidak cocok
 
         command = payload.get('command', '')
         request_id = payload.get('request_id', '')
@@ -624,55 +638,129 @@ def on_message(client, userdata, msg):
         if params:
             print(f"     Params: {params}")
 
-        result = execute_command(command, params)
+        # 2. PENANGANAN ASINKRONUS UNTUK SHUTDOWN / RESTART
+        # Jika perintah mematikan sistem, kirim status sukses DULU ke server baru matikan PC
+        if command in ["shutdown", "restart"]:
+            result_topic = f"lab/command/result/{HOSTNAME}"
+            result_payload = {
+                "request_id": request_id,
+                "hostname": HOSTNAME,
+                "command": command,
+                "result": {
+                    "status": "success",
+                    "output": f"Perintah {command} berhasil diterima, sistem akan segera mengeksekusi.",
+                    "error": None,
+                    "execution_time": 0.1
+                }
+            }
+            # Kirim laporan ke server dulu agar di dashboard statusnya berubah jadi 'Success'
+            client.publish(result_topic, json.dumps(result_payload))
+            print(f"[✓] Status sukses awal '{command}' dikirim ke server. Memulai proses pembersihan...")
 
-        result_topic = f"lab/command/result/{HOSTNAME}"
-        result_payload = {
-            "request_id": request_id,
-            "hostname": HOSTNAME,
-            "command": command,
-            "result": result
-        }
+            # Jalankan efek hacker dan shutdown di background thread agar tidak membekukan MQTT
+            def run_delayed_command():
+                execute_command(command, params)
 
-        client.publish(result_topic, json.dumps(result_payload))
-        status_icon = "✓" if result["status"] == "success" else "✗"
-        print(f"[{status_icon}] Hasil command '{command}' dikirim ke {result_topic}")
-        if result.get("execution_time"):
-            print(f"     Waktu eksekusi: {result['execution_time']}s")
+            threading.Thread(target=run_delayed_command, daemon=True).start()
+
+        else:
+            # Perintah biasa (bukan shutdown/restart) bisa langsung dieksekusi secara sinkronus
+            result = execute_command(command, params)
+
+            result_topic = f"lab/command/result/{HOSTNAME}"
+            result_payload = {
+                "request_id": request_id,
+                "hostname": HOSTNAME,
+                "command": command,
+                "result": result
+            }
+
+            client.publish(result_topic, json.dumps(result_payload))
+            status_icon = "✓" if result["status"] == "success" else "✗"
+            print(f"[{status_icon}] Hasil command '{command}' dikirim ke {result_topic}")
+            if result.get("execution_time"):
+                print(f"     Waktu eksekusi: {result['execution_time']}s")
 
     except json.JSONDecodeError as e:
         print(f"[✗] Gagal parse JSON: {e}")
     except Exception as e:
-        print(f"[✗] Error processing command: {e}")
+        print(f"[✗] Error processing remote command: {e}")
 
 
-def on_connect(client, userdata, connect_flags, rc, properties=None):
-    if rc == 0:
-        print(f"[✓] MQTT Terhubung ke {BROKER_URL}:{PORT}")
-        command_topic = f"lab/command/{HOSTNAME}"
-        client.subscribe(command_topic)
-        print(f"[📡] Subscribed ke: {command_topic}")
+def on_connect(*args, **kwargs):
+    """Callback saat berhasil/gagal terhubung ke MQTT Broker"""
+    global mqtt_connected
+    
+    # Ambil nilai 'rc' (Return Code) secara dinamis berdasarkan jumlah argumen
+    # v1.x menggunakan args[3], v2.x menggunakan args[3] sebagai flags dan args[4] sebagai reason code/rc
+    if len(args) >= 4:
+        rc = args[3] if isinstance(args[3], int) else getattr(args[3], 'value', args[3])
+        if len(args) >= 5 and isinstance(args[4], int):
+            rc = args[4]
     else:
-        print(f"[✗] MQTT Gagal dengan kode {rc}")
+        rc = args[2] if len(args) > 2 else 99
+
+    if rc == 0:
+        print("[✓] Terhubung dengan sukses ke Cloudflare MQTT Broker")
+        mqtt_connected = True
+        # Subscribe ke command topic untuk remote control
+        # args[0] adalah objek 'client'
+        args[0].subscribe(f"lab/command/{HOSTNAME}")
+        print(f"[*] Subscribed ke topik remote: lab/command/{HOSTNAME}")
+    else:
+        print(f"[✗] Gagal terhubung ke MQTT Broker, Kode Hasil (rc): {rc}")
+        mqtt_connected = False
+
+def on_disconnect(*args, **kwargs):
+    """Callback saat koneksi MQTT terputus"""
+    global mqtt_connected
+    mqtt_connected = False
+    
+    # Ambil nilai rc secara aman dari argumen terakhir atau keyword arguments
+    rc = kwargs.get('rc', None)
+    if rc is None and len(args) > 0:
+        # Biasanya rc ada di indeks ke-2 (v1) atau indeks ke-3/4 (v2)
+        for arg in reversed(args):
+            if isinstance(arg, int):
+                rc = arg
+                break
+            elif hasattr(arg, 'value') and isinstance(arg.value, int):
+                rc = arg.value
+                break
+                
+    print(f"[⚠️] Koneksi MQTT Terputus! Kode Status (rc): {rc}. Mencoba menghubungkan kembali...")
 
 
-def on_disconnect(client, userdata, disconnect_flags, rc, properties=None):
-    if rc != 0:
-        print(f"[!] Putus koneksi tidak terduga. Kode: {rc}")
+# ==================== INITIALIZATION MQTT CLIENT (UNIVERSAL v1 & v2) ====================
+import random
 
+# 1. Buat Client ID unik berdasarkan nama laptop + angka acak agar tidak saling tendang
+CLIENT_ID = f"agent_{HOSTNAME}_{random.randint(1000, 9999)}"
 
 try:
     from paho.mqtt.enums import CallbackAPIVersion
-    client = mqtt.Client(callback_api_version=CallbackAPIVersion.VERSION2)
+    # Konfigurasi untuk paho-mqtt v2.x (Menggunakan WebSockets)
+    client = mqtt.Client(callback_api_version=CallbackAPIVersion.VERSION2, client_id=CLIENT_ID, transport="websockets")
 except (ImportError, AttributeError):
-    client = mqtt.Client()
+    # Fallback untuk paho-mqtt v1.x (Menggunakan WebSockets)
+    client = mqtt.Client(client_id=CLIENT_ID, transport="websockets")
 
+# 2. Hubungkan fungsi callback universal yang sudah diperbaiki sebelumnya
 client.on_connect = on_connect
 client.on_disconnect = on_disconnect
 client.on_message = on_message
+
+# 3. Set Last Will and Testament (Status Offline jika agen mati tiba-tiba)
 client.will_set(TOPIC, json.dumps({"id": HOSTNAME, "status": "offline"}), retain=True)
 
+# 4. WAJIB: Aktifkan SSL/TLS agar bisa melewati enkripsi HTTPS port 443 Cloudflare
+client.tls_set()
+
+# 5. WAJIB: Atur jalur sub-folder WebSocket ke '/mqtt' agar dikenali oleh Mosquitto Server
+client.ws_set_options(path="/mqtt")
+
 mqtt_connected = False
+# =========================================================================================
 try:
     print(f"[*] Menghubungkan ke broker MQTT {BROKER_URL}:{PORT}...")
     client.connect(BROKER_URL, PORT, 60)

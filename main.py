@@ -114,7 +114,16 @@ def save_allowed_emails(emails_list):
 
 
 # ==================== KONFIGURASI ====================
-MQTT_BROKER = "10.190.143.25"
+# ==================== KEAMANAN ====================
+ADMIN_PASSWORD = os.environ.get("LAB_PASSWORD", "admin123")
+SECRET_KEY = os.environ.get("LAB_SECRET_KEY", secrets.token_hex(32))
+
+# Pastikan token ini SAMA dengan yang ditulis di agent.py
+AGENT_TOKEN = os.environ.get("LAB_AGENT_TOKEN", "lab-token-2024") 
+
+# ==================== KONFIGURASI MQTT LOCAL ====================
+# Di server backend, biarkan dia menembak ke broker lokalnya sendiri (Mosquitto lokal)
+MQTT_BROKER = "10.190.143.25" 
 MQTT_PORT = 1883
 MQTT_TOPIC = "lab/monitoring/+"
 MQTT_COMMAND_RESULT_TOPIC = "lab/command/result/+"
@@ -1279,7 +1288,7 @@ async def execute_remote_command(request: Request, session=Depends(check_auth)):
                 if param == 'process_name':
                     params['process_name'] = process_name
 
-        payload = {"command": command, "request_id": request_id, "timestamp": datetime.now().isoformat(), "params": params}
+        payload = {"command": command, "request_id": request_id, "timestamp": datetime.now().isoformat(), "params": params, "agent_token": AGENT_TOKEN}
         topic = f"lab/command/{hostname}"
         mqtt_client.publish(topic, json.dumps(payload))
         

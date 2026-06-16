@@ -11,15 +11,11 @@ Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk them
 ## 📑 Daftar Isi
 
 - [✨ Fitur Utama](#-fitur-utama)
-- [🖥️ Monitoring](#️-monitoring)
-- [🔐 Autentikasi & Keamanan](#-autentikasi--keamanan)
-- [📧 Email Whitelist Management](#-email-whitelist-management)
-- [📱 Akses Mobile & ZeroTier](#-akses-mobile--zerotier)
-- [💀 Hacker Effects](#-hacker-effects-pc-target)
-- [🎯 Remote Command](#-remote-command-execution)
-- [🚀 Instalasi](#-instalasi)
+- [🚀 Instalasi & Setup](#-instalasi--setup)
 - [⚙️ Konfigurasi](#️-konfigurasi)
 - [📖 Cara Menjalankan](#-cara-menjalankan)
+- [📱 Setup ZeroTier (Akses dari HP & Remote)](#-setup-zerotier-akses-dari-hp--remote)
+- [🔐 Setup Google OAuth Login](#-setup-google-oauth-login)
 - [🌐 API Endpoints](#-api-endpoints)
 - [🐛 Troubleshooting](#-troubleshooting)
 - [📁 Struktur File](#-struktur-file)
@@ -56,19 +52,6 @@ Sistem monitoring real-time untuk lab komputer dengan dashboard **Cyberpunk them
 | **🔧 Email Management API** | Kelola whitelist email via REST API (CRUD + reload) |
 | **⚡ Circuit Breaker** | Pencegah cascade failure pada broadcast WebSocket |
 
-### 📧 Email Whitelist Management (NEW in v2.2.0)
-| Endpoint | Method | Deskripsi |
-|---|---|---|
-| `/api/admin/emails` | GET | Lihat semua email terdaftar |
-| `/api/admin/emails` | POST | Tambah email baru (single/batch) |
-| `/api/admin/emails/{email}` | DELETE | Hapus email dari whitelist |
-| `/api/admin/emails/reload` | POST | Reload email dari file |
-
-- Daftar email disimpan di `allowed_emails.json` (persistensi)
-- Support fallback: file JSON → environment variable → default
-- Validasi format email otomatis
-- Minimal 1 email harus tetap terdaftar
-
 ### 💀 Hacker Effects (PC Target!)
 Saat **Shutdown** atau **Restart** dijalankan, terminal **PC target** menampilkan:
 1. **ASCII Skull** 💀 - Tengkorak merah besar
@@ -92,68 +75,26 @@ Saat **Shutdown** atau **Restart** dijalankan, terminal **PC target** menampilka
 
 ---
 
-## 📱 Akses Mobile & ZeroTier
+## 🚀 Instalasi & Setup
 
-Dashboard **fully responsive** untuk HP. Ada 2 mode tampilan:
-
-### 🖥️ Desktop (≥ 768px)
-- Header menampilkan: MQTT status, WebSocket status, Time, PC count, Session timer, Theme toggle, Logout button
-- Stats: 4 kolom
-- PC grid: 2/3/4 kolom (md/lg/xl)
-- Modal: max-width 5xl (terbatas di tengah)
-
-### 📱 Mobile (< 768px) - Hamburger Menu
-- **Header kiri atas tetap**: 🟢 status dot + "LAB MONITORING"
-- **Header kanan atas**: Tombol **Hamburger (☰)** yang jadi **X** saat aktif
-- **Tap hamburger** → slide-in drawer dari kanan berisi:
-  - 📊 Connection Status (MQTT, WebSocket)
-  - ⏰ System Info (Time, PCs Online, Session)
-  - 🌙 Theme Toggle
-  - ⏻ Logout
-- Stats: 2 kolom
-- PC grid: 1 kolom
-- Modal: full-screen
-- Tap target: minimum 44x44px
-- Font size: 16px (mencegah iOS zoom)
-
-### 🌐 Setup Akses HP via ZeroTier
-
-**1. Install ZeroTier di HP** (Play Store / App Store)
-- Join Network ID: `08752e18b163012d`
-- Authorize HP di `https://my.zerotier.com`
-
-**2. Akses Dashboard**
-- IP server ZeroTier (misal): `http://10.190.143.33:8800`
-- Atau via DNS: `http://ikyypantau.my.id:8800` (kalau sudah setup DNS)
-
-**3. Login**
-- Pilih **Sign in with Google** (recommended) atau login password
-
-Detail lengkap di: [`SETUP_HP_ACCESS.md`](SETUP_HP_ACCESS.md), [`SETUP_ZEROTIER.md`](SETUP_ZEROTIER.md)
-
----
-
-## 🚀 Instalasi
+### 1. Clone & Install
 
 ```bash
-# 1. Clone repository
+# Clone repository
 git clone https://github.com/ikyy96/web-lab-monitoring-system.git
 cd web-lab-monitoring-system
 
-# 2. Install dependencies
+# Install dependencies
 pip install -r requirements.txt
-
-# 3. (Opsional) Setup Google Login
-# Lihat: SETUP_GOOGLE_AUTH.md
 ```
 
-### Requirements
+### 2. Requirements
 - Python 3.8+
 - Mosquitto MQTT Broker
 - Modern browser (Chrome/Edge/Firefox/Safari)
-- (Opsional) ZeroTier untuk akses HP
+- (Opsional) ZeroTier untuk akses HP/remote
 
-### Dependencies
+### 3. Dependencies
 | Package | Versi | Fungsi |
 |---|---|---|
 | `fastapi` | 0.109.0 | Backend web framework |
@@ -185,19 +126,20 @@ set LAB_PASSWORD=passwordkuatbanget123
 export LAB_PASSWORD=passwordkuatbanget123
 ```
 
-### 📧 2. Setup Google OAuth Login
-Lihat panduan lengkap di [`SETUP_GOOGLE_AUTH.md`](SETUP_GOOGLE_AUTH.md)
+### 🌐 2. Konfigurasi IP Broker MQTT
+**Server (main.py):** `MQTT_BROKER = "localhost"` atau IP ZeroTier  
+**Agent (agent.py):** `BROKER_URL = "<IP_SERVER>"` (IP yang bisa diakses agent)
 
-Ringkasan:
-1. Buat OAuth Client ID di [Google Cloud Console](https://console.cloud.google.com)
-2. Aktifkan Google Identity Services API
-3. Tambahkan Authorized JavaScript origins (URL dashboard)
-4. Set di `main.py`:
-```python
-GOOGLE_CLIENT_ID = "123456789-xxxxx.apps.googleusercontent.com"
-```
+### 🔑 3. Environment Variables
+| Variable | Default | Deskripsi |
+|---|---|---|
+| `LAB_PASSWORD` | `admin123` | Password admin login |
+| `LAB_SECRET_KEY` | (random) | Secret key untuk session cookie |
+| `LAB_AGENT_TOKEN` | `lab-token-2024` | Token autentikasi agent |
+| `GOOGLE_CLIENT_ID` | - | Google OAuth Client ID |
+| `ALLOWED_EMAILS` | - | Daftar email (comma-separated) |
 
-### 📧 3. Kelola Whitelist Email (NEW in v2.2.0)
+### 📧 4. Kelola Whitelist Email
 Daftar email yang diizinkan login via Google bisa dikelola dengan 3 cara:
 
 **Cara 1: Via REST API (Recommended)**
@@ -228,9 +170,7 @@ curl -X DELETE -H "Authorization: Bearer <session_token>" \
   "emails": [
     "email1@gmail.com",
     "email2@gmail.com"
-  ],
-  "last_updated": "2024-01-15T10:30:00",
-  "total": 2
+  ]
 }
 ```
 Setelah edit, reload via API: `POST /api/admin/emails/reload`
@@ -239,19 +179,6 @@ Setelah edit, reload via API: `POST /api/admin/emails/reload`
 ```bash
 set ALLOWED_EMAILS=email1@gmail.com,email2@gmail.com
 ```
-
-### 🌐 4. Konfigurasi IP
-**Device A (Server):** `MQTT_BROKER = "localhost"` di `main.py`  
-**Device B (Client):** `BROKER_URL = "192.168.2.2"` di `agent.py`
-
-### 🔑 5. Environment Variables
-| Variable | Default | Deskripsi |
-|---|---|---|
-| `LAB_PASSWORD` | `admin123` | Password admin login |
-| `LAB_SECRET_KEY` | (random) | Secret key untuk session cookie |
-| `LAB_AGENT_TOKEN` | `lab-token-2024` | Token autentikasi agent |
-| `GOOGLE_CLIENT_ID` | - | Google OAuth Client ID |
-| `ALLOWED_EMAILS` | - | Daftar email (comma-separated) |
 
 ---
 
@@ -268,12 +195,14 @@ uvicorn main:app --host 0.0.0.0 --port 8800 --workers 4
 # Set USE_MQTT = False di main.py
 ```
 
-### 📱 Akses dari HP
+### Menjalankan Agent di Client PC
 ```bash
-# 1. Pastikan server sudah running
-# 2. Install ZeroTier di HP, join network
-# 3. Authorize HP di my.zerotier.com
-# 4. Buka browser HP: http://[ZEROTIER_IP_SERVER]:8800
+# Install dependencies di client
+pip install psutil paho-mqtt pynvml
+
+# Edit BROKER_URL di agent.py sesuai IP server
+# Jalankan
+python agent.py
 ```
 
 ### 🔍 Health Check
@@ -292,6 +221,157 @@ Response:
   "uptime": "2:30:00"
 }
 ```
+
+---
+
+## 📱 Setup ZeroTier (Akses dari HP & Remote)
+
+ZeroTier memungkinkan semua device (HP, laptop lain) terhubung ke dashboard meskipun berada di jaringan berbeda (WiFi rumah, kantor, cellular).
+
+### Arsitektur
+```
+INTERNET 🌐
+     │
+     └── ZeroTier Virtual Network 🔷  (contoh: 10.147.x.x)
+          │
+          ├── [🖥️ SERVER]  main.py + Mosquitto
+          │    ├── ZeroTier IP: 10.147.1.1 (static)
+          │    ├── Dashboard → port 8800
+          │    └── MQTT Broker → port 1883
+          │
+          ├── [💻 CLIENT A - Windows]  agent.py
+          │    └── ZeroTier IP: 10.147.1.2
+          │
+          ├── [💻 CLIENT B - Ubuntu]  agent.py
+          │    └── ZeroTier IP: 10.147.1.3
+          │
+          └── [📱 HANDPHONE]  (cukup join ZeroTier)
+               └── Buka: http://10.147.1.1:8800
+```
+
+### Langkah 1: Buat Akun & Jaringan ZeroTier
+
+1. Buka **https://my.zerotier.com** → Register/Login
+2. Klik **"Create A Network"** → Catat **Network ID** (16 karakter)
+3. Beri nama: `Lab Monitoring`
+4. Biarkan **IPv4 Auto-Assign** default (`10.147.0.0/16`)
+5. **Enable Broadcast**: ✅ Centang
+
+### Langkah 2: Install ZeroTier di Server (Ubuntu)
+
+```bash
+curl -s https://install.zerotier.com | sudo bash
+sudo zerotier-cli join [NETWORK_ID_ANDA]
+sudo systemctl enable zerotier-one
+sudo systemctl start zerotier-one
+```
+
+### Langkah 3: Install ZeroTier di Client (Windows)
+
+1. Download: https://www.zerotier.com/download/
+2. Install sebagai **Administrator**
+3. Buka ZeroTier di system tray → **Join New Network** → Masukkan Network ID
+
+Atau via CMD (Admin):
+```cmd
+"C:\Program Files\ZeroTier\One\zerotier-cli.bat" join [NETWORK_ID_ANDA]
+```
+
+### Langkah 4: Install ZeroTier di HP Android
+
+1. Download **ZeroTier** dari Play Store
+2. Masukkan **Network ID**
+3. Di ZeroTier Console → authorize device (centang Auth?)
+
+### Langkah 5: Set IP Static Server
+
+1. Di ZeroTier Console → tab **Members**
+2. Cari server Anda → **Centang "Auth?"**
+3. Klik IP address → Ganti ke `10.147.1.1` → Save
+4. Beri Name: `Server`
+
+### Langkah 6: Konfigurasi DNS (Opsional - Akses via Domain)
+
+Di ZeroTier Console → tab **Advanced** → **DNS Configuration**:
+```
+Domain:  ikyypantau.my.id
+Server:  10.147.1.1
+```
+Klik **Save**, lalu restart ZeroTier di semua device.
+
+### Langkah 7: Firewall
+
+**Ubuntu:**
+```bash
+sudo ufw allow from 10.147.0.0/16 to any port 1883 proto tcp
+sudo ufw allow from 10.147.0.0/16 to any port 8800 proto tcp
+```
+
+**Windows:**
+```cmd
+netsh advfirewall firewall add rule name="Dashboard 8800" dir=in action=allow protocol=TCP localport=8800
+netsh advfirewall firewall add rule name="MQTT 1883" dir=in action=allow protocol=TCP localport=1883
+```
+
+### Langkah 8: Akses Dashboard
+
+- Dari server: `http://localhost:8800`
+- Dari device ZeroTier: `http://10.147.1.1:8800`
+- Dari HP: Install ZeroTier → Join network → Buka `http://10.147.1.1:8800`
+
+---
+
+## 🔐 Setup Google OAuth Login
+
+### Langkah 1: Buat Project di Google Cloud Console
+
+1. Buka **https://console.cloud.google.com**
+2. Buat Project Baru: `lab-monitoring`
+
+### Langkah 2: Aktifkan Google OAuth API
+
+1. Menu kiri → **APIs & Services** → **Library**
+2. Cari: **"Google Identity Services API"** → Klik **Enable**
+
+### Langkah 3: OAuth Consent Screen
+
+1. **APIs & Services** → **OAuth consent screen**
+2. Pilih **"External"** → **Create**
+3. Isi App name: `Lab Monitoring`, email Anda
+4. **Scopes**: Tambah `userinfo.email` dan `userinfo.profile`
+5. **Test Users**: Tambah email yang boleh login
+6. **Save and Continue**
+
+### Langkah 4: Buat OAuth Credentials
+
+1. **APIs & Services** → **Credentials** → **+ Create Credentials** → **OAuth client ID**
+2. **Application type**: `Web application`
+3. **Authorized JavaScript origins**: Tambah URL dashboard
+   - `http://localhost:8800`
+   - `http://<ZEROTIER_IP_SERVER>:8800`
+4. **Authorized redirect URIs**: Sama dengan origins
+5. Klik **Create** → Copy **Client ID**
+
+### Langkah 5: Update main.py
+
+```python
+# Ganti dengan Client ID dari Google Cloud Console!
+GOOGLE_CLIENT_ID = "123456789-xxxxx.apps.googleusercontent.com"
+```
+
+### Langkah 6: Install Dependencies
+
+```bash
+pip install google-auth requests
+```
+
+### Verifikasi
+
+1. Buka dashboard → Klik **"Sign in with Google"**
+2. Pilih akun Google → Jika email di whitelist → Dashboard terbuka ✅
+3. Jika email tidak terdaftar → Error "Akses ditolak" ❌
+
+> 💡 **Tips**: Semua email yang login tercatat di `audit.log`
 
 ---
 
@@ -319,55 +399,6 @@ Response:
 
 ---
 
-## 🐛 Troubleshooting
-
-| Masalah | Solusi |
-|---|---|
-| Login gagal "Password salah" | Cek `LAB_PASSWORD` di main.py atau environment variable |
-| IP diblokir 5 menit | Tunggu atau restart server |
-| Session expired | Login ulang (session 1 jam) |
-| Google Sign-In button tidak muncul | Cek koneksi internet, atau `GOOGLE_CLIENT_ID` di main.py |
-| "Email tidak terdaftar" | Tambahkan email ke `allowed_emails.json` atau via API `/api/admin/emails` |
-| Google login popup error 400 | Cek **Authorized JavaScript origins** di Google Console |
-| Login gagal di HP | Pastikan URL di HP sama dengan yang didaftarkan di Google Console |
-| Dashboard tidak responsive di HP | Refresh browser, clear cache |
-| Hamburger menu tidak muncul | Resize browser ke < 768px, atau cek DevTools mobile mode |
-| MQTT connection failed | Pastikan Mosquitto running, cek firewall port 1883 |
-| Tidak ada data di dashboard | Pastikan agent.py berjalan di PC client |
-| Agent "Connection Refused" | Verifikasi IP broker di agent.py |
-| Email whitelist tidak update | Gunakan `POST /api/admin/emails/reload` atau restart server |
-| Circuit breaker OPEN | Tunggu 60 detik untuk recovery atau restart server |
-
----
-
-## 📁 Struktur File
-
-```
-├── main.py              # Backend FastAPI + MQTT + WebSocket + Auth (Password & Google)
-├── agent.py             # Agent client PC + 💀 Efek hacker
-├── requirements.txt     # Python dependencies
-├── static/
-│   └── index.html       # Frontend dashboard (responsive + Google Login + Hamburger Menu)
-│   └── favicon.png      # Icon dashboard
-├── allowed_emails.json  # Whitelist email untuk Google OAuth (auto-generated)
-├── commands.log         # Log remote commands
-├── audit.log            # Log keamanan (login, Google auth, dll)
-├── lab_monitoring.log   # Log backend
-├── README.md            # Dokumentasi ini
-├── design.md            # Design system reference
-├── SETUP_HP_ACCESS.md   # Panduan setup HP
-├── SETUP_ZEROTIER.md    # Panduan ZeroTier
-├── SETUP_GOOGLE_AUTH.md # Panduan Google OAuth
-├── SETUP_SERVER_NOW.md  # Quick start server
-├── SETUP_ZEROTIER_DNS_GUIDE.md  # Setup DNS custom
-├── SETUP_HOSTS_FILE.md  # Setup hosts file
-├── SETUP_MULTI_DEVICE.md # Setup multi-device
-├── IMPLEMENTATION_SUMMARY.txt   # Catatan implementasi
-└── run_diagnostic.bat   # Diagnostic script
-```
-
----
-
 ## 🔒 Keamanan Detail
 
 ### 🔐 Password Login
@@ -377,20 +408,11 @@ Response:
 4. Token disimpan di localStorage + dikirim via header
 
 ### 📧 Google OAuth Login
-1. User klik "Sign in with Google"
-2. Popup Google muncul (atau One Tap)
-3. User pilih akun Google mereka
-4. ID Token dikirim ke backend `/api/auth/google`
-5. Backend verify token dengan Google
-6. Backend cek apakah email ada di `ALLOWED_EMAILS_LIST`
-7. Jika ya → session dibuat, jika tidak → 403 Forbidden
-8. Semua percobaan login tercatat di `audit.log`
-
-### 🔐 Dual Password System (untuk command berbahaya)
-1. User pilih **shutdown / restart / taskkill**
-2. Muncul input **password admin** untuk verifikasi
-3. Password dikirim terpisah, tervalidasi di backend
-4. Gagal → tercatat di `audit.log` sebagai `DANGEROUS_CMD_NO_PASS`
+1. User klik "Sign in with Google" → Popup muncul
+2. ID Token dikirim ke backend `/api/auth/google`
+3. Backend verify token dengan Google → Cek email di whitelist
+4. Jika ya → session dibuat, jika tidak → 403 Forbidden
+5. Semua percobaan login tercatat di `audit.log`
 
 ### 🛡️ Brute Force Protection
 - **Rate Limiter**: 30 request/menit per IP
@@ -415,9 +437,48 @@ EMAIL_REMOVED | IP: ... | Email: olduser@gmail.com
 
 ---
 
+## 🐛 Troubleshooting
+
+| Masalah | Solusi |
+|---|---|
+| Login gagal "Password salah" | Cek `LAB_PASSWORD` di main.py atau environment variable |
+| IP diblokir 5 menit | Tunggu atau restart server |
+| Session expired | Login ulang (session 1 jam) |
+| Google Sign-In button tidak muncul | Cek koneksi internet, atau `GOOGLE_CLIENT_ID` di main.py |
+| "Email tidak terdaftar" | Tambahkan email ke `allowed_emails.json` atau via API |
+| Google login popup error 400 | Cek **Authorized JavaScript origins** di Google Console |
+| Login gagal di HP | Pastikan URL di HP sama dengan yang didaftarkan di Google Console |
+| MQTT connection failed | Pastikan Mosquitto running, cek firewall port 1883 |
+| Tidak ada data di dashboard | Pastikan agent.py berjalan di PC client |
+| Agent "Connection Refused" | Verifikasi IP broker di agent.py (`BROKER_URL`) |
+| Circuit breaker OPEN | Tunggu 60 detik untuk recovery atau restart server |
+| Domain tidak resolve (ZeroTier) | Restart ZeroTier, cek DNS config di Console |
+| HP Android tidak bisa akses | Install ZeroTier dari Play Store, join network, authorize |
+| Agent token tidak valid | Pastikan `AGENT_TOKEN` di main.py dan agent.py sama |
+
+---
+
+## 📁 Struktur File
+
+```
+├── main.py              # Backend FastAPI + MQTT + WebSocket + Auth
+├── agent.py             # Agent client PC + 💀 Efek hacker
+├── requirements.txt     # Python dependencies
+├── static/
+│   ├── index.html       # Frontend dashboard (responsive + Google Login)
+│   └── favicon.png      # Icon dashboard
+├── allowed_emails.json  # Whitelist email untuk Google OAuth (auto-generated)
+├── commands.log         # Log remote commands
+├── audit.log            # Log keamanan (login, Google auth, dll)
+├── lab_monitoring.log   # Log backend
+└── README.md            # Dokumentasi ini
+```
+
+---
+
 ## 📝 Changelog
 
-### v2.2.0 (Current) - 2025
+### v2.2.0 (Current)
 - 📧 **Email Whitelist Management API** - CRUD whitelist email via REST API
 - 💾 **Persistent Email Storage** - `allowed_emails.json` untuk persistensi
 - 🔄 **Email Reload** - Reload email whitelist tanpa restart server
@@ -425,17 +486,14 @@ EMAIL_REMOVED | IP: ... | Email: olduser@gmail.com
 - 🔌 **paho-mqtt v1 & v2 Compatibility** - Auto-detect versi paho-mqtt
 - 📊 **Enhanced Health Check** - Detail info: mode, MQTT status, sessions, circuit breaker
 - 🛡️ **Improved Error Handling** - Global exception handler + structured error responses
-- 📝 **Enhanced Audit Trail** - Email management actions tercatat di audit.log
-- 📖 **Updated Documentation** - API endpoint lengkap + environment variables reference
+- 🔧 **Fixed Agent Token Validation** - Token agent dikirim dalam payload command
 
-### v2.1.0 - 2024
+### v2.1.0
 - 🔑 **Login dengan Google OAuth** (whitelist email)
 - 🔔 **Notification system** (toast animasi success/error)
 - 📱 **Hamburger Menu** untuk HP (drawer slide-in)
 - 🎨 **Login page redesign** dengan Google button + divider
-- ⚡ **Mobile responsive** lengkap (header, stats, modal, form, table)
-- 🌓 **Touch-friendly tap targets** (min 44x44px)
-- 💾 **CSS variables** untuk light/dark theme
+- ⚡ **Mobile responsive** lengkap
 
 ### v2.0.0 - Secure Edition
 - 🔒 Login password + session 1 jam
@@ -445,7 +503,6 @@ EMAIL_REMOVED | IP: ... | Email: olduser@gmail.com
 - 💀 Matrix Rain + Hacker Effects
 - 🎯 Remote command execution (8 commands)
 - 🌐 WebSocket real-time updates
-- 🌓 Light/Dark theme toggle
 
 ### v1.0.0
 - Basic WebSocket + MQTT + Demo mode
@@ -454,7 +511,6 @@ EMAIL_REMOVED | IP: ... | Email: olduser@gmail.com
 
 ## 🤝 Kontribusi
 
-Kontribusi welcome! Silakan:
 1. Fork repo
 2. Buat branch (`git checkout -b feature/AmazingFeature`)
 3. Commit changes (`git commit -m 'Add some AmazingFeature'`)
@@ -475,6 +531,4 @@ MIT License - Bebas digunakan untuk edukasi, penelitian, dan pengembangan.
 
 ---
 
-**Repository**: [github.com/ikyy96/web-lab-monitoring-system](https://github.com/ikyy96/web-lab-monitoring-system)  
-**Issues**: [GitHub Issues](https://github.com/ikyy96/web-lab-monitoring-system/issues)  
-**Dokumentasi Lengkap**: Lihat file `SETUP_*.md` di repository
+**Repository**: [github.com/ikyy96/web-lab-monitoring-system](https://github.com/ikyy96/web-lab-monitoring-system)
