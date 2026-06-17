@@ -31,9 +31,6 @@ BROKER_URL = "ws-mqtt.ikyypantau.my.id"
 PORT = 443                            # Wajib port 443 untuk traffic HTTPS/WSS Cloudflare
 PING_TARGET = "8.8.8.8"
 
-# Tambahkan Token Keamanan (Harus SAMA dengan AGENT_TOKEN di main.py)
-AGENT_TOKEN = "lab-token-2024"
-
 CPU_THREADS = psutil.cpu_count(logical=True)
 CPU_CORES = psutil.cpu_count(logical=False)
 
@@ -621,13 +618,6 @@ def on_message(client, userdata, msg):
     try:
         payload_str = msg.payload.decode('utf-8')
         payload = json.loads(payload_str)
-
-        # 1. VALIDASI KEAMANAN TOKEN
-        # Memastikan perintah datang dari server resmi kita
-        received_token = payload.get('agent_token', '')
-        if received_token != AGENT_TOKEN:
-            print(f"[⚠️] PERINGATAN: Mencoba eksekusi command dengan Token Tidak Valid! Topik: {msg.topic}")
-            return  # Langsung blokir eksekusi jika token tidak cocok
 
         command = payload.get('command', '')
         request_id = payload.get('request_id', '')

@@ -44,9 +44,6 @@ ADMIN_PASSWORD = os.environ.get("LAB_PASSWORD", "admin123")
 # Secret key untuk session cookie (ubah ini!)
 SECRET_KEY = os.environ.get("LAB_SECRET_KEY", secrets.token_hex(32))
 
-# Token untuk agent.py (harus sama di agent.py)
-AGENT_TOKEN = os.environ.get("LAB_AGENT_TOKEN", "lab-token-2024")
-
 # Konfigurasi session
 SESSION_MAX_AGE = 3600  # 1 jam auto logout
 SESSION_REFRESH_AGE = 600  # Refresh session setiap 10 menit
@@ -117,9 +114,6 @@ def save_allowed_emails(emails_list):
 # ==================== KEAMANAN ====================
 ADMIN_PASSWORD = os.environ.get("LAB_PASSWORD", "admin123")
 SECRET_KEY = os.environ.get("LAB_SECRET_KEY", secrets.token_hex(32))
-
-# Pastikan token ini SAMA dengan yang ditulis di agent.py
-AGENT_TOKEN = os.environ.get("LAB_AGENT_TOKEN", "lab-token-2024") 
 
 # ==================== KONFIGURASI MQTT LOCAL ====================
 # Di server backend, biarkan dia menembak ke broker lokalnya sendiri (Mosquitto lokal)
@@ -1288,7 +1282,7 @@ async def execute_remote_command(request: Request, session=Depends(check_auth)):
                 if param == 'process_name':
                     params['process_name'] = process_name
 
-        payload = {"command": command, "request_id": request_id, "timestamp": datetime.now().isoformat(), "params": params, "agent_token": AGENT_TOKEN}
+        payload = {"command": command, "request_id": request_id, "timestamp": datetime.now().isoformat(), "params": params}
         topic = f"lab/command/{hostname}"
         mqtt_client.publish(topic, json.dumps(payload))
         
